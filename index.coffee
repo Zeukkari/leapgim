@@ -1,15 +1,17 @@
 # Load LeapJS 
 `Leap = require('leapjs');` # embed JavaScript code directly in your CoffeeScript so 'Leap' is global
 
+# <-- This approach looks like a hack, but I remember doing something similar. Do we really need to include leapjs like this???
+
 # Load LeapJS hand entry plugin
-require('./lib/leap.hand-entry.js')
+require('./lib/leap.hand-entry.js') # TODO: Deprecate
 
 
 # Desktop Automation. Control the mouse, keyboard, and read the screen.
 robot = require("robotjs")
 
 # Local gesture and actions configs
-config = require('./config.json')
+config = require('./config.json') # TODO: Use yaml
 
 
 loopController = new Leap.Controller( 
@@ -19,7 +21,7 @@ loopController = new Leap.Controller(
                         background:             true,
                         loopWhileDisconnected:  false
                     )
-loopController.use('handEntry')
+loopController.use('handEntry') # TODO: Deprecate and implement something similar for scratch
 
 class MainController
     constructor: () ->
@@ -30,6 +32,9 @@ class MainController
         @wait            = 0
     setFrame: (@frame) -> 
 
+    # This stuff needs structure.
+    # - Using the date object for timers was strange and felt like a hack.. There's propably a better utility library we can use?
+    # - 
     run: ->
         now = new Date() 
         if (now.getTime() - @lastGestureTime) < @wait
@@ -91,6 +96,7 @@ class MainController
         @gestureSequence    = []      
 
 class Gesture
+    # First argument already contains the data included in the second argument right?
     constructor: (@frame, @extendedFingers) -> 
 
     detect: ->
@@ -133,12 +139,15 @@ processFrame = (frame) ->
     else
         console.log('Invalid frame')
 
+# The 'new' keyword here caught my attention and got me thinking.. Most of the classes are fundamentally singletons and there's coffeescript syntax available to do exactly that, right? 
+# https://coffeescript-cookbook.github.io/chapters/design_patterns/singleton
 keyboard = new KeyboardAction()
 mainController = new MainController()
 loopController.connect()
 loopController.on('frame', processFrame)
 
 
+# Im having trouble comprehending this... What is it? An incantation to summon cthulhu? 
 Array::is = (o) ->
     return true if this is o
     return false if this.length isnt o.length
