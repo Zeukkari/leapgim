@@ -1,0 +1,141 @@
+{
+    "gestures": {
+        "oneFingerKeyTap":                  
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "alt", "z"],
+            "waitBeforeSameGesture": 1000, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "Play/Pause",
+                "description": ""
+            }
+        },
+
+        "oneFingerRotateClockwise": 
+        {
+            "title": "",
+            "description": "",
+            "inputType": "keyboard",
+            "keyCombo": ["control", "up"],
+            "waitBeforeSameGesture": 300, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "",
+                "description": ""
+            }
+        },
+
+        "oneFingerRotateContraClockwise": 
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "down"],
+            "waitBeforeSameGesture": 300, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "",
+                "description": ""
+            }
+        },
+
+        "openHandSwipeLeft": 
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "alt", "right"],
+            "waitBeforeSameGesture": 200, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "Switch to workspace",
+                "description": "...to the left"
+            }
+        },
+
+        "openHandSwipeRight": 
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "alt", "left"],
+            "waitBeforeSameGesture": 200, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "Switch to workspace",
+                "description": "...to the right"
+            }
+        },
+
+        "openHandSwipeUp": 
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "alt", "down"],
+            "waitBeforeSameGesture": 200, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "Switch to workspace",
+                "description": "...above"
+            }
+        },
+
+        "openHandSwipeDown": 
+        {
+            "inputType": "keyboard",
+            "keyCombo": ["control", "alt", "up"],
+            "waitBeforeSameGesture": 200, 
+            "waitBeforeNextGesture": 700,
+            "wait": 700,
+            "notification": {
+                "title": "Switch to workspace",
+                "description": "...below"
+            }
+        },
+
+        "twoFingerHoverDown":
+        {
+            "inputType": "mouse",
+            "keyCombo": "mouseWheelDown",
+            "waitBeforeSameGesture": 100, 
+            "waitBeforeNextGesture": 200,
+            "wait": 200,
+            "notification": {
+                "title": "Scroll down",
+                "description": ""
+            }  
+        },
+
+        "twoFingerHoverUp":
+        {
+            "inputType": "mouse",
+            "keyCombo": "mouseWheelUp",
+            "waitBeforeSameGesture": 100, 
+            "waitBeforeNextGesture": 200,
+            "wait": 200,
+            "notification": {
+                "title": "Scroll up",
+                "description": ""
+            }  
+        }
+    },
+    "gestureSequences":
+    [
+        {
+            "gestures": ["oneFingerRotateClockwise", "oneFingerRotateContraClockwise"],
+            "action": 
+            {
+                "type": "keyboard",
+                "keyCombo": ["command", "w"]
+            }
+        },
+        {
+            "gestures": ["oneFingerRotateContraClockwise", "oneFingerRotateClockwise"],
+            "action": 
+            {
+                "type": "keyboard",
+                "keyCombo": ["command", "s"]
+            }
+        }
+    ]    
+}
