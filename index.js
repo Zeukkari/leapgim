@@ -3,8 +3,6 @@
   Leap = require('leapjs');;
   var Gesture, KeyboardAction, MainController, MouseAction, config, keyboard, loopController, mainController, processFrame, robot;
 
-  require('./lib/leap.hand-entry.js');
-
   robot = require("robotjs");
 
   config = require('./config.json');
@@ -16,8 +14,6 @@
     background: true,
     loopWhileDisconnected: false
   });
-
-  loopController.use('handEntry');
 
   MainController = (function() {
     function MainController() {
@@ -36,13 +32,11 @@
       var currentGesture, currentGestureConfig, gestureController, j, len, mouseAction, ref, results, sequence;
       this.extendedFingers = this.getExtendedFingers();
       if (this.isInMouseMode()) {
-        console.log("mouse mode");
         mouseAction = new MouseAction(this.frame.hands[0]);
         return mouseAction.run();
       } else {
         gestureController = new Gesture(this.frame, this.extendedFingers);
         currentGesture = gestureController.detect();
-        console.log(currentGesture);
         if (currentGesture && currentGesture !== this.gestureSequence[this.gestureSequence.length - 1]) {
           this.lastGestureTime = new Date().getTime();
           this.gestureSequence.push(currentGesture);
@@ -180,8 +174,6 @@
     if (frame.valid && !mainController.hasToWait()) {
       mainController.setFrame(frame);
       return mainController.run();
-    } else {
-      return console.log('Invalid frame');
     }
   };
 
@@ -195,7 +187,7 @@
 
 
   /*
-      The Call of Cthulhu
+      The Call of Cthulhu!
       checks if two arrays are equal
    */
 

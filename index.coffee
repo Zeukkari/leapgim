@@ -1,11 +1,8 @@
 # Load LeapJS 
 `Leap = require('leapjs');` # embed JavaScript code directly in your CoffeeScript so 'Leap' is global
 
-# <-- This approach looks like a hack, but I remember doing something similar. Do we really need to include leapjs like this???
-
-# Load LeapJS hand entry plugin
-require('./lib/leap.hand-entry.js') # TODO: Deprecate
-
+# T. <-- This approach looks like a hack, but I remember doing something similar. Do we really need to include leapjs like this???
+# P. it is a hack, but I couldn't find anything else. `sad face`
 
 # Desktop Automation. Control the mouse, keyboard, and read the screen.
 robot = require("robotjs")
@@ -21,7 +18,6 @@ loopController = new Leap.Controller(
                         background:             true,
                         loopWhileDisconnected:  false
                     )
-loopController.use('handEntry') # TODO: Deprecate and implement something similar for scratch
 
 class MainController
     constructor: () ->
@@ -38,16 +34,12 @@ class MainController
         @extendedFingers = @getExtendedFingers()
         # check if in mouse mode
         if @isInMouseMode()
-            console.log "mouse mode"
             mouseAction = new MouseAction(@frame.hands[0])
             mouseAction.run()
-            # move mouse/exec mouse actions
-        # check if in keyboard shortcut mode / has gestures
         else
             gestureController = new Gesture(@frame, @extendedFingers)
 
             currentGesture = gestureController.detect()
-            console.log currentGesture
             if currentGesture and currentGesture != @gestureSequence[@gestureSequence.length - 1] 
                 # save detected time
                 @lastGestureTime = new Date().getTime()
@@ -65,7 +57,6 @@ class MainController
                             keyboard.runKeyCombo(sequence.action.keyCombo)
                         # reset gesture sequence
                         @resetGestureSequence()
-                # debugger
 
     isInMouseMode: ->
         @extendedFingers.length is 5
@@ -88,7 +79,8 @@ class MainController
         return if ((now.getTime() - @lastGestureTime) < @wait) then true else false
 
 class Gesture
-    # First argument already contains the data included in the second argument right?
+    # T. First argument already contains the data included in the second argument right?
+    # P. yeah, but it's already processed and in the format I want. I don't want to get it again
     constructor: (@frame, @extendedFingers) -> 
 
     detect: ->
@@ -125,14 +117,14 @@ class KeyboardAction
             robot.keyToggle(key, false)
 
 processFrame = (frame) ->
+    # run if the frame is valid and the controller does not have to wait
     if frame.valid and !mainController.hasToWait()
         mainController.setFrame(frame)
         mainController.run()
-    else
-        console.log('Invalid frame')
 
-# The 'new' keyword here caught my attention and got me thinking.. Most of the classes are fundamentally singletons and there's coffeescript syntax available to do exactly that, right? 
+# T. The 'new' keyword here caught my attention and got me thinking.. Most of the classes are fundamentally singletons and there's coffeescript syntax available to do exactly that, right? 
 # https://coffeescript-cookbook.github.io/chapters/design_patterns/singleton
+# P. I see no point in using a singleton right now. We have plenty to do.
 keyboard = new KeyboardAction()
 mainController = new MainController()
 loopController.connect()
@@ -140,7 +132,7 @@ loopController.on('frame', processFrame)
 
 
 ###
-    The Call of Cthulhu
+    The Call of Cthulhu!
     checks if two arrays are equal
 ### 
 Array::arrayIsEqual = (o) ->
