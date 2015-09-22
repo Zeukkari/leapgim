@@ -33,15 +33,8 @@ class MainController
     setFrame: (@frame) -> 
 
     # This stuff needs structure.
-    # - Using the date object for timers was strange and felt like a hack.. There's propably a better utility library we can use?
     # - 
     run: ->
-        now = new Date() 
-        if (now.getTime() - @lastGestureTime) < @wait
-            console.log 'wait'
-            # previous gesture requires a longer wait
-            return
-
         @extendedFingers = @getExtendedFingers()
         # check if in mouse mode
         if @isInMouseMode()
@@ -54,7 +47,7 @@ class MainController
             gestureController = new Gesture(@frame, @extendedFingers)
 
             currentGesture = gestureController.detect()
-
+            console.log currentGesture
             if currentGesture and currentGesture != @gestureSequence[@gestureSequence.length - 1] 
                 # save detected time
                 @lastGestureTime = new Date().getTime()
@@ -64,11 +57,9 @@ class MainController
                 currentGestureConfig = config.gestures[currentGesture]
                 @wait = currentGestureConfig.wait
 
-                console.log @wait
-
                 # check 
                 for sequence in config.gestureSequences 
-                    if sequence.gestures.is @gestureSequence
+                    if sequence.gestures.arrayIsEqual @gestureSequence
                         console.log "found sequence -> " + sequence.action.keyCombo
                         if sequence.action.type is "keyboard"
                             keyboard.runKeyCombo(sequence.action.keyCombo)
@@ -91,9 +82,10 @@ class MainController
 
         return extendedFingers
     resetGestureSequence: -> 
-        @wait               = 0
-        @lastGestureTime    = 0
-        @gestureSequence    = []      
+        @gestureSequence    = []
+    hasToWait: ->
+        now = new Date() 
+        return if ((now.getTime() - @lastGestureTime) < @wait) then true else false
 
 class Gesture
     # First argument already contains the data included in the second argument right?
@@ -104,7 +96,7 @@ class Gesture
             for gesture in @frame.gestures
                 switch gesture.type
                     when "circle"
-                        if @extendedFingers.is ["thumb", "index"]
+                        if @extendedFingers.arrayIsEqual ["thumb", "index"]
                             pointableID = gesture.pointableIds[0];
                             direction = @frame.pointable(pointableID).direction;
                             dotProduct = Leap.vec3.dot(direction, gesture.normal);
@@ -133,7 +125,7 @@ class KeyboardAction
             robot.keyToggle(key, false)
 
 processFrame = (frame) ->
-    if frame.valid
+    if frame.valid and !mainController.hasToWait()
         mainController.setFrame(frame)
         mainController.run()
     else
@@ -147,8 +139,11 @@ loopController.connect()
 loopController.on('frame', processFrame)
 
 
-# Im having trouble comprehending this... What is it? An incantation to summon cthulhu? 
-Array::is = (o) ->
+###
+    The Call of Cthulhu
+    checks if two arrays are equal
+### 
+Array::arrayIsEqual = (o) ->
     return true if this is o
     return false if this.length isnt o.length
     for i in [0..this.length]

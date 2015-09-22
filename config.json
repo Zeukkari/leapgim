@@ -21,7 +21,7 @@
             "keyCombo": ["control", "up"],
             "waitBeforeSameGesture": 300, 
             "waitBeforeNextGesture": 700,
-            "wait": 700,
+            "wait": 300,
             "notification": {
                 "title": "",
                 "description": ""
@@ -34,7 +34,7 @@
             "keyCombo": ["control", "down"],
             "waitBeforeSameGesture": 300, 
             "waitBeforeNextGesture": 700,
-            "wait": 700,
+            "wait": 300,
             "notification": {
                 "title": "",
                 "description": ""
@@ -122,19 +122,19 @@
     "gestureSequences":
     [
         {
-            "gestures": ["oneFingerRotateClockwise", "oneFingerRotateContraClockwise"],
+            "gestures": ["oneFingerRotateClockwise"],
             "action": 
             {
                 "type": "keyboard",
-                "keyCombo": ["command", "w"]
+                "keyCombo": ["control", "up"]
             }
         },
         {
-            "gestures": ["oneFingerRotateContraClockwise", "oneFingerRotateClockwise"],
+            "gestures": ["oneFingerRotateContraClockwise"],
             "action": 
             {
                 "type": "keyboard",
-                "keyCombo": ["command", "s"]
+                "keyCombo": ["control", "down"]
             }
         }
     ]    
