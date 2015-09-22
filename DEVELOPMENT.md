@@ -61,7 +61,7 @@ positions so that it can be used in our gesture configuration.
 This picture is still missing the Feedback Manager for sound, notifications 
 and other stuff that provides the user feedback regarding their hand gestures.
 
-
+```
 ------                ------------               -------------------
 |Leapd| ------------> |Frame Parser|  ------->  | Leapgim model     |
  -----                ------------              | -> Gesture Config |
@@ -79,7 +79,7 @@ and other stuff that provides the user feedback regarding their hand gestures.
 | Script Manager |
  ----------------      
     -> System calls
-
+```
 
 
 Leapgim Frame/Hand model
