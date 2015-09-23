@@ -3,8 +3,6 @@
   Leap = require('leapjs');;
   var Gesture, KeyboardAction, MainController, MouseAction, config, keyboard, loopController, mainController, processFrame, robot;
 
-  require('./lib/leap.hand-entry.js');
-
   robot = require("robotjs");
 
   config = require('./config.json');
@@ -16,8 +14,6 @@
     background: true,
     loopWhileDisconnected: false
   });
-
-  loopController.use('handEntry');
 
   MainController = (function() {
     function MainController() {
@@ -33,15 +29,9 @@
     };
 
     MainController.prototype.run = function() {
-      var currentGesture, currentGestureConfig, gestureController, j, len, mouseAction, now, ref, results, sequence;
-      now = new Date();
-      if ((now.getTime() - this.lastGestureTime) < this.wait) {
-        console.log('wait');
-        return;
-      }
+      var currentGesture, currentGestureConfig, gestureController, j, len, mouseAction, ref, results, sequence;
       this.extendedFingers = this.getExtendedFingers();
       if (this.isInMouseMode()) {
-        console.log("mouse mode");
         mouseAction = new MouseAction(this.frame.hands[0]);
         return mouseAction.run();
       } else {
@@ -52,12 +42,11 @@
           this.gestureSequence.push(currentGesture);
           currentGestureConfig = config.gestures[currentGesture];
           this.wait = currentGestureConfig.wait;
-          console.log(this.wait);
           ref = config.gestureSequences;
           results = [];
           for (j = 0, len = ref.length; j < len; j++) {
             sequence = ref[j];
-            if (sequence.gestures.is(this.gestureSequence)) {
+            if (sequence.gestures.arrayIsEqual(this.gestureSequence)) {
               console.log("found sequence -> " + sequence.action.keyCombo);
               if (sequence.action.type === "keyboard") {
                 keyboard.runKeyCombo(sequence.action.keyCombo);
@@ -94,9 +83,17 @@
     };
 
     MainController.prototype.resetGestureSequence = function() {
-      this.wait = 0;
-      this.lastGestureTime = 0;
       return this.gestureSequence = [];
+    };
+
+    MainController.prototype.hasToWait = function() {
+      var now;
+      now = new Date();
+      if ((now.getTime() - this.lastGestureTime) < this.wait) {
+        return true;
+      } else {
+        return false;
+      }
     };
 
     return MainController;
@@ -117,7 +114,7 @@
           gesture = ref[j];
           switch (gesture.type) {
             case "circle":
-              if (this.extendedFingers.is(["thumb", "index"])) {
+              if (this.extendedFingers.arrayIsEqual(["thumb", "index"])) {
                 pointableID = gesture.pointableIds[0];
                 direction = this.frame.pointable(pointableID).direction;
                 dotProduct = Leap.vec3.dot(direction, gesture.normal);
@@ -174,11 +171,9 @@
   })();
 
   processFrame = function(frame) {
-    if (frame.valid) {
+    if (frame.valid && !mainController.hasToWait()) {
       mainController.setFrame(frame);
       return mainController.run();
-    } else {
-      return console.log('Invalid frame');
     }
   };
 
@@ -190,7 +185,13 @@
 
   loopController.on('frame', processFrame);
 
-  Array.prototype.is = function(o) {
+
+  /*
+      The Call of Cthulhu!
+      checks if two arrays are equal
+   */
+
+  Array.prototype.arrayIsEqual = function(o) {
     var i, j, ref;
     if (this === o) {
       return true;
