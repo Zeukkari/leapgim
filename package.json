@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "leapjs": "~0.6.4",
-    "node-gyp": "^3.0.3"
+    "node-gyp": "^3.0.3",
+    "robotjs": "0.2.4"
   },
   "devDependencies": {
     "coffee-script": "~1.10.0"

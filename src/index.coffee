@@ -25,8 +25,8 @@ class FrameController
         @wait            = 0
 
         # Init Leap Motion
-        Leap = require("leapjs")
-        loopController = new Leap.Controller ( 
+        @Leap = require("leapjs")
+        loopController = new @Leap.Controller ( 
             inBrowser:              false, 
             enableGestures:         true, 
             frameEventName:         'deviceFrame', 
@@ -36,12 +36,13 @@ class FrameController
         loopController.connect()
         loopController.on('frame', @processFrame)
 
-    processFrame: (frame) ->
+    processFrame: (@frame) =>
         # Guard statements
-        return if not frame.valid
-        return if !frameController.hasToWait()
+        return if not @frame.valid
+        # return if !@hasToWait()
 
         @extendedFingers = @getExtendedFingers()
+        console.log @extendedFingers
         # check if in mouse mode
         if @isInMouseMode()
             mouseAction = new MouseAction(@frame.hands[0])
@@ -104,32 +105,33 @@ class GestureController
                         if @extendedFingers.arrayIsEqual ["thumb", "index"]
                             pointableID = gesture.pointableIds[0];
                             direction = @frame.pointable(pointableID).direction;
-                            dotProduct = Leap.vec3.dot(direction, gesture.normal);
+                            # dotProduct = @Leap.vec3.dot(direction, gesture.normal);
+                            dotProduct = 0
 
                             if dotProduct > 0
                                 return 'oneFingerRotateClockwise'
                             else
                                 return 'oneFingerRotateContraClockwise'
         return false
-    class MouseAction
-        constructor: (@hand) ->
+class MouseAction
+    constructor: (@hand) ->
 
-        run: ->
-            if @hand.pinchStrength > 0
-                console.log( 'hand.pinchStrength: ' + @hand.pinchStrength)
-                # do click
+    run: ->
+        if @hand.pinchStrength > 0
+            console.log( 'hand.pinchStrength: ' + @hand.pinchStrength)
+            # do click
 
-    class KeyboardAction
-        runKeyCombo: (keyCombo) -> 
-            #press keys
-            for key in keyCombo
-                super
-                robot.keyToggle(key, true)
+class KeyboardAction
+    runKeyCombo: (keyCombo) -> 
+        #press keys
+        for key in keyCombo
+            super
+            robot.keyToggle(key, true)
 
-            #release keys
-            for key in keyCombo by -1
-                super
-                robot.keyToggle(key, false)
+        #release keys
+        for key in keyCombo by -1
+            super
+            robot.keyToggle(key, false)
 
 
 #-------------------------------------------------------------
