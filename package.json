@@ -6,8 +6,8 @@
   "license": "GNU GENERAL PUBLIC LICENSE V3",
   "main": "lib/index.js",
   "scripts": {
-    "client": "node_modules/coffee-script/bin/coffee src/actioncontroller.coffee",
-    "server": "node_modules/coffee-script/bin/coffee src/framecontroller.coffee"
+    "client": "node_modules/coffee-script/bin/coffee src/client/actioncontroller.coffee",
+    "server": "node_modules/coffee-script/bin/coffee src/server/framecontroller.coffee"
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
