@@ -6,7 +6,6 @@
   "license": "GNU GENERAL PUBLIC LICENSE V3",
   "main": "lib/index.js",
   "scripts": {
-    "client": "cd ../client && npm run client",
     "server": "node_modules/coffee-script/bin/coffee src/FrameController.coffee"
   },
   "dependencies": {
