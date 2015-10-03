@@ -115,17 +115,13 @@ socket.on 'close_error', (fd, ep) ->
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
-socket.monitor 500, 0
-#socket.bindSync 'tcp://127.0.0.1:8000'
-socket.bindSync 'ipc://leapgim.ipc'
+socket.bindSync 'tcp://127.0.0.1:3000'
 
 frameController = new FrameController
 
-# frameController.on('update', socket.send)
-# leapController.on('frame', frameController.processFrame)
-
 frameController.on 'update', (handModel)->
-    console.log "Frame Controller update", handModel
+    # console.log "Frame Controller update", handModel
+    console.log 'sending....'
     socket.send [
         'update'
         JSON.stringify handModel
@@ -147,7 +143,7 @@ console.log "Leap Controller connected"
 consume = () ->
     frame = leapController.frame()
     frameController.processFrame(frame)
-    console.log "Consumed frame ", frame.id
+    # console.log "Consumed frame ", frame.id
 
 
 waitTime = 100
