@@ -1,0 +1,13 @@
+{
+  "name": "leapgim client",
+  "version": "0.0.1",
+  "main": "index.html",
+  "scripts": {
+    "client": "node_modules/coffee-script/bin/coffee -o lib src/ActionController.coffee"
+  },
+  "dependencies": {
+    "coffee-script": "~1.10.0",
+    "zmq": "^2.13.0",
+    "robotjs": "^0.2.4"
+  }
+}

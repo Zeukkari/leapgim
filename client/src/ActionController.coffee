@@ -1,4 +1,4 @@
-Leap = require 'leapjs'
+robot = require 'robotjs'
 zmq = require 'zmq'
 
 #
@@ -9,7 +9,7 @@ zmq = require 'zmq'
 #
 class ActionController
     constructor: ->
-        @robot = require("robotjs")
+        @robot = robot
     mouseMove: (handModel) =>
         screenSize = @robot.getScreenSize()
         console.log "Screen size: ", screenSize
@@ -64,12 +64,15 @@ socket.on 'disconnect', (fd, ep) ->
 console.log('Start monitoring...');
 socket.monitor 500, 0
 
-#socket.connect 'tcp://127.0.0.1:8000'
-socket.connect 'ipc://leapgim.ipc'
+socket.connect 'tcp://127.0.0.1:3000'
+#socket.connect 'ipc://leapgim.ipc'
 
 socket.subscribe 'update'
 socket.on 'message', (topic, message) ->
-  if(topic.toString() == 'update')
-    handModel = JSON.parse(message.toString())
-    actionController.parseGestures(handModel)
-  return
+    console.log 'received a message related to:', topic.toString()
+    console.log 'containing message:', message.toString()
+    return
+    # if(topic.toString() == 'update')
+    #     handModel = JSON.parse(message.toString())
+    #     actionController.parseGestures(handModel)
+    # return
