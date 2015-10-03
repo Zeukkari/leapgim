@@ -1,5 +1,5 @@
 {
-  "name": "leapgim client",
+  "name": "leapgim-client",
   "version": "0.0.1",
   "main": "index.html",
   "scripts": {
@@ -7,7 +7,11 @@
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
-    "zmq": "^2.13.0",
-    "robotjs": "^0.2.4"
+    "nw": "^0.12.3",
+    "robotjs": "^0.2.4",
+    "zmq": "^2.13.0"
+  },
+  "devDependencies": {
+    "nw-gyp": "^0.12.4"
   }
 }
