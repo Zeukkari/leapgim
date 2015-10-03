@@ -1,33 +1,5 @@
-Leap = require 'leapjs'
 zmq = require 'zmq'
-
-#
-# Action Controller
-#
-# Action controller's job is to recieve "leapgim frames" from the frame 
-# controller. 
-#
-class ActionController
-    constructor: ->
-        @robot = require("robotjs")
-    mouseMove: (handModel) =>
-        screenSize = @robot.getScreenSize()
-        console.log "Screen size: ", screenSize
-        moveTo = 
-            x: handModel.position.x * screenSize.width
-            y: handModel.position.y * screenSize.height
-        console.log "Move to: ", moveTo
-        @robot.moveMouse(moveTo.x, moveTo.y)
-    parseGestures: (handModel) =>
-        console.log "handModel: ", handModel
-        # Mouse Move test
-        position = handModel.position
-
-        # This conditional is hack to detect when no hand mode is present
-        unless position.x is 0 and position.y is 0 and position.z is 0 
-            @mouseMove(handModel)
-
-actionController = new ActionController
+io = require('socket.io')(app)
 
 socket = zmq.socket('sub')
 socket.on 'connect', (fd, ep) ->
@@ -69,7 +41,24 @@ socket.connect 'ipc://leapgim.ipc'
 
 socket.subscribe 'update'
 socket.on 'message', (topic, message) ->
-  if(topic.toString() == 'update')
-    handModel = JSON.parse(message.toString())
-    actionController.parseGestures(handModel)
-  return
+    if(topic.toString() == 'update')
+        console.log "Update!"
+        handModel = JSON.parse(message.toString())
+        #console.log 'Hand model recieved: ', handModel
+        #actionController.parseGestures(handModel)
+        socket.emit 'update', handModel
+    return
+
+
+io.on 'connection', (socket) ->
+
+    console.log 'Connected: ', socket
+
+    io.on 'update', (data) ->
+        socket.emit 'update', data
+        return
+    return
+
+app = require('http').createServer()
+
+app.listen 8080
