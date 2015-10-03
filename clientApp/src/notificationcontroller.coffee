@@ -49,7 +49,9 @@ console.log('Start monitoring...');
 socket.monitor 500, 0
 
 # connect to zmq
-socket.connect 'ipc://leapgim.ipc'
+# socket.connect 'ipc://leapgim.ipc'
+socket.connect 'tcp://127.0.0.1:8000'
+
 
 socket.subscribe 'update'
 socket.on 'message', (topic, message) ->

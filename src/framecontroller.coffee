@@ -116,8 +116,8 @@ socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
 socket.monitor 500, 0
-#socket.bindSync 'tcp://127.0.0.1:8000'
-socket.bindSync 'ipc://leapgim.ipc'
+socket.bindSync 'tcp://127.0.0.1:8000'
+# socket.bindSync 'ipc://leapgim.ipc'
 
 frameController = new FrameController
 
