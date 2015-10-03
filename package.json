@@ -6,13 +6,13 @@
   "license": "GNU GENERAL PUBLIC LICENSE V3",
   "main": "lib/index.js",
   "scripts": {
-    "source": "node_modules/coffee-script/bin/coffee src/index.coffee",
-    "build": "node lib/index.js",
-    "compile": "node_modules/coffee-script/bin/coffee -o lib -c src/index.coffee"
+    "client": "node_modules/coffee-script/bin/coffee src/client/actionController.coffee",
+    "server": "node_modules/coffee-script/bin/coffee src/server/frameController.coffee"
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
     "leapjs": "~0.6.4",
+    "robotjs": "^0.2.4",
     "zmq": "^2.13.0"
   },
   "repository": {
