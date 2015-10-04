@@ -69,10 +69,9 @@ socket.connect 'tcp://127.0.0.1:3000'
 
 socket.subscribe 'update'
 socket.on 'message', (topic, message) ->
-    console.log 'received a message related to:', topic.toString()
-    console.log 'containing message:', message.toString()
+    #console.log 'received a message related to:', topic.toString()
+    #console.log 'containing message:', message.toString()
+    if(topic.toString() == 'update')
+        handModel = JSON.parse(message.toString())
+        actionController.parseGestures(handModel)
     return
-    # if(topic.toString() == 'update')
-    #     handModel = JSON.parse(message.toString())
-    #     actionController.parseGestures(handModel)
-    # return
