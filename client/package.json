@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "index.html",
   "scripts": {
+    "postinstall" : "( cd node_modules/robotjs; ../nw-gyp/bin/nw-gyp.js configure --target=0.12.3; ../nw-gyp/bin/nw-gyp.js rebuild --target=0.12.3 ) && ( cd node_modules/zmq && ../nw-gyp/bin/nw-gyp.js configure --target=0.12.3 &&../nw-gyp/bin/nw-gyp.js rebuild --target=0.12.3 )",
     "client": "node_modules/coffee-script/bin/coffee -o lib src/ActionController.coffee && node_modules/nw/bin/nw ."
   },
   "dependencies": {
