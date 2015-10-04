@@ -9,15 +9,14 @@ zmq = require 'zmq'
 #
 class ActionController
     constructor: ->
-        @robot = robot
+        @screenSize = robot.getScreenSize()
+        console.log "Screen size: ", @screenSize
     mouseMove: (handModel) =>
-        screenSize = @robot.getScreenSize()
-        console.log "Screen size: ", screenSize
         moveTo = 
-            x: handModel.position.x * screenSize.width
-            y: handModel.position.y * screenSize.height
+            x: handModel.position.x * @screenSize.width
+            y: handModel.position.y * @screenSize.height
         console.log "Move to: ", moveTo
-        @robot.moveMouse(moveTo.x, moveTo.y)
+        robot.moveMouse(moveTo.x, moveTo.y)
     parseGestures: (handModel) =>
         console.log "handModel: ", handModel
         # Mouse Move test
