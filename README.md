@@ -7,7 +7,16 @@ Leap Motion gesture input mapper
 Installation
 ------------
 
-Install dependencies with:
+
+Ubuntu 14.04
+------------
+
+Install dependencies:
+
+sudo apt-get install xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
+
+
+Install module dependencies:
 
 npm install .
 
