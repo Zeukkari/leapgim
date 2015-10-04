@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.html",
   "scripts": {
-    "client": "node_modules/coffee-script/bin/coffee -o lib src/ActionController.coffee"
+    "client": "node_modules/coffee-script/bin/coffee -o lib src/ActionController.coffee && node_modules/nw/bin/nw ."
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
