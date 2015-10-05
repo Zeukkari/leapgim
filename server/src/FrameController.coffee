@@ -2,6 +2,8 @@
 Leap = require 'leapjs'
 zmq = require 'zmq'
 
+SOCKET = 'tcp://192.168.1.10:3000'
+
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with 
 class FrameController extends EventEmitter
@@ -115,13 +117,13 @@ socket.on 'close_error', (fd, ep) ->
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
-socket.bindSync 'tcp://127.0.0.1:3000'
+socket.bindSync SOCKET
 
 frameController = new FrameController
 
 frameController.on 'update', (handModel)->
-    # console.log "Frame Controller update", handModel
-    console.log 'sending....'
+    console.log "Frame Controller update", handModel
+    #console.log 'sending....'
     socket.send [
         'update'
         JSON.stringify handModel
@@ -143,7 +145,7 @@ console.log "Leap Controller connected"
 consume = () ->
     frame = leapController.frame()
     frameController.processFrame(frame)
-    # console.log "Consumed frame ", frame.id
+    console.log "Consumed frame ", frame.id
 
 
 waitTime = 100

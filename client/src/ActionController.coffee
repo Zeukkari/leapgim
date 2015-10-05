@@ -1,5 +1,8 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
+#foobar = require 'underscore'
+
+SOCKET = 'tcp://192.168.1.10:3000'
 
 #
 # Action Controller
@@ -9,14 +12,15 @@ zmq = require 'zmq'
 #
 class ActionController
     constructor: ->
-        @screenSize = robot.getScreenSize()
-        console.log "Screen size: ", @screenSize
+        @robot = require 'robotjs'
     mouseMove: (handModel) =>
+        screenSize = @robot.getScreenSize()
+        console.log "Screen size: " + screenSize.width + "," + screenSize.height
         moveTo = 
-            x: handModel.position.x * @screenSize.width
-            y: handModel.position.y * @screenSize.height
-        console.log "Move to: ", moveTo
-        robot.moveMouse(moveTo.x, moveTo.y)
+            x: handModel.position.x * screenSize.width
+            y: handModel.position.y * screenSize.height
+        console.log "Move to: " + moveTo.x + "," + moveTo.y
+        @robot.moveMouse(moveTo.x, moveTo.y)
     parseGestures: (handModel) =>
         console.log "handModel: ", handModel
         # Mouse Move test
@@ -29,9 +33,7 @@ class ActionController
 actionController = new ActionController
 
 socket = zmq.socket('sub')
-socket.on 'connect', (fd, ep) ->
-    console.log 'connect, endpoint:', ep
-    return
+
 socket.on 'connect_delay', (fd, ep) ->
     console.log 'connect_delay, endpoint:', ep
     return
@@ -60,17 +62,27 @@ socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
 
+socket.on 'connect', (fd, ep) ->
+    console.log 'connect, endpoint:', ep
+    socket.subscribe 'update'
+    socket.on 'message', (topic, message) ->
+        str_topic = topic.toString()
+        str_message = message.toString()
+
+        #console.log 'topic: ', topic
+        #console.log 'topic stringified: ', str_topic
+
+        #console.log 'message: ', message
+        #console.log 'message stringified: ', str_message
+        if(topic.toString() == 'update')
+            handModel = JSON.parse str_message
+            actionController.parseGestures(handModel)
+        return
+    return
+
 console.log('Start monitoring...');
 socket.monitor 500, 0
 
-socket.connect 'tcp://127.0.0.1:3000'
+socket.connect SOCKET
 #socket.connect 'ipc://leapgim.ipc'
 
-socket.subscribe 'update'
-socket.on 'message', (topic, message) ->
-    #console.log 'received a message related to:', topic.toString()
-    #console.log 'containing message:', message.toString()
-    if(topic.toString() == 'update')
-        handModel = JSON.parse(message.toString())
-        actionController.parseGestures(handModel)
-    return
