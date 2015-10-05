@@ -1,8 +1,7 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
-#foobar = require 'underscore'
 
-SOCKET = 'tcp://192.168.1.10:3000'
+SOCKET = 'tcp://127.0.0.1:3000'
 
 #
 # Action Controller
@@ -84,5 +83,3 @@ console.log('Start monitoring...');
 socket.monitor 500, 0
 
 socket.connect SOCKET
-#socket.connect 'ipc://leapgim.ipc'
-

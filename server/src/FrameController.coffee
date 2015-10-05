@@ -2,7 +2,7 @@
 Leap = require 'leapjs'
 zmq = require 'zmq'
 
-SOCKET = 'tcp://192.168.1.10:3000'
+SOCKET = 'tcp://127.0.0.1:3000'
 
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with 
