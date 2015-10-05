@@ -19,7 +19,7 @@ sudo n 0.10.40
 
 Install dependencies:
 
-sudo apt-get install g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
+sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
 
 sudo npm install node-gyp -g
 
