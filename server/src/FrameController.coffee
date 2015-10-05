@@ -7,6 +7,16 @@ SOCKET = 'tcp://127.0.0.1:3000'
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with 
 class FrameController extends EventEmitter
+
+    # A map to convert Finger type codes into descriptive names
+    nameMap : [
+        'thumb'
+        'indexFinger'
+        'middleFinger'
+        'ringFinger'
+        'pinky'
+    ]
+
     constructor: ->
         # Hand model - just the extended fingers of an arbitary hand for now
         @handModel = @yieldDefaultModel()
@@ -24,6 +34,30 @@ class FrameController extends EventEmitter
             y : 0
             z : 0
         }
+        pinchStrength: 0
+        pinchFinger: null
+
+
+
+    findPinchingFingerType: (hand) =>
+        pincher = undefined
+        closest = 500
+        f = 1
+        while f < 5
+            current = hand.fingers[f]
+            distance = Leap.vec3.distance(hand.thumb.tipPosition, current.tipPosition)
+            if current != hand.thumb and distance < closest
+                closest = distance
+                pincher = current
+            f++
+        pincherName = @nameMap[pincher.type]
+        console.log "Pincher type: ", pincher.type
+        console.log "Pincher: " + pincherName
+        return pincherName
+
+        # if pincher is not undefined
+        #     console.log "Pincher type: ", pincher.type
+        #     console.log "Pincher: ", pincher
 
     processFrame: (frame) =>
         console.log "Processing frame..."
@@ -36,6 +70,12 @@ class FrameController extends EventEmitter
 
             palmPosition = @relative3DPosition(frame, firstHand.palmPosition)
 
+            pinchStrength = firstHand.pinchStrength
+            if pinchStrength > 0
+                pinchingFinger = @findPinchingFingerType firstHand
+            else
+                pinchingFinger = null
+
             # Update frame model
             @handModel =
                 extendedFingers: 
@@ -45,6 +85,8 @@ class FrameController extends EventEmitter
                     ringerFinger : firstHand.ringFinger.extended
                     pinky : firstHand.pinky.extended
                 position: palmPosition
+                pinchStrength : pinchStrength
+                pinchingFinger : pinchingFinger
 
         @emit 'update', @handModel
         console.log "Processed frame: ", frame.id
@@ -122,7 +164,7 @@ socket.bindSync SOCKET
 frameController = new FrameController
 
 frameController.on 'update', (handModel)->
-    console.log "Frame Controller update", handModel
+    #console.log "Frame Controller update", handModel
     #console.log 'sending....'
     socket.send [
         'update'
