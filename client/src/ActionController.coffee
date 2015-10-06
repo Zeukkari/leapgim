@@ -20,6 +20,10 @@ class ActionController
             y: handModel.position.y * screenSize.height
         console.log "Move to: " + moveTo.x + "," + moveTo.y
         @robot.moveMouse(moveTo.x, moveTo.y)
+    # down: up|down, button: left|right
+    mouseClick: (down, button) =>
+        @robot.mouseToggle down
+
     parseGestures: (handModel) =>
         console.log "handModel: ", handModel
         # Mouse Move test
@@ -28,6 +32,13 @@ class ActionController
         # This conditional is hack to detect when no hand mode is present
         unless position.x is 0 and position.y is 0 and position.z is 0 
             @mouseMove(handModel)
+
+        # Demo mouse clicking
+        if (handModel.pinchStrength >  0.5 and handModel.pinchingFinger == "indexFinger")
+            @mouseClick "down", "left"
+        else if (handModel.pinchStrength < 0.5 and handModel.pinchingFinger == "indexFinger")
+            @mouseClick "up", "left"
+            console.log "Click click click"
 
 actionController = new ActionController
 
