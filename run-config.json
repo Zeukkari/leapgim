@@ -1,0 +1,10 @@
+[
+  {
+    // App1
+    "uid": "leapgimd",
+    "append": true,
+    "watch": true,
+    "script": "index.js",
+    "sourceDir": "server"
+  }
+]
