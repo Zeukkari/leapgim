@@ -1,10 +1,8 @@
 {
   "name": "leapgimd",
-  "version": "0.1.0",
-
+  "main": "index.js",
   "scripts": {
-    "build": "node_modules/coffee-script/bin/coffee -o lib src/FrameController.coffee",
-    "run-source": "node_modules/coffee-script/bin/coffee src/FrameController.coffee",
+    "install": "coffee -o lib src/FrameController.coffee",
     "start": "./index.js"
   },
   "dependencies": {
