@@ -5,7 +5,7 @@
   "description": "Leap Motion gesture input mapper",
   "version": "0.1.0",
   "dependencies": {
-    "coffee-script": "~1.10.0",
+    "coffee-script": "~1.10.0"
   },
   "scripts": {
     "install" : "(cd client; npm install) & (cd server; npm install)"
