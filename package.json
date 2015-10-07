@@ -5,10 +5,15 @@
   "description": "Leap Motion gesture input mapper",
   "version": "0.1.0",
   "dependencies": {
-    "coffee-script": "~1.10.0"
+    "coffee-script": "~1.10.0",
+    "forever": "^0.15.1"
   },
   "scripts": {
-    "install" : "(cd client; npm install) & (cd server; npm install)"
+    "install": "(cd client; npm install) & (cd server; npm install)",
+    "forever": "node_modules/forever/bin/forever",
+    "start-server": "forever start run-config.json",
+    "start-client": "cd client; npm start",
+    "start": "start-server && start-client"
   },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
