@@ -1,0 +1,28 @@
+{
+  "name": "leapgim",
+  "author": "Petre Tudor, Timo Aho",
+  "license": "GNU GENERAL PUBLIC LICENSE V3",
+  "description": "Leap Motion gesture input mapper",
+  "version": "0.1.0",
+  "dependencies": {
+    "coffee-script": "~1.10.0",
+  },
+  "scripts": {
+    "install" : "(cd client; npm install) & (cd server; npm install)"
+  },
+  "homepage": "https://github.com/Zeukkari/leapgim",
+  "bugs": {
+    "url": "https://github.com/Zeukkari/leapgim/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zeukkari/leapgim.git"
+  },
+  "keywords": [
+    "leap",
+    "leapmotion",
+    "mouse",
+    "keyboard",
+    "hand gesture"
+  ]
+}
