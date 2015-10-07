@@ -7,34 +7,34 @@ Leap Motion gesture input mapper
 Ubuntu 14.04 Installation
 -------------------------
 
-Current version is higly unstable and has been tested on node.js v0.10.40 only.
+Tested with node v4.1.2 and npm v2.14.4.
+
+Install dependencies:
+
+sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
+
+Install leapgim bundle:
+
+npm install .
+
+
+
+Running
+-------
+
+npm start
+
+
+
+Notes
+-----
 
 Node.js versions can be easily switched with the n package. In order to run leapgim you propably need to install it and switch node.js versions to whatever we're using for the moment.
 
 Install n and switch node.js versions:
 
 sudo npm install n -g
-sudo n 0.10.40
-
-
-Install dependencies:
-
-sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
-
-sudo npm install node-gyp -g
-
-Install module dependencies:
-
-( cd client; npm install . ) && ( cd server; npm install . )
-
-
-Running
--------
-
-Run development server: npm run server
-
-Run development client: npm run client
-
+sudo n 2.14.4
 
 Leapgim Development
 ===================
@@ -43,6 +43,7 @@ Developers:
 - Andrushin Anton
 - Petre Tudor
 - Timo Aho
+
 
 Featurelist
 -----------
