@@ -7,7 +7,11 @@ Leap Motion gesture input mapper
 Ubuntu 14.04 Installation
 -------------------------
 
-Tested with node v4.1.2 and npm v2.14.4.
+Tested with: 
+
+- node v4.1.2
+- npm v2.14.4.
+- Leap Motion SDK v2.3.1+31549
 
 Install dependencies:
 
