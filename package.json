@@ -9,7 +9,7 @@
     "forever": "^0.15.1"
   },
   "scripts": {
-    "install": "(cd client; npm install) & (cd server; npm install)",
+    "install": "(cd client; npm install); (cd server; npm install)",
     "forever": "node_modules/forever/bin/forever",
     "start-server": "forever start run-config.json",
     "start-client": "cd client; npm start",
