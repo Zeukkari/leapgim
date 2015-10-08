@@ -1,5 +1,8 @@
 {
   "name": "leapgimd",
+  "author": "Petre Tudor, Timo Aho",
+  "license": "GPL-3.0",
+  "description": "Leap Motion gesture input mapper",
   "main": "index.js",
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
@@ -10,5 +13,9 @@
     "leapjs": "~0.6.4",
     "zmq": "^2.13.0",
     "coffee-script": "~1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zeukkari/leapgim.git"
   }
 }

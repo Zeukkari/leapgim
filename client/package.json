@@ -1,5 +1,8 @@
 {
-  "name": "leapgim",
+  "name": "leapgim-client",
+  "author": "Petre Tudor, Timo Aho",
+  "license": "GPL-3.0",
+  "description": "Leap Motion gesture input mapper",
   "main": "index.html",
   "scripts": {
     "nw-gyp": "nw-gyp/bin/nw-gyp.js",
@@ -21,5 +24,9 @@
   },
   "devDependencies": {
     "nw-gyp": "^0.12.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zeukkari/leapgim.git"
   }
 }

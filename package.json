@@ -1,7 +1,7 @@
 {
   "name": "leapgim",
   "author": "Petre Tudor, Timo Aho",
-  "license": "GNU GENERAL PUBLIC LICENSE V3",
+  "license": "GPL-3.0",
   "description": "Leap Motion gesture input mapper",
   "version": "0.1.0",
   "dependencies": {
