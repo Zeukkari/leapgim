@@ -3,11 +3,13 @@
   "main": "index.html",
   "scripts": {
     "nw-gyp": "nw-gyp/bin/nw-gyp.js",
-    "rebuild-robotjs": "( cd node_modules/robotjs; nw-gyp configure rebuild --target=0.12.3 )",
-    "rebuild-zmq": "( cd node_modules/zmq && nw-gyp configure build --target=0.12.3 )",
-    "postinstall": "rebuild-zmq; rebuild-robotjs",
     "coffee": "node_modules/coffee-script/bin/coffee",
     "build": "coffee -o lib src/ActionController.coffee",
+
+    "rebuild-robotjs": "( cd node_modules/robotjs; nw-gyp configure rebuild --target=0.12.3 )",
+    "rebuild-zmq": "( cd node_modules/zmq && nw-gyp configure rebuild --target=0.12.3 )",
+    "install": "rebuild-zmq; rebuild-robotjs; build",
+
     "nw": "node_modules/nw/bin/nw",
     "start": "nw ."
   },
