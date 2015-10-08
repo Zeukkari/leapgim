@@ -3,21 +3,23 @@
   "main": "index.html",
   "scripts": {
     "nw-gyp": "nw-gyp/bin/nw-gyp.js",
-    "postinstall": "( cd node_modules/robotjs; nw-gyp configure build --target=0.12.3 ) && ( cd node_modules/zmq && nw-gyp configure build --target=0.12.3 )",
     "coffee": "node_modules/coffee-script/bin/coffee",
     "build": "coffee -o lib src/ActionController.coffee",
+
+    "rebuild-robotjs": "( cd node_modules/robotjs; nw-gyp configure rebuild --target=0.12.3 )",
+    "rebuild-zmq": "( cd node_modules/zmq && nw-gyp configure rebuild --target=0.12.3 )",
+    "install": "npm run rebuild-zmq; npm run rebuild-robotjs; npm run build",
+
     "nw": "node_modules/nw/bin/nw",
     "start": "nw ."
   },
   "dependencies": {
     "robotjs": "git+https://github.com/Zeukkari/robotjs.git",
     "nw": "^0.12.3",
-    "zmq": "^2.13.0"
+    "zmq": "^2.13.0",
+    "coffee-script": "~1.10.0"
   },
   "devDependencies": {
     "nw-gyp": "^0.12.3"
-  },
-  "peerDependencies": {
-    "coffee-script": "~1.10.0"
   }
 }
