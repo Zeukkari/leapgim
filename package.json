@@ -10,7 +10,7 @@
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
     "forever": "node_modules/forever/bin/forever",
-    "start-server": "forever start run-config.json",
+    "start-server": "forever server/index.js",
     "start-client": "cd client; npm start",
     "start": "start-server && start-client"
   },
