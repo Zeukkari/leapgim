@@ -24,7 +24,12 @@ class ActionController
     mouseClick: (down, button) =>
         @robot.mouseToggle down
 
-    parseGestures: (handModel) =>
+    parseGestures: (model) =>
+
+        console.log "model: ", model
+
+        handModel = model[0]
+
         console.log "handModel: ", handModel
         # Mouse Move test
         position = handModel.position

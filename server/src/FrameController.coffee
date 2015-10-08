@@ -18,11 +18,10 @@ class FrameController extends EventEmitter
     ]
 
     constructor: ->
-        # Hand model - just the extended fingers of an arbitary hand for now
-        @handModel = @yieldDefaultModel()
+        @model = @yieldDefaultModel()
         console.log "Frame Controller initialized"
 
-    yieldDefaultModel: ->
+    yieldDefaultHandModel: ->
         extendedFingers :
             thumb : 0
             indexFinger : 0
@@ -36,6 +35,13 @@ class FrameController extends EventEmitter
         }
         pinchStrength: 0
         pinchFinger: null
+
+    yieldDefaultModel: =>
+        leftHand = @yieldDefaultHandModel()
+        leftHand.type = "left"
+        rightHand = @yieldDefaultHandModel()
+        rightHand.type = "right"
+        return [ leftHand, rightHand ]
 
 
 
@@ -63,32 +69,33 @@ class FrameController extends EventEmitter
         console.log "Processing frame..."
 
         if not frame.valid or frame.hands is null or frame.hands.length is 0
-            @handModel = @yieldDefaultModel()
+            @model = @yieldDefaultModel()
         else
-            # Select the first hand and update extended fingers based on that.. for now
-            firstHand = frame.hands[0]
+            @model = []
+            for hand in frame.hands
+                palmPosition = @relative3DPosition(frame, hand.palmPosition)
 
-            palmPosition = @relative3DPosition(frame, firstHand.palmPosition)
+                pinchStrength = hand.pinchStrength
+                if pinchStrength > 0
+                    pinchingFinger = @findPinchingFingerType hand
+                else
+                    pinchingFinger = null
 
-            pinchStrength = firstHand.pinchStrength
-            if pinchStrength > 0
-                pinchingFinger = @findPinchingFingerType firstHand
-            else
-                pinchingFinger = null
+                # Update frame model
+                handModel =
+                    type : hand.type
+                    extendedFingers: 
+                        thumb : hand.thumb.extended
+                        indexFinger : hand.indexFinger.extended
+                        middleFinger : hand.middleFinger.extended
+                        ringerFinger : hand.ringFinger.extended
+                        pinky : hand.pinky.extended
+                    position: palmPosition
+                    pinchStrength : pinchStrength
+                    pinchingFinger : pinchingFinger
+                @model.push handModel
 
-            # Update frame model
-            @handModel =
-                extendedFingers: 
-                    thumb : firstHand.thumb.extended
-                    indexFinger : firstHand.indexFinger.extended
-                    middleFinger : firstHand.middleFinger.extended
-                    ringerFinger : firstHand.ringFinger.extended
-                    pinky : firstHand.pinky.extended
-                position: palmPosition
-                pinchStrength : pinchStrength
-                pinchingFinger : pinchingFinger
-
-        @emit 'update', @handModel
+        @emit 'update', @model
         console.log "Processed frame: ", frame.id
 
     ###
@@ -163,12 +170,12 @@ socket.bindSync SOCKET
 
 frameController = new FrameController
 
-frameController.on 'update', (handModel)->
-    #console.log "Frame Controller update", handModel
+frameController.on 'update', (model)->
+    console.log "Frame Controller update", model
     #console.log 'sending....'
     socket.send [
         'update'
-        JSON.stringify handModel
+        JSON.stringify model
     ]
     return
 
