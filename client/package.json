@@ -8,7 +8,7 @@
 
     "rebuild-robotjs": "( cd node_modules/robotjs; nw-gyp configure rebuild --target=0.12.3 )",
     "rebuild-zmq": "( cd node_modules/zmq && nw-gyp configure rebuild --target=0.12.3 )",
-    "install": "rebuild-zmq; rebuild-robotjs; build",
+    "install": "npm run rebuild-zmq; npm run rebuild-robotjs; npm run build",
 
     "nw": "node_modules/nw/bin/nw",
     "start": "nw ."
