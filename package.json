@@ -10,9 +10,10 @@
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
     "forever": "node_modules/forever/bin/forever",
-    "start-server": "forever server/index.js",
+    "start-server": "forever start server/index.js",
+    "stop-server": "forever start server/index.js",
     "start-client": "cd client; npm start",
-    "start": "start-server && start-client"
+    "start": "npm run start-server; npm run start-client"
   },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
