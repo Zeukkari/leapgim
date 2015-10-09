@@ -69,7 +69,7 @@ class FrameController extends EventEmitter
         console.log "Processing frame..."
 
         if not frame.valid or frame.hands is null or frame.hands.length is 0
-            @model = @yieldDefaultModel()
+            console.log "Invalid frame or no hands detected"
         else
             @model = []
             for hand in frame.hands
@@ -91,12 +91,13 @@ class FrameController extends EventEmitter
                         ringerFinger : hand.ringFinger.extended
                         pinky : hand.pinky.extended
                     position: palmPosition
+                    grabStrength : hand.grabStrength
                     pinchStrength : pinchStrength
                     pinchingFinger : pinchingFinger
                 @model.push handModel
-
-        @emit 'update', @model
+            @emit 'update', @model
         console.log "Processed frame: ", frame.id
+        return
 
     ###
     # Produce x and y coordinates for a leap pointable.

@@ -12,38 +12,54 @@ SOCKET = 'tcp://127.0.0.1:3000'
 class ActionController
     constructor: ->
         @robot = require 'robotjs'
+        # @mouseState = 
+        #     left : "up",
+        #     right : "down"
     mouseMove: (handModel) =>
         screenSize = @robot.getScreenSize()
-        console.log "Screen size: " + screenSize.width + "," + screenSize.height
+        #console.log "Screen size: " + screenSize.width + "," + screenSize.height
         moveTo = 
             x: handModel.position.x * screenSize.width
             y: handModel.position.y * screenSize.height
-        console.log "Move to: " + moveTo.x + "," + moveTo.y
+        #console.log "Move to: " + moveTo.x + "," + moveTo.y
         @robot.moveMouse(moveTo.x, moveTo.y)
     # down: up|down, button: left|right
-    mouseClick: (down, button) =>
-        @robot.mouseToggle down
+    mouseButton: (down, button) =>
+        @robot.mouseToggle down, button
+        # # Skip action if we're already in the correct state
+        # unless (@mouseState[button] == down)        
 
     parseGestures: (model) =>
 
+        console.log "Parsing gestures.."
         console.log "model: ", model
 
         handModel = model[0]
+        for handModel in model
+            console.log "handModel: ", handModel
 
-        console.log "handModel: ", handModel
-        # Mouse Move test
-        position = handModel.position
+            # Demo mouse clicking
+            checkClick = (button, pinchingFinger) =>
+                if (handModel.pinchStrength >  0.5 and handModel.pinchingFinger == pinchingFinger)
+                    @mouseButton "down", button
+                    console.log "Mouse button " + button + "down"
+                else if (handModel.pinchStrength < 0.5)
+                    @mouseButton "up", button
+                    console.log "Mouse button " + button + "up"
+                return
+            checkClick 'left', 'indexFinger'
+            checkClick 'right', 'ringFinger'
 
-        # This conditional is hack to detect when no hand mode is present
-        unless position.x is 0 and position.y is 0 and position.z is 0 
-            @mouseMove(handModel)
+            # Mouse Move test
+            position = handModel.position
 
-        # Demo mouse clicking
-        if (handModel.pinchStrength >  0.5 and handModel.pinchingFinger == "indexFinger")
-            @mouseClick "down", "left"
-        else if (handModel.pinchStrength < 0.5 and handModel.pinchingFinger == "indexFinger")
-            @mouseClick "up", "left"
-            console.log "Click click click"
+            # Mouse Lock
+            if (handModel.grabStrength > 0.3)
+                holdMouse = true
+
+            frameIsEmpty = model is null or model.length is 0
+            unless holdMouse is true or frameIsEmpty 
+                @mouseMove(handModel)
 
 actionController = new ActionController
 
@@ -84,14 +100,14 @@ socket.on 'connect', (fd, ep) ->
         str_topic = topic.toString()
         str_message = message.toString()
 
-        #console.log 'topic: ', topic
-        #console.log 'topic stringified: ', str_topic
+        console.log 'topic: ', topic
+        console.log 'topic stringified: ', str_topic
 
-        #console.log 'message: ', message
-        #console.log 'message stringified: ', str_message
+        console.log 'message: ', message
+        console.log 'message stringified: ', str_message
         if(topic.toString() == 'update')
-            handModel = JSON.parse str_message
-            actionController.parseGestures(handModel)
+            model = JSON.parse str_message
+            actionController.parseGestures(model)
         return
     return
 
