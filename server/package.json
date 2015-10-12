@@ -10,9 +10,10 @@
     "start": "./index.js"
   },
   "dependencies": {
+    "coffee-script": "~1.10.0",
     "leapjs": "~0.6.4",
-    "zmq": "^2.13.0",
-    "coffee-script": "~1.10.0"
+    "yamljs": "^0.2.4",
+    "zmq": "^2.13.0"
   },
   "repository": {
     "type": "git",

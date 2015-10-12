@@ -1,8 +1,11 @@
 {EventEmitter} = require 'events'
 Leap = require 'leapjs'
 zmq = require 'zmq'
+YAML = require 'yamljs'
 
-SOCKET = 'tcp://127.0.0.1:3000'
+config = YAML.load 'etc/config.yml'
+
+#SOCKET = 'tcp://127.0.0.1:3000'
 
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with 
@@ -167,7 +170,7 @@ socket.on 'close_error', (fd, ep) ->
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
-socket.bindSync SOCKET
+socket.bindSync config.socket
 
 frameController = new FrameController
 

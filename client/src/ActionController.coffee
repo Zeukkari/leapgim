@@ -1,7 +1,14 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
+YAML = require 'yamljs'
+fs = require 'fs'
 
-SOCKET = 'tcp://127.0.0.1:3000'
+config = YAML.parse fs.readFileSync('etc/config.yml', 'utf8')
+
+console.log "Config: ", config
+
+#SOCKET = 'tcp://127.0.0.1:3000'
+#SOCKET = 'tcp://127.0.0.1:8282'
 
 #
 # Action Controller
@@ -26,7 +33,7 @@ class ActionController
     # down: up|down, button: left|right
     mouseButton: (down, button) =>
         @robot.mouseToggle down, button
-        # # Skip action if we're already in the correct state
+        # # Skip action if we're valready in the correct state
         # unless (@mouseState[button] == down)        
 
     parseGestures: (model) =>
@@ -114,4 +121,5 @@ socket.on 'connect', (fd, ep) ->
 console.log('Start monitoring...');
 socket.monitor 500, 0
 
-socket.connect SOCKET
+console.log "Connect to " + config.socket
+socket.connect config.socket
