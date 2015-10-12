@@ -7,9 +7,6 @@ config = YAML.parse fs.readFileSync('etc/config.yml', 'utf8')
 
 console.log "Config: ", config
 
-#SOCKET = 'tcp://127.0.0.1:3000'
-#SOCKET = 'tcp://127.0.0.1:8282'
-
 #
 # Action Controller
 #
@@ -107,11 +104,6 @@ socket.on 'connect', (fd, ep) ->
         str_topic = topic.toString()
         str_message = message.toString()
 
-        console.log 'topic: ', topic
-        console.log 'topic stringified: ', str_topic
-
-        console.log 'message: ', message
-        console.log 'message stringified: ', str_message
         if(topic.toString() == 'update')
             model = JSON.parse str_message
             actionController.parseGestures(model)

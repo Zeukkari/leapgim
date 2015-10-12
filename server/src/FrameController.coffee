@@ -5,8 +5,6 @@ YAML = require 'yamljs'
 
 config = YAML.load 'etc/config.yml'
 
-#SOCKET = 'tcp://127.0.0.1:3000'
-
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with 
 class FrameController extends EventEmitter
