@@ -17,7 +17,7 @@
   "dependencies": {
     "coffee-script": "~1.10.0",
     "nw": "^0.12.3",
-    "robotjs": "git+https://github.com/Zeukkari/robotjs.git",
+    "robotjs": "^0.3.1",
     "yamljs": "^0.2.4",
     "zmq": "^2.13.0"
   },
