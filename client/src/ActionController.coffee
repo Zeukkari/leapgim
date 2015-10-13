@@ -16,27 +16,36 @@ console.log "Config: ", config
 class ActionController
     constructor: ->
         @robot = require 'robotjs'
-        # @mouseState = 
-        #     left : "up",
-        #     right : "down"
+        @mouseState = 
+            left : "up",
+            right : "down"
+        
+    audioNotification: (clip) ->
+        audio = new Audio(clip)
+        audio.play()
+
     mouseMove: (handModel) =>
         screenSize = @robot.getScreenSize()
-        #console.log "Screen size: " + screenSize.width + "," + screenSize.height
         moveTo = 
             x: handModel.position.x * screenSize.width
             y: handModel.position.y * screenSize.height
-        #console.log "Move to: " + moveTo.x + "," + moveTo.y
         @robot.moveMouse(moveTo.x, moveTo.y)
+
     # down: up|down, button: left|right
     mouseButton: (down, button) =>
-        @robot.mouseToggle down, button
-        # # Skip action if we're valready in the correct state
-        # unless (@mouseState[button] == down)        
+        if(@mouseState.button != down)
+            @mouseState.button = down
+            @robot.mouseToggle down, button
+            if(down == 'down')
+                @audioNotification 'asset/audio/mousedown.ogg'
+            else
+                @audioNotification 'asset/audio/mouseup.ogg'
 
     parseGestures: (model) =>
 
         console.log "Parsing gestures.."
-        console.log "model: ", model
+        console.log "Keyboard model test mutex: " + @keyboardModel.test
+        #console.log "model: ", model
 
         handModel = model[0]
         for handModel in model
@@ -54,11 +63,8 @@ class ActionController
             checkClick 'left', 'indexFinger'
             checkClick 'right', 'ringFinger'
 
-            # Mouse Move test
-            position = handModel.position
-
-            # Mouse Lock
-            if (handModel.grabStrength > 0.3)
+            # # Mouse Lock
+            if (handModel.grabStrength > 0.5)
                 holdMouse = true
 
             frameIsEmpty = model is null or model.length is 0
@@ -110,8 +116,10 @@ socket.on 'connect', (fd, ep) ->
         return
     return
 
-console.log('Start monitoring...');
+console.log 'Start monitoring...'
 socket.monitor 500, 0
 
 console.log "Connect to " + config.socket
 socket.connect config.socket
+
+window.actionController = actionController
