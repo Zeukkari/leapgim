@@ -14,7 +14,7 @@
     "install": "npm run rebuild-zmq; npm run rebuild-robotjs; npm run build",
 
     "nw": "node_modules/nw/bin/nw",
-    "start": "nw ."
+    "start": "coffee -o lib src/ActionController.coffee; nw ."
   },
   "dependencies": {
     "robotjs": "git+https://github.com/Zeukkari/robotjs.git",

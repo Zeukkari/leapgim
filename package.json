@@ -10,8 +10,8 @@
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
     "forever": "node_modules/forever/bin/forever",
-    "start-server": "forever start server/index.js",
-    "stop-server": "forever stop server/index.js",
+    "start-server": "cd server; npm install; forever start index.js",
+    "stop-server": "cd server; forever stop index.js",
     "start-client": "cd client; npm start",
     "start": "npm run start-server; npm run start-client"
   },

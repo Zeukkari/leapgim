@@ -7,7 +7,7 @@
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
     "install": "coffee -o lib src/FrameController.coffee",
-    "start": "./index.js"
+    "start": "install; ./index.js"
   },
   "dependencies": {
     "leapjs": "~0.6.4",
