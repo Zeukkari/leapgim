@@ -1,7 +1,16 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
+gui = require('nw.gui')
 
 SOCKET = 'tcp://127.0.0.1:3000'
+
+
+# Reference to window and tray
+mainWindow = gui.Window.get();
+# hide main 
+mainWindow.hide();
+# Show tray
+tray = new gui.Tray({ icon: 'lib/images/icon.png' });
 
 #
 # Action Controller
@@ -15,6 +24,13 @@ class ActionController
         # @mouseState = 
         #     left : "up",
         #     right : "down"
+    audionNotification: () =>
+        audio = new Audio('lib/sounds/soft_delay.ogg')
+        audio.play() 
+
+    visualNotification: (title, body) =>
+        new Notification(title, { body: body} )
+
     mouseMove: (handModel) =>
         screenSize = @robot.getScreenSize()
         #console.log "Screen size: " + screenSize.width + "," + screenSize.height
@@ -30,9 +46,13 @@ class ActionController
         # unless (@mouseState[button] == down)        
 
     parseGestures: (model) =>
-
         console.log "Parsing gestures.."
         console.log "model: ", model
+
+        # if model.gestures.length > 0
+        #     for gesture in model.gestures
+        #     switch gesture.type
+        #         when 'circle'                    
 
         handModel = model[0]
         for handModel in model
