@@ -1,8 +1,12 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
 gui = require('nw.gui')
+YAML = require 'yamljs'
+fs = require 'fs'
 
-SOCKET = 'tcp://127.0.0.1:3000'
+config = YAML.parse fs.readFileSync('etc/config.yml', 'utf8')
+
+console.log "Config: ", config
 
 
 # Reference to window and tray
@@ -42,7 +46,7 @@ class ActionController
     # down: up|down, button: left|right
     mouseButton: (down, button) =>
         @robot.mouseToggle down, button
-        # # Skip action if we're already in the correct state
+        # # Skip action if we're valready in the correct state
         # unless (@mouseState[button] == down)        
 
     parseGestures: (model) =>
@@ -120,11 +124,6 @@ socket.on 'connect', (fd, ep) ->
         str_topic = topic.toString()
         str_message = message.toString()
 
-        console.log 'topic: ', topic
-        console.log 'topic stringified: ', str_topic
-
-        console.log 'message: ', message
-        console.log 'message stringified: ', str_message
         if(topic.toString() == 'update')
             model = JSON.parse str_message
             actionController.parseGestures(model)
@@ -134,4 +133,5 @@ socket.on 'connect', (fd, ep) ->
 console.log('Start monitoring...');
 socket.monitor 500, 0
 
-socket.connect SOCKET
+console.log "Connect to " + config.socket
+socket.connect config.socket
