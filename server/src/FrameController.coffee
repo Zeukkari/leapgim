@@ -22,6 +22,7 @@ class FrameController extends EventEmitter
         @model = @yieldDefaultModel()
         console.log "Frame Controller initialized"
 
+    # TODO: Deprecate
     yieldDefaultHandModel: ->
         extendedFingers :
             thumb : 0
@@ -37,6 +38,7 @@ class FrameController extends EventEmitter
         pinchStrength: 0
         pinchFinger: null
 
+    # TODO: Deprecate
     yieldDefaultModel: =>
         leftHand = @yieldDefaultHandModel()
         leftHand.type = "left"
@@ -74,7 +76,13 @@ class FrameController extends EventEmitter
         else
             @model = []
             for hand in frame.hands
-                palmPosition = @relative3DPosition(frame, hand.palmPosition)
+                if(config.stabilize)
+                    console.log "Stabilized position in use!"
+                    position = hand.stabilizedPalmPosition
+                else 
+                    position = hand.palmPosition                  
+                palmPosition = @relative3DPosition(frame, position)
+                
 
                 pinchStrength = hand.pinchStrength
                 if pinchStrength > 0
@@ -198,7 +206,7 @@ consume = () ->
     frameController.processFrame(frame)
     console.log "Consumed frame ", frame.id
 
+#config.interval
+#waitTime = 100
 
-waitTime = 100
-
-setInterval consume, waitTime
+setInterval consume, config.interval
