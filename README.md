@@ -29,7 +29,6 @@ Running
 npm start
 
 
-
 Notes
 -----
 
@@ -44,8 +43,8 @@ Leapgim Development
 ===================
 
 Developers:
-- Andrushin Anton
 - Petre Tudor
+- Taija Mertanen
 - Timo Aho
 
 
