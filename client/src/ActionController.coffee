@@ -18,7 +18,7 @@ class ActionController
         @robot = require 'robotjs'
         @mouseState = 
             left : "up",
-            right : "down"
+            right : "up"
         
     audioNotification: (clip) ->
         audio = new Audio(clip)
@@ -33,13 +33,18 @@ class ActionController
 
     # down: up|down, button: left|right
     mouseButton: (down, button) =>
-        @mouseState.button = down
-        @robot.mouseToggle down, button
+
         if(@mouseState.button != down)
             if(down == 'down')
                 @audioNotification 'asset/audio/mousedown.ogg'
             else
                 @audioNotification 'asset/audio/mouseup.ogg'
+            @mouseState.button = down
+            @robot.mouseToggle down, button
+
+        # Extra mouse up
+        if(down == 'up')
+            @robot.mouseToggle down, button
 
     parseGestures: (model) =>
 
