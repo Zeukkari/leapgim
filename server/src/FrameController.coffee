@@ -76,7 +76,10 @@ class FrameController extends EventEmitter
         if not frame.valid or frame.hands is null or frame.hands.length is 0
             console.log "Invalid frame or no hands detected"
         else
-            @model = []
+            @model =
+                hands : []
+                gestures : []
+                timestamp : frame.timestamp
             for hand in frame.hands
                 if(config.stabilize)
                     console.log "Stabilized position in use!"
@@ -85,14 +88,12 @@ class FrameController extends EventEmitter
                     position = hand.palmPosition                  
                 palmPosition = @relative3DPosition(frame, position)
                 
-
                 pinchStrength = hand.pinchStrength
                 if pinchStrength > 0
                     pinchingFinger = @findPinchingFingerType hand
                 else
                     pinchingFinger = null
 
-                # Update frame model
                 handModel =
                     type : hand.type
                     extendedFingers: 
@@ -105,7 +106,16 @@ class FrameController extends EventEmitter
                     grabStrength : hand.grabStrength
                     pinchStrength : pinchStrength
                     pinchingFinger : pinchingFinger
-                @model.push handModel
+                @model.hands.push handModel
+
+            # Gestures
+            for gesture in frame.gestures
+                gestureModel =
+                    type : gesture.type
+                    duration : gesture.duration
+                    progress: gesture.progress
+                    state : gesture.state
+                @model.gestures.push gestureModel
             @emit 'update', @model
         console.log "Processed frame: ", frame.id
         return
@@ -177,6 +187,10 @@ console.log "Leap Controller connected"
 
 consume = () ->
     frame = leapController.frame()
+
+    # Skip invalid frame processing
+    if(frame is null or frame.valid is false)
+        return
     frameController.processFrame(frame)
     console.log "Consumed frame ", frame.id
 
