@@ -4,16 +4,10 @@
   "license": "GPL-3.0",
   "description": "Leap Motion gesture input mapper",
   "version": "0.1.0",
-  "dependencies": {
-    "forever": "^0.15.1"
-  },
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
-    "forever": "node_modules/forever/bin/forever",
-    "start-server": "forever start server/index.js",
-    "stop-server": "forever stop server/index.js",
+    "start-server": "cd server; npm start",
     "start-client": "cd client; npm start",
-    "start": "npm run start-server; npm run start-client"
   },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {

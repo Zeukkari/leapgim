@@ -21,13 +21,21 @@ Install leapgim bundle:
 
 npm install .
 
-
-
 Running
 -------
 
-npm start
+Run server:
 
+```
+cd server
+npm start
+```
+
+Run client:
+```
+cd server
+npm start
+```
 
 Notes
 -----
@@ -69,7 +77,7 @@ so we need to support it other ways
 - Visual feedback
 -> Some kind of status window?
 -> "Ghost hands" via webgl magic.. possibly?
-- popup menus
+-> popup menus
 
 Examples of use:
     -basic desktop usage: mouse movement, some limited keyboard support (arrow 
@@ -88,85 +96,128 @@ Tech choices
 - Node.js
 - Node libraries
 -> robot.js
--> somethig for desktop notifications (like growl, but growl does not support 
-timers on notificications)
--> nw.js ?
+-> nw.js
+-> forever
+-> zmq
 
 
-Architecture 
-------------
+Leapgim Frame Model
+===================
 
-This is my idea of the basic architecture. The Frame Parser parses a leap 
-motion frame into our own model, which contains information about hand 
-positions so that it can be used in our gesture configuration.
+- hands: Array
+    - Hand Model
+        - type: left|right
+        - position: (x,y,z)
+        - extendedFingers: Object
+            - thumb: Bool
+            - indexFinger: Bool
+            - middleFinger: Bool
+            - ringFinger: Bool
+            - pinky: Bool
+        - palmDirection: String
+            - up|down|left|right|forward|backward
+        - palmNormal: String
+            - up|down|left|right|forward|backward
+        - grabStrength
+            - 0..1
+        - pinch
+            - strength:
+                - 0...1
+            - finger: String 
+                - thumb|indexFinger|middleFinger|ringFinger|pinky
 
-This picture is still missing the Feedback Manager for sound, notifications 
-and other stuff that provides the user feedback regarding their hand gestures.
-
-```
-------                ------------               -------------------
-|Leapd| ------------> |Frame Parser|  ------->  | Leapgim model     |
- -----                ------------              | -> Gesture Config |
-                                                | -> Current Frame  |
------------------------------------------------ | -> Previous Frame |
-|         |                           |          -------------------
-|         |                           |
-|         |------------------         |
-|         | Keyboard Manager |        |
-|         -------------------         |
-|            -> RobotJS calls         |----------------
-|                                     | Mouse Manager |
-|                                     -----------------
-|----------------                       -> RobotJS calls
-| Script Manager |
- ----------------      
-    -> System calls
-```
-
-
-Leapgim Frame/Hand model
-------------------------
-
-The leapgim frame model contains human readable information about tracked 
-hands. Properties supported in the legacy version at least included:
-
-- Finger extended state for each finger
-
-- Palm position: {x,y,z} - a 3-element object representing a point in 3d 
-space. The sensor device is used as the point of origin, and the possible 
-values are [0..1] for y and [-1..1] for x and z. Palm position is mainly used 
-for mouse control.
-
-- Palm direction: ["up", "down", "left", "right", "forward", "backward"]
-
-- Grab strength: [0..1]
-
-- Pinch strength: [0..1]
-
-- Pinching finger: ["indexFinger", "middleFinger", "ringFinger", "pinkie"]
-
-- Hand movement direction: {x,y,z} - a 3-element object representing a vector 
-{x,y,z}
+- gestures: Array
+    - types: swipe, circle (possibly also: key tap and screen tap)
+    - swipe
+        - direction: String
+            - up|down|left|right|forward|backward
+    - circle
+        - direction: String
+            - up|down|left|right|forward|backward
+        - progress: Float
+            - number of rounds for the circle gestures
 
 
-The legacy version of leapgim old held one model, but we could consider keeping the previous frame saved as well. This would allow as to configure gestures e.g. "hand movement changed from left to right after the previous moment".
+Leapgim Action Model
+====================
+
+Mouse Actions
+-------------
+
+- Movevement
+    - Grab
+    - Release
+- Buttons
+    - Click
+    - Hold
+
+Keyboard Actions
+----------------
+
+- Tap
+    - support key combinations
+- Hold
+
+Script Evocation
+----------------
+
+- Evoke
+- Start|Stop
 
 
-Leapgim Gesture model
----------------------
+Leapgim Control
+---------------
 
-Gesture model contained pretty much the same field as frame model, with some notable differences:
-- For numeric values a {min, max} map object was used to provide acceptable parameters for each gesture.
-- Timer attributes for gestures that were to be held a certain time perioid before triggering an action.
-- Any value could basically be ommitted.
+Actions for redirecting leapgim data to certain client, or load a new recipe set in the current receiver. 
 
 
-Mouse control tech notes
-------------------------
+Leapgim Client Gestures
+=======================
 
-The basic implementation is to query screen resolution and use it to map the x 
-and y attributes of palm position into a point in screen. In addition, to make
-mouse movement feasible several complementary techniques should be used.
+Define how Frame Model data is mapped to Action Model data.
+
+Actions
+-------
+
+[template]
+- action
+- time (sleep after)
+- feedback
+
+Signs
+-----
+
+[template]
+- sign
+    - valid parameters for leapgim frame model
+- time (in ms)
+
+Recipes
+-------
+
+- Sign or signs
+- Action
+- (optional) tear down action
+
+
+Leapgim Client Config
+=====================
+
+- socket (zmq notation)
+
+
+Leapgim Server Config
+=====================
+
+
+- refresh interval
+- minConfidence
+
+
+
+
+
+
 
 Mouse Sensitivity
 -----------------
@@ -181,6 +232,14 @@ position reaches the border of sensor read area.
 A notable benefit for using a sensitivity value greater than one is that hand 
 confidence levels drop in the edges. Forcing the user to remain in the middle 
 of the device FOV greatly increases accuracy near screen borders.
+
+
+Mouse control tech notes
+------------------------
+
+The basic implementation is to query screen resolution and use it to map the x 
+and y attributes of palm position into a point in screen. In addition, to make
+mouse movement feasible several complementary techniques should be used.
 
 
 Github

@@ -33,9 +33,9 @@ class ActionController
 
     # down: up|down, button: left|right
     mouseButton: (down, button) =>
+        @mouseState.button = down
+        @robot.mouseToggle down, button
         if(@mouseState.button != down)
-            @mouseState.button = down
-            @robot.mouseToggle down, button
             if(down == 'down')
                 @audioNotification 'asset/audio/mousedown.ogg'
             else
@@ -44,7 +44,6 @@ class ActionController
     parseGestures: (model) =>
 
         console.log "Parsing gestures.."
-        console.log "Keyboard model test mutex: " + @keyboardModel.test
         #console.log "model: ", model
 
         handModel = model[0]
