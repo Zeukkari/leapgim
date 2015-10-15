@@ -19,34 +19,8 @@ class FrameController extends EventEmitter
     ]
 
     constructor: ->
-        @model = @yieldDefaultModel()
+        @model = []
         console.log "Frame Controller initialized"
-
-    # TODO: Deprecate
-    yieldDefaultHandModel: ->
-        extendedFingers :
-            thumb : 0
-            indexFinger : 0
-            middleFinger : 0
-            ringerFinger : 0
-            pinky : 0
-        position : {
-            x : 0
-            y : 0
-            z : 0
-        }
-        pinchStrength: 0
-        pinchFinger: null
-
-    # TODO: Deprecate
-    yieldDefaultModel: =>
-        leftHand = @yieldDefaultHandModel()
-        leftHand.type = "left"
-        rightHand = @yieldDefaultHandModel()
-        rightHand.type = "right"
-        return [ leftHand, rightHand ]
-
-
 
     findPinchingFingerType: (hand) =>
         pincher = undefined
@@ -64,9 +38,37 @@ class FrameController extends EventEmitter
         console.log "Pincher: " + pincherName
         return pincherName
 
-        # if pincher is not undefined
-        #     console.log "Pincher type: ", pincher.type
-        #     console.log "Pincher: ", pincher
+    ###
+    # Produce x and y coordinates for a leap pointable.
+    ###
+
+    relative3DPosition: (frame, leapPoint) ->
+        iBox = frame.interactionBox
+        normalizedPoint = iBox.normalizePoint(leapPoint, false)
+
+        # Translate coordinates so that origin is in the top left corner
+        x = normalizedPoint[0]
+        y = 1 - (normalizedPoint[1])
+        z = normalizedPoint[2]
+
+        # Clamp
+        if x < 0
+            x = 0
+        if x > 1
+            x = 1
+        if y < 0
+            y = 0
+        if y > 1
+            y = 1
+        if z < -1
+            z = -1
+        if z > 1
+            z = 1
+        {
+            x: x
+            y: y
+            z: z
+        }
 
     processFrame: (frame) =>
         console.log "Processing frame..."
@@ -108,38 +110,6 @@ class FrameController extends EventEmitter
         console.log "Processed frame: ", frame.id
         return
 
-    ###
-    # Produce x and y coordinates for a leap pointable.
-    ###
-
-    relative3DPosition: (frame, leapPoint) ->
-        iBox = frame.interactionBox
-        normalizedPoint = iBox.normalizePoint(leapPoint, false)
-
-        # Translate coordinates so that origin is in the top left corner
-        x = normalizedPoint[0]
-        y = 1 - (normalizedPoint[1])
-        z = normalizedPoint[2]
-
-        # Clamp
-        if x < 0
-            x = 0
-        if x > 1
-            x = 1
-        if y < 0
-            y = 0
-        if y > 1
-            y = 1
-        if z < -1
-            z = -1
-        if z > 1
-            z = 1
-        {
-            x: x
-            y: y
-            z: z
-        }
-
 
 #
 # Socket
@@ -176,13 +146,17 @@ socket.on 'close_error', (fd, ep) ->
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
+console.log 'Start monitoring...'
+socket.monitor 500, 0
+
+
+# Config key: socket
 socket.bindSync config.socket
 
 frameController = new FrameController
 
 frameController.on 'update', (model)->
     console.log "Frame Controller update", model
-    #console.log 'sending....'
     socket.send [
         'update'
         JSON.stringify model
@@ -206,7 +180,5 @@ consume = () ->
     frameController.processFrame(frame)
     console.log "Consumed frame ", frame.id
 
-#config.interval
-#waitTime = 100
-
+# Config key: interval
 setInterval consume, config.interval

@@ -75,10 +75,13 @@ class ActionController
             unless holdMouse is true or frameIsEmpty 
                 @mouseMove(handModel)
 
-actionController = new ActionController
 
+actionController = new ActionController
 socket = zmq.socket('sub')
 
+##
+# Debugging stuff
+##
 socket.on 'connect_delay', (fd, ep) ->
     console.log 'connect_delay, endpoint:', ep
     return
@@ -107,6 +110,14 @@ socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
     return
 
+console.log 'Start monitoring...'
+socket.monitor 500, 0
+window.actionController = actionController # For debugging
+
+
+##
+# Connection 
+##
 socket.on 'connect', (fd, ep) ->
     console.log 'connect, endpoint:', ep
     socket.subscribe 'update'
@@ -120,10 +131,5 @@ socket.on 'connect', (fd, ep) ->
         return
     return
 
-console.log 'Start monitoring...'
-socket.monitor 500, 0
-
 console.log "Connect to " + config.socket
 socket.connect config.socket
-
-window.actionController = actionController
