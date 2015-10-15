@@ -50,9 +50,8 @@ class ActionController
 
         console.log "Parsing gestures.."
         #console.log "model: ", model
-
-        handModel = model[0]
-        for handModel in model
+        
+        for handModel in model.hands
             console.log "handModel: ", handModel
 
             # Demo mouse clicking
