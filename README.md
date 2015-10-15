@@ -33,7 +33,7 @@ npm start
 
 Run client:
 ```
-cd server
+cd client
 npm start
 ```
 
