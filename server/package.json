@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
-    "install": "coffee -o lib src/FrameController.coffee",
-    "start": "./index.js"
+    "build": "coffee -o lib src/FrameController.coffee",
+    "postinstall": "npm run build",
+    "start": "node index.js"
   },
   "dependencies": {
     "coffee-script": "~1.10.0",

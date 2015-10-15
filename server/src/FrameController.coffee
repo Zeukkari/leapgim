@@ -19,8 +19,12 @@ class FrameController extends EventEmitter
     ]
 
     constructor: ->
+        @timeout = 1000 # Timeout based on client timestamps
         @model = []
         console.log "Frame Controller initialized"
+
+        # Sign, action, recipe
+        # Duration!
 
     findPinchingFingerType: (hand) =>
         pincher = undefined
