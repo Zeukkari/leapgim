@@ -1,11 +1,20 @@
 robot = require 'robotjs'
 zmq = require 'zmq'
+gui = require('nw.gui')
 YAML = require 'yamljs'
 fs = require 'fs'
 
 config = YAML.parse fs.readFileSync('etc/config.yml', 'utf8')
 
 console.log "Config: ", config
+
+
+# Reference to window and tray
+mainWindow = gui.Window.get();
+# hide main 
+mainWindow.hide();
+# Show tray
+tray = new gui.Tray({ icon: 'lib/images/icon.png' });
 
 #
 # Action Controller
@@ -47,7 +56,6 @@ class ActionController
             @robot.mouseToggle down, button
 
     parseGestures: (model) =>
-
         console.log "Parsing gestures.."
         #console.log "model: ", model
         
