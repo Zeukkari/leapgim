@@ -14,7 +14,10 @@ mainWindow = gui.Window.get();
 # hide main 
 mainWindow.hide();
 # Show tray
-tray = new gui.Tray({ icon: 'asset/image/icon.png' });
+tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/icon.png' })
+tray.on 'click', () => mainWindow.show()
+menu = new gui.Menu()
+tray.menu = menu
 
 #
 # Action Controller
