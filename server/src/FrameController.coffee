@@ -195,4 +195,4 @@ consume = () ->
     console.log "Consumed frame ", frame.id
 
 # Config key: interval
-setInterval consume, config.interval\
+setInterval consume, config.interval

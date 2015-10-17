@@ -7,7 +7,7 @@
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
     "start-server": "cd server; npm start",
-    "start-client": "cd client; npm start",
+    "start-client": "cd client; npm start"
   },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
