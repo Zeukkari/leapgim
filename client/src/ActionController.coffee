@@ -14,7 +14,7 @@ mainWindow = gui.Window.get();
 # hide main 
 mainWindow.hide();
 # Show tray
-tray = new gui.Tray({ icon: 'lib/images/icon.png' });
+tray = new gui.Tray({ icon: 'asset/image/icon.png' });
 
 #
 # Action Controller
