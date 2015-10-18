@@ -36,11 +36,13 @@ class ActionController
             right : "up"
         
     audioNotification: (clip) ->
-        audio = new Audio(clip)
+        audio = new Audio('asset/audio/' + clip)
         audio.play()
 
-    visualNotification: (title, body, clip) =>
-        new Notification(title, { body: body } )
+    visualNotification: (title, options, clip) =>
+        if options.icon then options.icon = 'asset/image/touch-gesture-icons/PNG/128/' + options.icon
+        console.log options.icon
+        new Notification(title, options)
         if clip then @audioNotification clip
 
     mouseMove: (handModel) =>
@@ -55,9 +57,9 @@ class ActionController
 
         if(@mouseState.button != down)
             if(down == 'down')
-                @audioNotification 'asset/audio/mousedown.ogg'
+                @audioNotification 'mousedown.ogg'
             else
-                @audioNotification 'asset/audio/mouseup.ogg'
+                @audioNotification 'mouseup.ogg'
             @mouseState.button = down
             @robot.mouseToggle down, button
 
@@ -95,6 +97,11 @@ class ActionController
 
 actionController = new ActionController
 socket = zmq.socket('sub')
+
+
+# visual notification example
+actionController.visualNotification('Notification Example', {body: 'Example body visualNotification', icon: '2x_Hold_Timer.png', tag: 'leapgim'}, 'mousedown.ogg')
+
 
 ##
 # Debugging stuff
@@ -149,4 +156,4 @@ socket.on 'connect', (fd, ep) ->
     return
 
 console.log "Connect to " + config.socket
-# socket.connect config.s1ocket
+socket.connect config.socket
