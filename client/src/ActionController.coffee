@@ -19,6 +19,9 @@ tray.on 'click', () => mainWindow.show()
 menu = new gui.Menu()
 tray.menu = menu
 
+mainWindow.on 'focus', () => mainWindow.enterFullscreen()
+
+
 #
 # Action Controller
 #
@@ -35,6 +38,10 @@ class ActionController
     audioNotification: (clip) ->
         audio = new Audio(clip)
         audio.play()
+
+    visualNotification: (title, body, clip) =>
+        new Notification(title, { body: body } )
+        if clip then @audioNotification clip
 
     mouseMove: (handModel) =>
         screenSize = @robot.getScreenSize()
@@ -142,4 +149,4 @@ socket.on 'connect', (fd, ep) ->
     return
 
 console.log "Connect to " + config.socket
-socket.connect config.socket
+# socket.connect config.s1ocket
