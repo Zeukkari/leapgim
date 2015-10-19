@@ -11,15 +11,15 @@ console.log "Config: ", config
 
 # Reference to window and tray
 mainWindow = gui.Window.get();
-# hide main 
-mainWindow.hide();
+mainWindow.resizeTo(150, 150)
+# # hide main 
+# mainWindow.hide();
 # Show tray
-tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/icon.png' })
-tray.on 'click', () => mainWindow.show()
-menu = new gui.Menu()
-tray.menu = menu
+# tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/icon.png' })
+# tray.on 'click', () => mainWindow.show()
+# menu = new gui.Menu()
+# tray.menu = menu
 
-mainWindow.on 'focus', () => mainWindow.enterFullscreen()
 
 
 #
