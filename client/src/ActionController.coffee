@@ -11,11 +11,9 @@ class ActionController
     constructor: ->
         @actions = window.config.actions
         @robot = require 'robotjs'
-        #@feedback = new window.FeedbackController
         @mouseState =
             left : "up",
             right : "up"
-        @tearDownQueue = []
         @position =
             x: undefined
             y: undefined
@@ -29,26 +27,21 @@ class ActionController
 
     # down: up|down, button: left|right
     mouseButton: (buttonState, button) =>
-
         feedback = window.feedback
-
-        console.log "Mouse state left: " + @mouseState.left + ", right: " + @mouseState.right
-        console.log "mouseButton state: " + buttonState + ", button: " + button
-
         if(buttonState == 'up')
             @robot.mouseToggle buttonState, button
-            window.feedback.audioNotification 'asset/audio/mouseup.ogg'
-            window.feedback.mouseStatus button, buttonState
-        else if(@mouseState.button != buttonState)
-            @robot.mouseToggle buttonState, button
-            window.feedback.audioNotification 'asset/audio/mousedown.ogg'
-            window.feedback.mouseStatus button, buttonState
+            if(@mouseState.button != buttonState)
+                window.feedback.audioNotification 'asset/audio/mouseup.ogg'
+        else if(buttonState == 'down')
+            if(@mouseState.button != buttonState)
+                @robot.mouseToggle buttonState, button
+                window.feedback.audioNotification 'asset/audio/mousedown.ogg'
+        window.feedback.mouseStatus button, buttonState
         @mouseState.button = buttonState
 
     executeAction: (action) =>
-        console.log "Execute action: ", action
+        #console.log "Execute action: ", action
         cmd = @actions[action]
-        console.log "cmd: ", cmd
         if(cmd.type == 'mouse')
             if(cmd.action == 'hold')
                 button = cmd.target
@@ -57,9 +50,6 @@ class ActionController
                 button = cmd.target
                 @mouseButton 'up', button
             if(cmd.action == 'move')
-                console.log "Moooove"
-                console.log "Position: ", @position
                 @mouseMove(@position)
-
 
 window.ActionController = ActionController

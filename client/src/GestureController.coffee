@@ -12,19 +12,13 @@ class GestureController
         @signs = window.config.signs
         @recipes = window.config.recipes
         # Milliseconds. Release mouse buttons if no new data is received during this time frame.
-        #@timeout = config.timeout
-        @tearDownQueue = []
-
+        #@timeout = window.config.timeout
 
     assertSign: (sign, frameData) =>
-
-        #console.log "Assert sign: ", sign, frameData
-
         # Assert true unless a filter statement is found
         sign_ok = true
 
         for handModel in frameData.hands
-            #console.log "handModel: ", handModel
             if(sign.grab)
                 grabStrength = handModel.grabStrength
                 if(sign.grab.min)
@@ -66,48 +60,23 @@ class GestureController
         return sign_ok
 
     parseGestures: (model) =>
-
-        #console.log "Parsing gestures.."
-        #console.log "model: ", model
-        #console.log "config.signs: ", config.signs
-
-        # Mouse tracking quick'n'dirty
         manager = window.actionHero
         manager.position = model.hands[0].position
-        #console.log "Position: ", manager.position
-
-        #@timestamp = model.timestamp
-        # TODO: Implement processSign and properly figure out this shit
         # Timeout handling
+        #@timestamp = model.timestamp
         #if(@timer)
         #    clearTimeout(@timer)
         #@timer = setTimeout()
 
         validSigns = []
-
-        #console.log "signs: ", @signs
-        #console.log "recipes: ", @recipes
-
-        # This is defunct after refactoring.. why?
         for signName,signData of @signs
-            #console.log "Sign name: " + signName
-            #console.log "Sign data: " + signData
-            #console.log "Assert " + signName
             if(@assertSign(signData, model))
-                #console.log "Assert ok for " + signName
                 validSigns.push signName
 
         # TODO: Figure out tear down mechanism
-
         for recipeName, recipe of @recipes
             if(recipe.sign in validSigns)
-                #console.log "Trigger recipe action: " + recipe.action
-                #console.log "Config actions: ", config.actions
-                #action = config.actions[recipe.action]
-                #console.log "Interpolated: ", action
                 manager = window.actionHero
                 manager.executeAction(recipe.action)
-                #@tearDownQueue.push(action.tearDown)
-
 
 window.GestureController = GestureController

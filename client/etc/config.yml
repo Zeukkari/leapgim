@@ -1,28 +1,25 @@
 socket: 'tcp://127.0.0.1:8282'
 timeout: 500
 actions:
-    mouse1Up:
-        type: 'mouse'
-        action: 'release'
-        target: 'left'
-    mouse2Up:
-        type: 'mouse'
-        action: 'release'
-        target: 'right'
     mouse1Down:
         type: 'mouse'
         action: 'hold'
+        target: 'left'
+    mouse1Up:
+        type: 'mouse'
+        action: 'release'
         target: 'left'
     mouse2Down:
         type: 'mouse'
         action: 'hold'
         target: 'right'
+    mouse2Up:
+        type: 'mouse'
+        action: 'release'
+        target: 'right'
     mouseMove:
         type: 'mouse'
         action: 'move'
-    holdMouse:
-        type: 'mouse'
-        action: 'hold'
 signs:
     pinchIndex:
         pinch:
@@ -37,7 +34,7 @@ signs:
             max: 0.5
     freeHand:
         grab:
-            max: 0.5
+            max: 0.4
 recipes:
     mouseMove:
         action: 'mouseMove'
