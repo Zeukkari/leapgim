@@ -14,4 +14,7 @@ class FeedbackController
         audio = new Audio(clip)
         audio.play()
 
+    mouseStatus: (elem, status) ->
+        document.getElementById(elem).innerHTML = status
+
 window.FeedbackController = FeedbackController

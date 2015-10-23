@@ -67,14 +67,14 @@ class GestureController
 
     parseGestures: (model) =>
 
-        console.log "Parsing gestures.."
-        console.log "model: ", model
+        #console.log "Parsing gestures.."
+        #console.log "model: ", model
         #console.log "config.signs: ", config.signs
 
         # Mouse tracking quick'n'dirty
         manager = window.actionHero
         manager.position = model.hands[0].position
-        console.log "Position: ", manager.position
+        #console.log "Position: ", manager.position
 
         #@timestamp = model.timestamp
         # TODO: Implement processSign and properly figure out this shit
@@ -85,23 +85,23 @@ class GestureController
 
         validSigns = []
 
-        console.log "signs: ", @signs
-        console.log "recipes: ", @recipes
+        #console.log "signs: ", @signs
+        #console.log "recipes: ", @recipes
 
         # This is defunct after refactoring.. why?
         for signName,signData of @signs
-            console.log "Sign name: " + signName
-            console.log "Sign data: " + signData
-            console.log "Assert " + signName
+            #console.log "Sign name: " + signName
+            #console.log "Sign data: " + signData
+            #console.log "Assert " + signName
             if(@assertSign(signData, model))
-                console.log "Assert ok for " + signName
+                #console.log "Assert ok for " + signName
                 validSigns.push signName
 
         # TODO: Figure out tear down mechanism
 
         for recipeName, recipe of @recipes
             if(recipe.sign in validSigns)
-                console.log "Trigger recipe action: " + recipe.action
+                #console.log "Trigger recipe action: " + recipe.action
                 #console.log "Config actions: ", config.actions
                 #action = config.actions[recipe.action]
                 #console.log "Interpolated: ", action

@@ -28,23 +28,33 @@ class ActionController
         @robot.moveMouse(moveTo.x, moveTo.y)
 
     # down: up|down, button: left|right
-    mouseButton: (down, button) =>
+    mouseButton: (buttonState, button) =>
 
-        if(@mouseState.button != down)
-            if(down == 'down')
-                feedback.audioNotification 'asset/audio/mousedown.ogg'
+        feedback = window.feedback
+
+        console.log "Mouse state left: " + @mouseState.left + ", right: " + @mouseState.right
+        console.log "mouseButton state: " + buttonState + ", button: " + button
+
+        if(@mouseState.button != buttonState)
+            console.log "Fubar"
+            if(buttonState == 'down')
+                window.feedback.audioNotification 'asset/audio/mousedown.ogg'
+                window.feedback.mouseStatus button, buttonState
             else
-                feedback.audioNotification 'asset/audio/mouseup.ogg'
-            @mouseState.button = down
-            @robot.mouseToggle down, button
+                window.feedback.audioNotification 'asset/audio/mouseup.ogg'
+                window.feedback.mouseStatus button, buttonState
+            console.log "Fubar 2"
+            @mouseState.button = buttonState
+            @robot.mouseToggle buttonState, button
 
-        # Extra mouse up
-        if(down == 'up')
-            @robot.mouseToggle down, button
+        # # Extra mouse up
+        # if(buttonState == 'up')
+        #     @robot.mouseToggle buttonState, button
 
     executeAction: (action) =>
         console.log "Execute action: ", action
         cmd = @actions[action]
+        console.log "cmd: ", cmd
         if(cmd.type == 'mouse')
             if(cmd.action == 'hold')
                 button = cmd.target

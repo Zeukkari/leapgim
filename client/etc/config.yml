@@ -21,11 +21,11 @@ actions:
         target: 'right'
     mouse1Down:
         type: 'mouse'
-        action: 'down'
+        action: 'hold'
         target: 'left'
     mouse2Down:
         type: 'mouse'
-        action: 'down'
+        action: 'hold'
         target: 'right'
     mouseMove:
         type: 'mouse'
@@ -49,12 +49,18 @@ signs:
         grab:
             max: 0.5
 recipes:
-    holdMouse1:
-        sign: 'pinchIndex'
-        action: 'mouse1Down'
-    holdMouse2:
-        sign: 'pinchRing'
-        action: 'mouse2Down'
     mouseMove:
         action: 'mouseMove'
         sign: 'freeHand'
+    mouse1Down:
+        sign: 'pinchIndex'
+        action: 'mouse1Down'
+    mouse1Up:
+        sign: 'unpinch'
+        action: 'mouse1Up'
+    # mouse2Down:
+    #     sign: 'pinchRing'
+    #     action: 'mouse2Down'
+    # mouse2Up:
+    #     sign: 'unpinch'
+    #     action: 'mouse2Up'
