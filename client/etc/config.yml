@@ -1,16 +1,6 @@
 socket: 'tcp://127.0.0.1:8282'
 timeout: 500
 actions:
-    leftClick:
-        type: 'mouse'
-        action: 'hold'
-        tearDown: 'mouse1Up'
-        target: 'left'
-    rightClick:
-        type: 'mouse'
-        action: 'hold'
-        tearDown: 'mouse2Up'
-        target: 'right'
     mouse1Up:
         type: 'mouse'
         action: 'release'
@@ -58,9 +48,9 @@ recipes:
     mouse1Up:
         sign: 'unpinch'
         action: 'mouse1Up'
-    # mouse2Down:
-    #     sign: 'pinchRing'
-    #     action: 'mouse2Down'
-    # mouse2Up:
-    #     sign: 'unpinch'
-    #     action: 'mouse2Up'
+    mouse2Down:
+        sign: 'pinchRing'
+        action: 'mouse2Down'
+    mouse2Up:
+        sign: 'unpinch'
+        action: 'mouse2Up'

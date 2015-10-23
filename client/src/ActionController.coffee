@@ -35,21 +35,15 @@ class ActionController
         console.log "Mouse state left: " + @mouseState.left + ", right: " + @mouseState.right
         console.log "mouseButton state: " + buttonState + ", button: " + button
 
-        if(@mouseState.button != buttonState)
-            console.log "Fubar"
-            if(buttonState == 'down')
-                window.feedback.audioNotification 'asset/audio/mousedown.ogg'
-                window.feedback.mouseStatus button, buttonState
-            else
-                window.feedback.audioNotification 'asset/audio/mouseup.ogg'
-                window.feedback.mouseStatus button, buttonState
-            console.log "Fubar 2"
-            @mouseState.button = buttonState
+        if(buttonState == 'up')
             @robot.mouseToggle buttonState, button
-
-        # # Extra mouse up
-        # if(buttonState == 'up')
-        #     @robot.mouseToggle buttonState, button
+            window.feedback.audioNotification 'asset/audio/mouseup.ogg'
+            window.feedback.mouseStatus button, buttonState
+        else if(@mouseState.button != buttonState)
+            @robot.mouseToggle buttonState, button
+            window.feedback.audioNotification 'asset/audio/mousedown.ogg'
+            window.feedback.mouseStatus button, buttonState
+        @mouseState.button = buttonState
 
     executeAction: (action) =>
         console.log "Execute action: ", action
