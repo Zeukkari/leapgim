@@ -7,12 +7,13 @@
   "scripts": {
     "nw-gyp": "nw-gyp/bin/nw-gyp.js",
     "coffee": "node_modules/coffee-script/bin/coffee",
-    "build": "coffee -o lib src/ActionController.coffee",
     "rebuild-robotjs": "( cd node_modules/robotjs; nw-gyp configure rebuild --target=0.12.3 )",
     "rebuild-zmq": "( cd node_modules/zmq && nw-gyp configure rebuild --target=0.12.3 )",
-    "install": "npm run rebuild-zmq; npm run rebuild-robotjs; npm run build",
+    "install": "npm run rebuild-zmq; npm run rebuild-robotjs",
+    "postinstall": "npm run build",
+    "build": "coffee -o lib src/*.coffee",
     "nw": "node_modules/nw/bin/nw",
-    "start": "coffee -o lib src/ActionController.coffee; nw --enable-transparent-visuals --disable-gpu --force-cpu-draw ."
+    "start": "npm run build; nw ."
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
