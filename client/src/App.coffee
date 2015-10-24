@@ -43,6 +43,14 @@ socket.on 'close_error', (fd, ep) ->
     return
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
+    window.feedback.visualNotification(
+        'Server Disconnected', 
+        {
+            body: 'Connection with Leapgim Server is down', 
+            icon: 'Thumb-Down.png', 
+            tag: 'zqm'
+        }
+    )
     return
 
 console.log 'Start monitoring...'
