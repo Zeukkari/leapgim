@@ -2,6 +2,7 @@ robot = require 'robotjs'
 zmq = require 'zmq'
 YAML = require 'yamljs'
 fs = require 'fs'
+gui = require('nw.gui')
 
 window.config = YAML.parse fs.readFileSync('etc/config.yml', 'utf8')
 config = window.config
@@ -11,6 +12,9 @@ console.log "Config: ", config
 window.feedback = new window.FeedbackController
 window.actionHero = new window.ActionController
 window.translator = new window.GestureController
+
+# show connecting icon in tray
+tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/Rock-&-Roll.png' })
 
 socket = zmq.socket('sub')
 
@@ -43,6 +47,10 @@ socket.on 'close_error', (fd, ep) ->
     return
 socket.on 'disconnect', (fd, ep) ->
     console.log 'disconnect, endpoint:', ep
+
+    if tray then tray.remove()
+    tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/Thumb-Down.png' })
+
     window.feedback.visualNotification(
         'Server Disconnected', 
         {
@@ -62,6 +70,11 @@ socket.monitor 500, 0
 ##
 socket.on 'connect', (fd, ep) ->
     console.log 'connect, endpoint:', ep
+
+    # Show tray
+    if tray then tray.remove()
+    tray = new gui.Tray({ title: 'Leapgim', tooltip: 'Open Settings', icon: 'asset/image/Thumb-up.png' })
+
     socket.subscribe 'update'
     socket.on 'message', (topic, message) ->
         str_topic = topic.toString()
