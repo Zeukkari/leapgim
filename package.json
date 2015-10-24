@@ -6,13 +6,8 @@
   "version": "0.1.0",
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
-<<<<<<< HEAD
-    "start-server": "cd server; npm start",
-    "start-client": "cd client; npm start"
-=======
     "server": "cd server; npm start",
     "client": "cd client; npm start"
->>>>>>> upstream/master
   },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
