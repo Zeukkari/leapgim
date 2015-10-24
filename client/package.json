@@ -13,7 +13,7 @@
     "postinstall": "npm run build",
     "build": "coffee -o lib src/*.coffee",
     "nw": "node_modules/nw/bin/nw",
-    "start": "npm run build; nw ."
+    "start": "npm run build; nw --enable-transparent-visuals --disable-gpu ."
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
@@ -30,9 +30,9 @@
     "url": "https://github.com/Zeukkari/leapgim.git"
   },
   "window": {
-    "show":         false,
-    "transparent":  false,
+    "show":         true,
+    "transparent":  true,
     "toolbar":      false,
-    "frame":        true
+    "frame":        false
   }
 }
