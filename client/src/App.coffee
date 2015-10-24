@@ -55,8 +55,8 @@ socket.on 'disconnect', (fd, ep) ->
         'Server Disconnected', 
         {
             body: 'Connection with Leapgim Server is down', 
-            icon: 'Thumb-Down.png', 
-            tag: 'zqm'
+            icon: 'Thumb-Down.png',
+            tag: 'leapgim'
         }
     )
     return
@@ -78,12 +78,11 @@ socket.on 'connect', (fd, ep) ->
     window.feedback.visualNotification(
         'Server Connected', 
         {
-            body: 'Connection with Leapgim Server is up', 
-            icon: 'Thumb-up.png', 
-            tag: 'zqm'
+            body: 'Leapgim is up and running', 
+            icon: 'Thumb-up.png',
+            tag: 'leapgim'
         }
     )
-
 
     socket.subscribe 'update'
     socket.on 'message', (topic, message) ->
