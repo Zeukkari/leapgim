@@ -19,5 +19,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Zeukkari/leapgim.git"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1"
   }
 }
