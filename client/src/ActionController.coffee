@@ -17,13 +17,32 @@ class ActionController
         @position =
             x: undefined
             y: undefined
+        @mouseFreeze =
+            enabled: true
+            waitingTrigger: true
+
+    toggleFreeze: (toggle) =>
+        #console.log "Toggle freeze: " + toggle
+        if(toggle is false)
+            if(@mouseFreeze.waitingTrigger is false)
+                @mouseFreeze.waitingTrigger = true
+                console.log('Reset freeze trigger')
+        if(toggle is true)
+            if(@mouseFreeze.waitingTrigger)
+                console.log('Toggle freeze')
+                @mouseFreeze.waitingTrigger = false
+                if(@mouseFreeze.enabled)
+                    @mouseFreeze.enabled = false
+                else
+                    @mouseFreeze.enabled = true
 
     mouseMove: (position) =>
-        screenSize = @robot.getScreenSize()
-        moveTo =
-            x: position.x * screenSize.width
-            y: position.y * screenSize.height
-        @robot.moveMouse(moveTo.x, moveTo.y)
+        if(@mouseFreeze.enabled)
+            screenSize = @robot.getScreenSize()
+            moveTo =
+                x: position.x * screenSize.width
+                y: position.y * screenSize.height
+            @robot.moveMouse(moveTo.x, moveTo.y)
 
     # down: up|down, button: left|right
     mouseButton: (buttonState, button) =>
@@ -51,5 +70,10 @@ class ActionController
                 @mouseButton 'up', button
             if(cmd.action == 'move')
                 @mouseMove(@position)
+            if(cmd.action == 'freeze')
+                @toggleFreeze(true)
+            if(cmd.action == 'reset')
+                @toggleFreeze(false)
+                #console.log('Reset freeze')
 
 window.ActionController = ActionController

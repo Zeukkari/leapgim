@@ -20,6 +20,12 @@ actions:
     mouseMove:
         type: 'mouse'
         action: 'move'
+    mouseFreeze:
+        type: 'mouse'
+        action: 'freeze'
+    freezeReset:
+        type: 'mouse'
+        action: 'reset'
 signs:
     pinchIndex:
         pinch:
@@ -45,9 +51,9 @@ recipes:
     mouse1Up:
         sign: 'unpinch'
         action: 'mouse1Up'
-    mouse2Down:
+    mouseFreeze:
         sign: 'pinchRing'
-        action: 'mouse2Down'
-    mouse2Up:
+        action: 'mouseFreeze'
+    mouseFreezeReset:
         sign: 'unpinch'
-        action: 'mouse2Up'
+        action: 'freezeReset'
