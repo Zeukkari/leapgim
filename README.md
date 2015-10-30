@@ -1,41 +1,18 @@
-Leapgim
-=======
-
 Leap Motion gesture input mapper
 
 
-Ubuntu 14.04 Installation
--------------------------
+Setup
+=====
 
-Tested with: 
+Install:
 
-- node v4.1.2
-- npm v2.14.4.
-- Leap Motion SDK v2.3.1+31549
+npm install git+https://git@github.com/zeukkari/leapgim.git
 
-Install dependencies:
 
-sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
+Run locally:
 
-Install leapgim bundle:
-
-npm install .
-
-Running
--------
-
-Run server:
-
-```
-cd server
 npm start
-```
 
-Run client:
-```
-cd client
-npm start
-```
 
 Notes
 -----
@@ -47,58 +24,10 @@ Install n and switch node.js versions:
 sudo npm install n -g
 sudo n 2.14.4
 
-Leapgim Development
-===================
 
-Developers:
-- Petre Tudor
-- Taija Mertanen
-- Timo Aho
+Ubuntu 14.04 dependencies:
 
-
-Featurelist
------------
-
-Map hand gestures to other types of input
-
-- Mouse control
-- Keyboard control
-- Custom control (evoke scripts)
-- A GUI for defining gestures
-
-
-Feedback methods
-----------------
-
-A basic problem is that leap motion hand gestures provide no haptic feedback 
-so we need to support it other ways
-
-- Audio effects (mouse click, mouse down, button press etc)
-- Visual feedback
--> Some kind of status window?
--> "Ghost hands" via webgl magic.. possibly?
--> popup menus
-
-Examples of use:
-    -basic desktop usage: mouse movement, some limited keyboard support (arrow 
-    keys, page up/down), close window, switch windows. switch desktops
-    - media usage: playback controls etc
-    - Propellerhead use cases:
-    -> Home automation integration
--> Maybe a game control
-
-
-Tech choices
-------------
-
-- Git & Github
-- Coffeescript
-- Node.js
-- Node libraries
--> robot.js
--> nw.js
--> forever
--> zmq
+sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
 
 
 Leapgim Frame Model
@@ -123,7 +52,7 @@ Leapgim Frame Model
         - pinch
             - strength:
                 - 0...1
-            - finger: String 
+            - finger: String
                 - thumb|indexFinger|middleFinger|ringFinger|pinky
 
 - gestures: Array
@@ -168,7 +97,7 @@ Script Evocation
 Leapgim Control
 ---------------
 
-Actions for redirecting leapgim data to certain client, or load a new recipe set in the current receiver. 
+Actions for redirecting leapgim data to certain client, or load a new recipe set in the current receiver.
 
 
 Leapgim Client Gestures
@@ -198,56 +127,3 @@ Recipes
 - Sign or signs
 - Action
 - (optional) tear down action
-
-
-Leapgim Client Config
-=====================
-
-- socket (zmq notation)
-
-
-Leapgim Server Config
-=====================
-
-
-- refresh interval
-- minConfidence
-
-
-
-
-
-
-
-Mouse Sensitivity
------------------
-
-Sensitivity is implemented as a multiplier to palm coordinates. A value of 1
-indicates that mouse movement is mapped to the entire field of vision of the 
-leap motion sensor. A value lesser than 1 makes mouse movement more accurate, 
-but limits the mouse movement area to portion of the screen. A value greater 
-than 1 makes it so that the mouse pointer reaches screen border before palm 
-position reaches the border of sensor read area. 
-
-A notable benefit for using a sensitivity value greater than one is that hand 
-confidence levels drop in the edges. Forcing the user to remain in the middle 
-of the device FOV greatly increases accuracy near screen borders.
-
-
-Mouse control tech notes
-------------------------
-
-The basic implementation is to query screen resolution and use it to map the x 
-and y attributes of palm position into a point in screen. In addition, to make
-mouse movement feasible several complementary techniques should be used.
-
-
-Github
-======
-Main Repo: https://github.com/Zeukkari/leapgim
-
-Track Main Repo from local fork: 
-git remote add --track master leapgim git@github.com:Zeukkari/leapgim.git 
-
-Pull changes from repo: 
-git fetch leapgim
