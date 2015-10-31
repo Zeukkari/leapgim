@@ -1,0 +1,14 @@
+{
+  "apps" : [{
+    "name": "leapgim",
+    "script": ".",
+    "cwd": "client",
+    "vizion": true,
+    "autorestart": true,
+    "restart_delay": 4000,
+    "exec_mode": "fork_mode",
+    "exec_interpreter": "nw",
+    "watch": false,
+    "merge_logs": true
+  }]
+}

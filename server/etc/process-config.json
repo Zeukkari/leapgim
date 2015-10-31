@@ -1,14 +1,5 @@
 {
   "apps" : [{
-    "name": "leapim",
-    "script": "client",
-    "vizion": true,
-    "autorestart": true,
-    "exec_mode": "fork_mode",
-    "exec_interpreter": "nw",
-    "watch": false,
-    "merge_logs": true
-  },{
     "name": "leapgim-server",
     "script": "server/index.js",
     "cwd": "server",

@@ -6,7 +6,7 @@ YAML = require 'yamljs'
 config = YAML.load 'etc/config.yml'
 
 # Frame controller recieves leap frame data from leapd and parses it into a
-# structured format we'll use later to configure gestures with 
+# structured format we'll use later to configure gestures with
 class FrameController extends EventEmitter
 
     # A map to convert Finger type codes into descriptive names
@@ -88,10 +88,10 @@ class FrameController extends EventEmitter
                 if(config.stabilize)
                     console.log "Stabilized position in use!"
                     position = hand.stabilizedPalmPosition
-                else 
-                    position = hand.palmPosition                  
+                else
+                    position = hand.palmPosition
                 palmPosition = @relative3DPosition(frame, position)
-                
+
                 pinchStrength = hand.pinchStrength
                 if pinchStrength > 0
                     pinchingFinger = @findPinchingFingerType hand
@@ -100,7 +100,7 @@ class FrameController extends EventEmitter
 
                 handModel =
                     type : hand.type
-                    extendedFingers: 
+                    extendedFingers:
                         thumb : hand.thumb.extended
                         indexFinger : hand.indexFinger.extended
                         middleFinger : hand.middleFinger.extended
@@ -127,7 +127,7 @@ class FrameController extends EventEmitter
 
 #
 # Socket
-# 
+#
 socket = zmq.socket 'pub'
 # Register to monitoring events
 socket.on 'connect', (fd, ep) ->
@@ -178,10 +178,10 @@ frameController.on 'update', (model)->
     return
 
 # Init Leap Motion
-leapController = new Leap.Controller ( 
-    inBrowser:              false, 
-    enableGestures:         true, 
-    frameEventName:         'deviceFrame', 
+leapController = new Leap.Controller (
+    inBrowser:              false,
+    enableGestures:         true,
+    frameEventName:         'deviceFrame',
     background:             true,
     loopWhileDisconnected:  false
 )
