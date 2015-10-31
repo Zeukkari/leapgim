@@ -29,25 +29,22 @@ signs:
         pinch:
             pincher: 'ringFinger'
             min: 0.5
-    unpinch:
-        pinch:
-            max: 0.5
     freeHand:
         grab:
             max: 0.4
 recipes:
     mouseMove:
         action: 'mouseMove'
-        sign: 'freeHand'
-    mouse1Down:
-        sign: 'pinchIndex'
+        signs:
+         - 'freeHand'
+        continuous: true
+    mouseButton1:
+        signs:
+         - 'pinchIndex'
         action: 'mouse1Down'
-    mouse1Up:
-        sign: 'unpinch'
-        action: 'mouse1Up'
-    mouse2Down:
-        sign: 'pinchRing'
+        tearDown: 'mouse1Up'
+    mouseButton2:
+        signs:
+         - 'pinchRing'
         action: 'mouse2Down'
-    mouse2Up:
-        sign: 'unpinch'
-        action: 'mouse2Up'
+        tearDown: 'mouse2Up'

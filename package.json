@@ -3,7 +3,7 @@
   "author": "Petre Tudor, Taija Mertanen, Timo Aho",
   "license": "GPL-3.0",
   "description": "Leap Motion gesture input mapper",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "scripts": {
     "install": "(cd client; npm install); (cd server; npm install)",
     "start": "pm2 start server/etc/process-config.json; pm2-dev start client/etc/process-config.json"

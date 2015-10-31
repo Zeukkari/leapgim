@@ -5,14 +5,90 @@
 #
 
 config = window.config
-manager = window.actionHero
 
 class GestureController
     constructor: ->
-        @signs = window.config.signs
-        @recipes = window.config.recipes
-        # Milliseconds. Release mouse buttons if no new data is received during this time frame.
-        #@timeout = window.config.timeout
+
+        # General state data
+        state = {}
+        state.lastTimestamp = 0
+        state.currentTimestamp = 0
+        state.signRecord = {}
+        state.recipeRecord = {}
+        state.activeSigns = []
+        #state.status = "Disconnected" # disconnect/connected/something
+        state.timeout = window.config.timeout
+
+        # Sign record
+        for signName, sign of window.config.signs
+            sign.name = signName
+            sign.timeVisible = 0
+            # Sign status can be active/pending/inactive. A pending status implies that the sign has been visible but not long enough.
+            sign.status = 'inactive'
+            state.signRecord[signName] = sign
+        # Recipe record
+        for recipeName, recipe of window.config.recipes
+            recipe.name = recipeName
+            recipe.timeVisible = 0
+            # recipe status can be active/pending/inactive. A pending status implies that the recipe has been visible but not long enough.
+            recipe.signIndex = 0
+            state.recipeRecord[recipeName] = recipe
+        @state = state
+        @currentFrame = {}
+        window.gestureController = @
+
+    # Arg1 = sign name
+    updateSignRecord: (sign) =>
+        console.log "Update sign #{sign}"
+        data = @state.signRecord[sign]
+        oldStatus = data.status
+        if(@assertSign(data, @currentFrame))
+            # Sign passes assertion
+            if(oldStatus != 'inactive')
+                # Update timeVisible
+                data.timeVisible += @state.currentTimestamp - @state.lastTimestamp
+            if(!data.minTime or data.minTime < data.timeVisible)
+                data.status = 'active'
+            else
+                data.status = 'pending'
+        else
+            data.status = 'inactive'
+
+    # Arg1 = recipe name
+    updateRecipeRecord: (recipe) =>
+        console.log "Update recipe #{recipe}"
+        data = @state.recipeRecord[recipe]
+        #console.log "data: ", data
+        oldIndex = data.signIndex
+
+        #console.log "oldIndex: ", oldIndex
+
+        # Figure out the sign to look for
+        sign = data.signs[oldIndex]
+
+        #console.log "sign: ", sign
+        #console.log "active signs: ", @state.activeSigns
+
+        if sign in @state.activeSigns
+            data.signIndex += 1
+        else if(oldIndex > 0)
+            secondaryIndex = oldIndex-1
+            secondarySign = data.signs[secondaryIndex]
+            if secondarySign in @state.activeSigns
+                data.signIndex = oldIndex # Keep it as it is..
+            else
+                data.signIndex = 0
+        else
+            data.signIndex = 0
+
+        manager = window.actionHero
+        if(data.signIndex == data.signs.length)
+            # Activate recipe
+            manager.activateRecipe data.name
+        else
+            # Tear down recipe.. action controller handles extra events
+            manager.tearDownRecipe data.name
+
 
     assertSign: (sign, frameData) =>
         # Assert true unless a filter statement is found
@@ -59,24 +135,37 @@ class GestureController
                         sign_ok = false
         return sign_ok
 
+    getActiveSigns: () =>
+        activeSigns = []
+        for sign, data of @state.signRecord
+            if(data.status == 'active')
+                activeSigns.push sign
+        return activeSigns
+
     parseGestures: (model) =>
+        #console.log "Parse gestures: ", model
+
         manager = window.actionHero
+        # Update position for mouse movement
         manager.position = model.hands[0].position
-        # Timeout handling
-        #@timestamp = model.timestamp
-        #if(@timer)
-        #    clearTimeout(@timer)
-        #@timer = setTimeout()
+        #console.log "Set position: ", manager.position
 
-        validSigns = []
-        for signName,signData of @signs
-            if(@assertSign(signData, model))
-                validSigns.push signName
+        # Update timestamps
+        @lastTimestamp = @currentTimestamp
+        @currentTimestamp = model.timestamp
+        # Current frame
+        @currentFrame = model
 
-        # TODO: Figure out tear down mechanism
-        for recipeName, recipe of @recipes
-            if(recipe.sign in validSigns)
-                manager = window.actionHero
-                manager.executeAction(recipe.action)
+        # Process signs
+        #console.log "Process signs", @state.signRecord
+        for sign of @state.signRecord
+            #console.log "Sign: ", sign
+            @updateSignRecord(sign)
 
-window.GestureController = GestureController
+        # Set active signs
+        @state.activeSigns = @getActiveSigns()
+
+        # Process recipes
+        #console.log "Process recipes", @state.recipeRecord
+        for recipe of @state.recipeRecord
+            @updateRecipeRecord(recipe)
