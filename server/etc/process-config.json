@@ -1,11 +1,13 @@
 {
   "apps" : [{
     "name": "leapgim-server",
-    "script": "server/index.js",
+    "script": "src/FrameController.coffee",
     "cwd": "server",
+    "autorestart": true,
+    "restart_delay": 4000,
     "exec_mode": "fork_mode",
-    "exec_interpreter": "node",
-    "watch": false,
+    "exec_interpreter": "coffee",
+    "watch": true,
     "merge_logs": true
   }]
 }

@@ -6,8 +6,8 @@ var gulp = require('gulp')
 gulp.task('compile-coffee', function () {
     gulp.src('./src/*.coffee')
     .pipe(sourcemaps.init())
-    .pipe(coffee())
-    .pipe(sourcemaps.write())
+    .pipe(coffee({ bare: true })).on('error', gutil.log)
+    .pipe(sourcemaps.write("./maps"))
     .pipe(gulp.dest('./lib'));
 });
 gulp.task('reload', function() {
