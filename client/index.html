@@ -6,13 +6,28 @@
         <script src="lib/ActionController.js"></script>
         <script src="lib/GestureController.js"></script>
         <script src="lib/App.js"></script>
-        <!-- <link rel="stylesheet" type="text/css" href="lib/style.css"> -->
+        <script>
+          var path = './lib';
+          var fs = require('fs');
+
+          fs.watch(path, function() {
+            require('nw.gui').App.closeAllWindows();
+          });
+        </script>
+        <script>
+          var path = './index.html';
+          var fs = require('fs');
+
+          fs.watch(path, function() {
+            require('nw.gui').App.closeAllWindows();
+          });
+        </script>
     </head>
     <body>
-        <!-- <div id="holder">
-			<div class="dot"></div>
-			<div class="pulse"></div>
-		</div> -->
+        <h1>Leapgim</h1>
+        <p>Refresh time:
+            <div id="reload-status"></div>
+        </p>
         <div id="audioNotitication"></div>
         <p>Mouse 1:
             <div id="left">Dunno</div>
@@ -21,4 +36,7 @@
             <div id="right">Dunno</div>
         </p>
     </body>
+    <script>
+        document.getElementById("reload-status").innerHTML = new Date();
+    </script>
 </html>
