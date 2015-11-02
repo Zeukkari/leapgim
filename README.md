@@ -13,6 +13,18 @@ Run locally:
 
 npm start
 
+Windows 10 dependencies:
+-----------------------
+  * Nodejs and nvm: https://github.com/coreybutler/nvm-windows (download and install)
+```
+nvm install 4.1.2
+nvm use 4.1.2
+node -v
+```
+  * git: https://git-scm.com/download/win
+  * node-gyp: `npm install -g node-gyp`
+  * Visual Studio 2013 
+  * Python (v2.7.3 recommended, v3.x.x is not supported).
 
 Notes
 -----
