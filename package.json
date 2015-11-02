@@ -5,8 +5,10 @@
   "description": "Leap Motion gesture input mapper",
   "version": "0.1.2",
   "scripts": {
-    "install": "(cd client; npm install); (cd server; npm install)",
-    "start": "pm2 start server/etc/process-config.json; pm2-dev start client/etc/process-config.json"
+    "install": "npm run client-install && npm run server-install",
+    "client-install": "cd client && npm install",
+    "server-install": "cd server && npm install",
+    "start": "pm2 start server/etc/process-config.json && pm2-dev start client/etc/process-config.json"
   },
   "dependencies": {
     "nw": "^0.12.3",
