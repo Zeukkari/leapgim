@@ -60,10 +60,9 @@ socket.on 'connect', (fd, ep) ->
             str_topic = topic.toString()
             str_message = message.toString()
 
-            if(topic.toString() == 'update')
+            if(str_topic == 'update')
                 model = JSON.parse str_message
                 #console.info "Model: ", model
-                #console.log "translator: ", translator
                 translator.parseGestures(model)
         catch e
             console.log "error", e
