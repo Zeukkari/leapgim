@@ -56,12 +56,15 @@ socket.on 'connect', (fd, ep) ->
     console.log 'connect, endpoint:', ep
     socket.subscribe 'update'
     socket.on 'message', (topic, message) ->
-        str_topic = topic.toString()
-        str_message = message.toString()
+        try
+            str_topic = topic.toString()
+            str_message = message.toString()
 
-        if(topic.toString() == 'update')
-            model = JSON.parse str_message
-            translator.parseGestures(model)
+            if(topic.toString() == 'update')
+                model = JSON.parse str_message
+                translator.parseGestures(model)
+        catch e
+            console.log "error", e
         return
     return
 
