@@ -9,14 +9,12 @@ actions:
         type: 'mouse'
         action: 'release'
         target: 'left'
-    mouse2Down:
-        type: 'mouse'
-        action: 'hold'
-        target: 'right'
-    mouse2Up:
-        type: 'mouse'
-        action: 'release'
-        target: 'right'
+    keyboardTest:
+        type: 'keyboardTest'
+        action: 'down'
+    keyboardTestTearDown:
+        type: 'keyboardTest'
+        action: 'up'
     mouseMove:
         type: 'mouse'
         action: 'move'
@@ -43,8 +41,8 @@ recipes:
          - 'pinchIndex'
         action: 'mouse1Down'
         tearDown: 'mouse1Up'
-    mouseButton2:
+    keyboardTestRecipe:
         signs:
          - 'pinchRing'
-        action: 'mouse2Down'
-        tearDown: 'mouse2Up'
+        action: 'keyboardTest'
+        tearDown: 'keyboardTestTearDown'

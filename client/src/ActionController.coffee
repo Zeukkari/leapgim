@@ -25,12 +25,12 @@ class ActionController
         for name, recipe of @recipes
             @recipeState[name] = 'inactive'
 
-    # keyboardTest: (down) =>
-    #     if(down == 'down')
-    #         console.log "Keyboard state: ", @recipeState.keyboardTest
-    #         window.feedback.audioNotification 'asset/audio/mouseup.ogg'
-    #         @robot.keyToggle 't', 'down', 'command'
-    #         @robot.keyToggle 't', 'up', 'command'
+    keyboardTest: (down) =>
+        if(down == 'down')
+            console.log "Keyboard state: ", @recipeState.keyboardTest
+            window.feedback.audioNotification 'asset/audio/mouseup.ogg'
+            @robot.keyToggle 't', 'down', 'command'
+            @robot.keyToggle 't', 'up', 'command'
 
     mouseMove: (position) =>
         screenSize = @robot.getScreenSize()
