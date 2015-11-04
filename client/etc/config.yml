@@ -1,5 +1,5 @@
 socket: 'tcp://127.0.0.1:8282'
-timeout: 500
+timeout: 5000
 actions:
     mouse1Down:
         type: 'mouse'
@@ -32,6 +32,7 @@ signs:
     freeHand:
         grab:
             max: 0.4
+        minTime: 1000000
 recipes:
     mouseMove:
         action: 'mouseMove'
