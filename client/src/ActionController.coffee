@@ -48,12 +48,12 @@ class ActionController
         feedback = window.feedback
         if(buttonState == 'up')
             @robot.mouseToggle buttonState, button
-            if(@mouseState.button != buttonState)
-                window.feedback.audioNotification 'asset/audio/mouseup.ogg'
+            #if(@mouseState.button != buttonState)
+                #window.feedback.audioNotification 'asset/audio/mouseup.ogg'
         else if(buttonState == 'down')
             if(@mouseState.button != buttonState)
                 @robot.mouseToggle buttonState, button
-                window.feedback.audioNotification 'asset/audio/mousedown.ogg'
+                #window.feedback.audioNotification 'asset/audio/mousedown.ogg'
         window.feedback.mouseStatus button, buttonState
         @mouseState.button = buttonState
 
@@ -61,6 +61,11 @@ class ActionController
         #console.log "Execute action: ", action
         cmd = @actions[action]
         #console.log "cmd: ", cmd
+
+        if(cmd.feedback)
+            if(cmd.feedback.audio)
+                window.feedback.audioNotification cmd.feedback.audio
+
         if(cmd.type == 'mouse')
             if(cmd.action == 'hold')
                 button = cmd.target

@@ -16,6 +16,7 @@ class GestureController
         state.signRecord = {}
         state.recipeRecord = {}
         state.activeSigns = []
+        state.lastActiveSigns = []
         #state.status = "Disconnected" # disconnect/connected/something
         state.timeout = window.config.timeout
 
@@ -87,6 +88,8 @@ class GestureController
 
         #console.log "sign: ", sign
         #console.log "active signs: ", @state.activeSigns
+
+        signFeedback = true
 
         if sign in @state.activeSigns
             data.signIndex += 1
@@ -162,11 +165,16 @@ class GestureController
         for sign, data of @state.signRecord
             if(data.status == 'active')
                 activeSigns.push sign
+                if(data.feedback and data.feedback.audio)
+                    if(sign not in @state.lastActiveSigns)
+                        #console.log "Audio notification #{data.feedback.audio}"
+                        window.feedback.audioNotification data.feedback.audio
         return activeSigns
 
     parseGestures: (model) =>
         #console.log "Parse gestures: ", model
         clearTimeout(@timerID)
+        @state.lastActiveSigns = @state.activeSigns
 
         manager = window.actionHero
         # Update position for mouse movement
