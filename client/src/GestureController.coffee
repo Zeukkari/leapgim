@@ -44,7 +44,7 @@ class GestureController
         data.timeVisible = 0
 
     wipeRecord: () =>
-        console.log "Wiping record.."
+        #console.log "Wiping record.."
         #console.log "ActionHero recipe state: ", window.actionHero.recipeState
         manager = window.actionHero
         for sign of @state.signRecord

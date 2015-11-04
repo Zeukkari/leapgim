@@ -1,4 +1,4 @@
-#
+    #
 # Action Controller
 #
 # Triggers mouse and keyboard actions based on configured recipes. Actions are idempotent operations.
@@ -58,7 +58,7 @@ class ActionController
         @mouseState.button = buttonState
 
     executeAction: (action) =>
-        console.log "Execute action: ", action
+        #console.log "Execute action: ", action
         cmd = @actions[action]
         #console.log "cmd: ", cmd
         if(cmd.type == 'mouse')
@@ -92,9 +92,11 @@ class ActionController
     tearDownRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
         actionName = recipe.tearDown
+        if(!actionName)
+            return false
         if(@recipeState[recipeName].status == 'active')
             if(!@recipeState[recipeName].timerID)
-                console.log "Tear down delay for #{recipeName} is " + @recipeState[recipeName].tearDownDelay
+                #console.log "Tear down delay for #{recipeName} is " + @recipeState[recipeName].tearDownDelay
                 if(@recipeState[recipeName].tearDownDelay)
                     callback = () =>
                         console.log "Tear down timed recipe #{recipeName}"
@@ -110,7 +112,7 @@ class ActionController
                     @executeAction(actionName)
                     return true
             else
-                console.log "Tear down timer already triggered for #{recipeName}"
+                #console.log "Tear down timer already triggered for #{recipeName}"
                 return false
         else
             #console.log "Recipe status is inactive for #{recipeName}"
@@ -128,14 +130,5 @@ class ActionController
                     recipeList.push recipeName
         return recipeList
 
-    # tearDownRecipes: (filter) =>
-    #     console.log "Tear down recipes: ", filter
-    #     for recipeName, state of @recipeState
-    #         status = state.status
-    #         console.log "recipeName, status: ", recipeName, status
-    #         if(state != 'inactive')
-    #             if(typeof filter != 'function' or filter(recipeName, status))
-    #                 @tearDownRecipe recipeName
-    #     return
 # execute action, execute tear down action, set action state active/inactive.. fuuuu
 #
