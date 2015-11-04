@@ -37,12 +37,29 @@ class GestureController
         @currentFrame = {}
         window.gestureController = @
 
+    resetSignRecord: (sign) =>
+        console.log "Reset sign #{sign}"
+        data = @state.signRecord[sign]
+        data.status = 'inactive'
+        data.timeVisible = 0
+
+    wipeRecord: () =>
+        console.log "Wiping record.."
+        manager = window.actionHero
+        for sign of @state.signRecord
+            @resetSignRecord sign
+
+        for recipe of @state.recipeRecord
+            manager.tearDownRecipe recipe
+            @state.recipeRecord[recipe].signIndex = 0
+
+
     # Arg1 = sign name
     updateSignRecord: (sign) =>
         console.log "Update sign #{sign}"
         data = @state.signRecord[sign]
         oldStatus = data.status
-        if(@assertSign(data, @currentFrame))
+        if(@assertSign(data, @state.currentFrame))
             # Sign passes assertion
             if(oldStatus != 'inactive')
                 # Update timeVisible
@@ -52,7 +69,7 @@ class GestureController
             else
                 data.status = 'pending'
         else
-            data.status = 'inactive'
+            @resetSignRecord sign
 
     # Arg1 = recipe name
     updateRecipeRecord: (recipe) =>
@@ -82,6 +99,7 @@ class GestureController
             data.signIndex = 0
 
         manager = window.actionHero
+        #console.info "Data: ", data
         if(data.signIndex == data.signs.length)
             # Activate recipe
             manager.activateRecipe data.name
@@ -144,6 +162,7 @@ class GestureController
 
     parseGestures: (model) =>
         #console.log "Parse gestures: ", model
+        clearTimeout(@timerID)
 
         manager = window.actionHero
         # Update position for mouse movement
@@ -151,10 +170,10 @@ class GestureController
         #console.log "Set position: ", manager.position
 
         # Update timestamps
-        @lastTimestamp = @currentTimestamp
-        @currentTimestamp = model.timestamp
+        @state.lastTimestamp = @state.currentTimestamp
+        @state.currentTimestamp = model.timestamp
         # Current frame
-        @currentFrame = model
+        @state.currentFrame = model
 
         # Process signs
         #console.log "Process signs", @state.signRecord
@@ -169,3 +188,13 @@ class GestureController
         #console.log "Process recipes", @state.recipeRecord
         for recipe of @state.recipeRecord
             @updateRecipeRecord(recipe)
+
+        callback = => @wipeRecord()
+        delay = window.config.timeout
+
+        console.log "Callback", callback
+        console.log "Delay: ", delay
+
+        # Set timeout
+        @timerID = setTimeout callback, delay
+

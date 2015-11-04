@@ -1,5 +1,5 @@
 socket: 'tcp://127.0.0.1:8282'
-timeout: 500
+timeout: 2000
 actions:
     mouse1Down:
         type: 'mouse'
