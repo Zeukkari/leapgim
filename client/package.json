@@ -33,5 +33,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Zeukkari/leapgim.git"
+  },
+  "window": {
+    "show":         true,
+    "transparent":  false,
+    "toolbar":      false,
+    "frame":        true
   }
 }
