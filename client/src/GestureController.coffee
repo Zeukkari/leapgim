@@ -38,25 +38,27 @@ class GestureController
         window.gestureController = @
 
     resetSignRecord: (sign) =>
-        console.log "Reset sign #{sign}"
+        #console.log "Reset sign #{sign}"
         data = @state.signRecord[sign]
         data.status = 'inactive'
         data.timeVisible = 0
 
     wipeRecord: () =>
         console.log "Wiping record.."
+        #console.log "ActionHero recipe state: ", window.actionHero.recipeState
         manager = window.actionHero
         for sign of @state.signRecord
             @resetSignRecord sign
 
         for recipe of @state.recipeRecord
-            manager.tearDownRecipe recipe
             @state.recipeRecord[recipe].signIndex = 0
+            manager.tearDownRecipe recipe
+
 
 
     # Arg1 = sign name
     updateSignRecord: (sign) =>
-        console.log "Update sign #{sign}"
+        #console.log "Update sign #{sign}"
         data = @state.signRecord[sign]
         oldStatus = data.status
         if(@assertSign(data, @state.currentFrame))
@@ -73,7 +75,7 @@ class GestureController
 
     # Arg1 = recipe name
     updateRecipeRecord: (recipe) =>
-        console.log "Update recipe #{recipe}"
+        #console.log "Update recipe #{recipe}"
         data = @state.recipeRecord[recipe]
         #console.log "data: ", data
         oldIndex = data.signIndex
@@ -107,6 +109,8 @@ class GestureController
             # Tear down recipe.. action controller handles extra events
             manager.tearDownRecipe data.name
 
+            # Tear down with timers
+            manager.tearDownRecipe data.name
 
     assertSign: (sign, frameData) =>
         # Assert true unless a filter statement is found
@@ -192,8 +196,8 @@ class GestureController
         callback = => @wipeRecord()
         delay = window.config.timeout
 
-        console.log "Callback", callback
-        console.log "Delay: ", delay
+        #console.log "Callback", callback
+        #console.log "Delay: ", delay
 
         # Set timeout
         @timerID = setTimeout callback, delay

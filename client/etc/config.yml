@@ -43,6 +43,7 @@ recipes:
          - 'pinchIndex'
         action: 'mouse1Down'
         tearDown: 'mouse1Up'
+        #tearDownDelay: 2000
     mouseButton2:
         signs:
          - 'pinchRing'
