@@ -84,13 +84,27 @@ class ActionController
         else
             return false
 
+    deactivateRecipe: (recipeName) =>
+        recipe = @recipes[recipeName]
+        if(@recipeState[recipeName] == 'active')
+
+            setTimeout (recipe.tearDownDelay or 0)=>
+                @executeAction(recipe.tearDown)
+                @recipeState[recipeName] = 'inactive'
+
+
+
     tearDownRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
         actionName = recipe.tearDown
         if(@recipeState[recipeName] == 'active')
             console.log "Tear down: #{recipeName}"
-            @executeAction(actionName)
-            @recipeState[recipeName] = 'inactive'
+            if(recipe.tearDownDelay)
+                console.log "Tear down: #{recipeName}"
+                setTimeout(()=>
+                    @executeAction(actionName)
+                    @recipeState[recipeName] = 'inactive'
+                ), recipe.TearDownDelay
             return true
         else
             return false
