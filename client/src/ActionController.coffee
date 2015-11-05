@@ -43,7 +43,7 @@ class ActionController
             y: position.y * screenSize.height
         @robot.moveMouse(moveTo.x, moveTo.y)
 
-    # down: up|down, button: left|right
+    # buttonAction: up|down|click|doubleClick, button: left|right
     mouseButton: (buttonAction, button) =>
         feedback = window.feedback
         if(buttonAction == 'up')
@@ -61,6 +61,17 @@ class ActionController
             @mouseState[button] = 'up'
         #window.feedback.mouseStatus button, @mouseState[button] # This shouldn't be here..
 
+    # action: up|down|tap
+    keyboard: (action, button) =>
+        feedback = window.feedback
+        if(action == 'up')
+            @robot.keyToggle button, action
+        else if(action == 'down')
+            @robot.keyToggle button, action
+        else if(action == 'tap')
+            @robot.keyTap button
+        return
+
     scrollMouse: (direction, magnitude = 50) =>
         if(direction == 'up' or direction == 'down')
             @robot.scrollMouse(magnitude, direction)
@@ -68,9 +79,9 @@ class ActionController
             console.log 'This aint 3d, man!'
 
     executeAction: (action) =>
-        console.log "Execute action: ", action
+        #console.log "Execute action: ", action
         cmd = @actions[action]
-        console.log "cmd: ", cmd
+        #console.log "cmd: ", cmd
 
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
@@ -83,8 +94,9 @@ class ActionController
                 @mouseMove(@position)
             if(cmd.action == 'scroll')
                 @scrollMouse cmd.direction, cmd.magnitude
-        if(cmd.type == 'keyboardTest')
-            @keyboardTest(cmd.action)
+        if(cmd.type == 'keyboard')
+            if(cmd.action in ['up', 'down', 'tap'])
+                @keyboard cmd.action, cmd.button
 
     activateRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
