@@ -8,10 +8,13 @@ Recipes
 
 Recipes are how signs are translated into actions. The term is borrowed from IFTTT (https://ifttt.com/).
 
+```
+
          ----------
 signs -> | recipe | -> actions
          ----------
 
+```
 
 Action Types
 ------------
@@ -67,7 +70,7 @@ node -v
 
 
 Ubuntu 14.04 dependencies
-.........................
+-------------------------
 
 Node.js versions can be easily switched with the n package. In order to run leapgim you propably need to install it and switch node.js versions to whatever we're using for the moment.
 
