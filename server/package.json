@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
+    "gutil": "^1.6.4",
     "leapjs": "~0.6.4",
     "yamljs": "^0.2.4",
     "zmq": "^2.13.0"

@@ -44,35 +44,35 @@ class ActionController
         @robot.moveMouse(moveTo.x, moveTo.y)
 
     # down: up|down, button: left|right
-    mouseButton: (buttonState, button) =>
+    mouseButton: (buttonAction, button) =>
         feedback = window.feedback
-        if(buttonState == 'up')
-            @robot.mouseToggle buttonState, button
-            #if(@mouseState.button != buttonState)
-                #window.feedback.audioNotification 'asset/audio/mouseup.ogg'
-        else if(buttonState == 'down')
-            if(@mouseState.button != buttonState)
-                @robot.mouseToggle buttonState, button
-                #window.feedback.audioNotification 'asset/audio/mousedown.ogg'
-        window.feedback.mouseStatus button, buttonState
-        @mouseState.button = buttonState
+        if(buttonAction == 'up')
+            @robot.mouseToggle buttonAction, button
+            @mouseState[button] = 'up'
+        else if(buttonAction == 'down')
+            if(@mouseState.button != buttonAction)
+                @robot.mouseToggle buttonAction, button
+                @mouseState[button] = 'down'
+        else if(buttonAction == 'click')
+            @robot.mouseClick button, false
+            @mouseState[button] = 'up'
+        else if(buttonAction == 'doubleClick')
+            @robot.mouseClick button, true
+            @mouseState[button] = 'up'
+        #window.feedback.mouseStatus button, @mouseState[button] # This shouldn't be here..
 
     executeAction: (action) =>
-        #console.log "Execute action: ", action
+        console.log "Execute action: ", action
         cmd = @actions[action]
-        #console.log "cmd: ", cmd
+        console.log "cmd: ", cmd
 
         if(cmd.feedback)
             if(cmd.feedback.audio)
                 window.feedback.audioNotification cmd.feedback.audio
 
         if(cmd.type == 'mouse')
-            if(cmd.action == 'hold')
-                button = cmd.target
-                @mouseButton 'down', button
-            if(cmd.action == 'release')
-                button = cmd.target
-                @mouseButton 'up', button
+            if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
+                @mouseButton cmd.action, cmd.target
             if(cmd.action == 'move')
                 @mouseMove(@position)
         if(cmd.type == 'keyboardTest')
@@ -97,7 +97,11 @@ class ActionController
     tearDownRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
         actionName = recipe.tearDown
+
+        # Apathy!
         if(!actionName)
+            @recipeState[recipeName].status = 'inactive'
+            @recipeState[recipeName].timerID = null
             return false
         if(@recipeState[recipeName].status == 'active')
             if(!@recipeState[recipeName].timerID)
