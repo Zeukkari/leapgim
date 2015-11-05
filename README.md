@@ -1,11 +1,59 @@
 # Leap Motion gesture input mapper
 
+Leapgim Client
+==============
+
+Recipes
+-------
+
+Recipes are how signs are translated into actions. The term is borrowed from IFTTT (https://ifttt.com/).
+
+         ----------
+signs -> | recipe | -> actions
+         ----------
+
+
+Action Types
+------------
+
+Mouse buttons:
+- Mouse button down
+- Mouse button up
+- Mouse button click
+- Mouse button double click
+- Mouse scroll
+
+Mouse movement:
+- Move
+- Freeze
+- Unfreeze
+- Toggle freeze
+
+Keyboard:
+- Key down
+- Key up
+- Key tap
+
+Misc:
+- Compound (trigger a list of other actions)
+- System (run a script)
+- Reconfigure (load another profile / client config)
+
+
+Signs
+-----
+
+Signs are hand gestures in leapgim context. A sign can contain contain information about hand hand poses, native gestures, and time constraints.
+
+We use the term 'sign' to provide a clear distinction from leap motion's native gestures circle, swipe, key tap and screen tap.
+
 
 Setup
 =====
 
-Windows 10 dependencies:
+Windows 10 dependencies
 -----------------------
+
   * Nodejs and nvm: https://github.com/coreybutler/nvm-windows (download and install)
 ```
 nvm install 4.1.2
@@ -18,8 +66,8 @@ node -v
   * Python (v2.7.3 recommended, v3.x.x is not supported).
 
 
-Ubuntu 14.04 dependencies:
-..........................
+Ubuntu 14.04 dependencies
+.........................
 
 Node.js versions can be easily switched with the n package. In order to run leapgim you propably need to install it and switch node.js versions to whatever we're using for the moment.
 
@@ -34,6 +82,7 @@ sudo n 2.14.4
 sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
 ```
 
+
 Install
 -------
 
@@ -41,107 +90,10 @@ Install
 npm install git+https://git@github.com/zeukkari/leapgim.git
 ```
 
+
 Running
 -------
 
 ```
 npm start
 ```
-
-
-Leapgim Frame Model
-===================
-
-- hands: Array
-    - Hand Model
-        - type: left|right
-        - position: (x,y,z)
-        - extendedFingers: Object
-            - thumb: Bool
-            - indexFinger: Bool
-            - middleFinger: Bool
-            - ringFinger: Bool
-            - pinky: Bool
-        - palmDirection: String
-            - up|down|left|right|forward|backward
-        - palmNormal: String
-            - up|down|left|right|forward|backward
-        - grabStrength
-            - 0..1
-        - pinch
-            - strength:
-                - 0...1
-            - finger: String
-                - thumb|indexFinger|middleFinger|ringFinger|pinky
-
-- gestures: Array
-    - types: swipe, circle (possibly also: key tap and screen tap)
-    - swipe
-        - direction: String
-            - up|down|left|right|forward|backward
-    - circle
-        - direction: String
-            - up|down|left|right|forward|backward
-        - progress: Float
-            - number of rounds for the circle gestures
-
-
-Leapgim Action Model
-====================
-
-Mouse Actions
--------------
-
-- Movevement
-    - Grab
-    - Release
-- Buttons
-    - Click
-    - Hold
-
-Keyboard Actions
-----------------
-
-- Tap
-    - support key combinations
-- Hold
-
-Script Evocation
-----------------
-
-- Evoke
-- Start|Stop
-
-
-Leapgim Control
----------------
-
-Actions for redirecting leapgim data to certain client, or load a new recipe set in the current receiver.
-
-
-Leapgim Client Gestures
-=======================
-
-Define how Frame Model data is mapped to Action Model data.
-
-Actions
--------
-
-[template]
-- action
-- feedback
-
-Signs
------
-
-[template]
-- sign
-    - valid parameters for leapgim frame model
-- time (in ms)
-
-Recipes
--------
-
-- Sign or signs
-- Action
-- (optional) tear down action
