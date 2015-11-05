@@ -89,8 +89,6 @@ class GestureController
         #console.log "sign: ", sign
         #console.log "active signs: ", @state.activeSigns
 
-        signFeedback = true
-
         if sign in @state.activeSigns
             data.signIndex += 1
         else if(oldIndex > 0)
@@ -143,19 +141,19 @@ class GestureController
                         sign_ok = false
             if(sign.extendedFingers)
                 extendedFingers = sign.extendedFingers
-                if(extendedFingers.indexFinger is not undefined)
+                if(extendedFingers.indexFinger?)
                     if extendedFingers.indexFinger != handModel.extendedFingers.indexFinger
                         sign_ok = false
-                if(extendedFingers.middleFinger is not undefined)
+                if(extendedFingers.middleFinger?)
                     if extendedFingers.middleFinger != handModel.extendedFingers.middleFinger
                         sign_ok = false
-                if(extendedFingers.ringFinger is not undefined)
+                if(extendedFingers.ringFinger?)
                     if extendedFingers.ringFinger != handModel.extendedFingers.ringFinger
                         sign_ok = false
-                if(extendedFingers.pinky is not undefined)
-                    if extendedFingers.pinky != handModel.extendedFingers.ringFinger
+                if(extendedFingers.pinky?)
+                    if extendedFingers.pinky != handModel.extendedFingers.pinky
                         sign_ok = false
-                if(extendedFingers.thumb is not undefined)
+                if(extendedFingers.thumb?)
                     if extendedFingers.thumb != handModel.extendedFingers.thumb
                         sign_ok = false
         return sign_ok
