@@ -8,7 +8,7 @@ config = window.config
 
 class GestureController
     constructor: ->
-
+        @startTime = null
         # General state data
         state = {}
         state.lastTimestamp = 0
@@ -155,6 +155,25 @@ class GestureController
         @currentTimestamp = model.timestamp
         # Current frame
         @currentFrame = model
+
+        if !@startTime
+            @startTime = model.timestamp
+        else
+            @currentTotalTime = model.timestamp
+
+        # Overall time elapsed in ms since the start
+        elapsedMS = @currentTotalTime - @startTime
+        elapsedSeconds = elapsedMS / 1000000
+
+        window.feedback.time elapsedSeconds
+
+        visible = model.hands[0].visible
+
+        window.feedback.handVisible visible
+
+        confidence = model.hands[0].confidence
+
+        window.feedback.confidenceMeter confidence
 
         # Process signs
         #console.log "Process signs", @state.signRecord

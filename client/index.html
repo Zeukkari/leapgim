@@ -24,17 +24,45 @@
         </script>
     </head>
     <body>
-        <h1>Leapgim</h1>
-        <p>Refresh time:
-            <div id="reload-status"></div>
-        </p>
+        <h1 style="text-align:center">Leapgim</h1>
         <div id="audioNotitication"></div>
-        <p>Mouse 1:
-            <div id="left">Dunno</div>
-        </p>
-        <p>Mouse 2:
-            <div id="right">Dunno</div>
-        </p>
+        <table style="padding:3px; border-spacing:3px">
+        <colgroup>
+    		<col style="width:150px">
+    		<col style="width:50x">
+  		</colgroup>
+        <tr>
+        	<th style="width:150px">Refresh time: </th>
+        	<td colspan="2" style="text-indent:20px; font-size:12px"><div id="reload-status"></div></td>
+        </tr>
+        <tr>
+        	<th>Hand confidence: </th>
+        	<td span="2" style="text-indent:20px"><meter id="meter" min="0" low="50" optimum="90" max="100" value="0"></meter></td>
+        </tr>
+        <tr>
+  			<td colspan="3" style="padding:15px"></td>
+  		</tr>
+  		<tr>
+    		<th rowspan="2" style="text-align:center">Mouse: </th>
+    		<td style="text-indent:20px">Left</td>
+    		<td><div class="stat" id="left">null</div></td>
+  		</tr>
+  		<tr>
+  			<td style="text-indent:20px">Right</td>
+  			<td><div class="stat" id="right">null</div></td>
+  		</tr>
+  		<tr>
+  			<td colspan="3" style="padding:15px"></td>
+  		</tr>
+        <tr>
+        <th style="text-align:center">Elapsed time:</th>
+        <td colspan="2" style="text-indent:20px"><div class="stat" id="timer">null</div></td>
+        </tr>
+        <tr>
+        <th style="text-align:center">Hand visible:</th>
+        <td colspan="2" style="text-indent:20px"><div class="stat" id="handVisible">null</div></td>
+        </tr>
+        </table>
     </body>
     <script>
         document.getElementById("reload-status").innerHTML = new Date();

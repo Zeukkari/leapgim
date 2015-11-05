@@ -19,7 +19,6 @@ class FrameController extends EventEmitter
     ]
 
     constructor: ->
-        @timeout = 1000 # Timeout based on client timestamps
         @model = []
         console.log "Frame Controller initialized"
 
@@ -100,6 +99,8 @@ class FrameController extends EventEmitter
 
                 handModel =
                     type : hand.type
+                    visible : hand.timeVisible
+                    confidence : hand.confidence
                     extendedFingers:
                         thumb : hand.thumb.extended
                         indexFinger : hand.indexFinger.extended
@@ -193,7 +194,7 @@ consume = () ->
     frame = leapController.frame()
 
     # Skip invalid frame processing
-    if(frame is null or frame.valid is false)
+    if frame is null
         return
     frameController.processFrame(frame)
     console.log "Consumed frame ", frame.id
