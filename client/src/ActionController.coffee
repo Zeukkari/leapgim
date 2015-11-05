@@ -1,11 +1,13 @@
-    #
+#
 # Action Controller
 #
 # Triggers mouse and keyboard actions based on configured recipes. Actions are idempotent operations.
 #
+execSh = require 'exec-sh'
 
 feedback = window.feedback
 config = window.config
+
 
 class ActionController
     constructor: ->
@@ -74,6 +76,9 @@ class ActionController
         else
             console.log 'This aint 3d, man!'
 
+    execSh: (cmd, options, callback) =>
+        execSh cmd, options, callback
+
     executeAction: (action) =>
         #console.log "Execute action: ", action
         cmd = @actions[action]
@@ -101,6 +106,10 @@ class ActionController
                 @keyboard cmd.action, cmd.button
         if(cmd.type == 'compound')
             @executeAction action for action in cmd.actions
+        if(cmd.type == 'exec')
+            @execSh cmd.cmd, cmd.options, (err)->
+                if(err)
+                    console.log "Exec error", err
 
     activateRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
