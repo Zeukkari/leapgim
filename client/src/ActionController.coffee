@@ -61,13 +61,19 @@ class ActionController
             @mouseState[button] = 'up'
         #window.feedback.mouseStatus button, @mouseState[button] # This shouldn't be here..
 
+    scrollMouse: (direction, magnitude = 50) =>
+        if(direction == 'up' or direction == 'down')
+            @robot.scrollMouse(magnitude, direction)
+        else
+            console.log 'This aint 3d, man!'
+
     executeAction: (action) =>
         console.log "Execute action: ", action
         cmd = @actions[action]
         console.log "cmd: ", cmd
 
-        if(cmd.feedback)
-            if(cmd.feedback.audio)
+        if(cmd.feedback?)
+            if(cmd.feedback.audio?)
                 window.feedback.audioNotification cmd.feedback.audio
 
         if(cmd.type == 'mouse')
@@ -75,6 +81,8 @@ class ActionController
                 @mouseButton cmd.action, cmd.target
             if(cmd.action == 'move')
                 @mouseMove(@position)
+            if(cmd.action == 'scroll')
+                @scrollMouse cmd.direction, cmd.magnitude
         if(cmd.type == 'keyboardTest')
             @keyboardTest(cmd.action)
 
