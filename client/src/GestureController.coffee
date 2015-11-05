@@ -16,6 +16,7 @@ class GestureController
         state.signRecord = {}
         state.recipeRecord = {}
         state.activeSigns = []
+        state.lastActiveSigns = []
         #state.status = "Disconnected" # disconnect/connected/something
         state.timeout = window.config.timeout
 
@@ -37,12 +38,31 @@ class GestureController
         @currentFrame = {}
         window.gestureController = @
 
+    resetSignRecord: (sign) =>
+        #console.log "Reset sign #{sign}"
+        data = @state.signRecord[sign]
+        data.status = 'inactive'
+        data.timeVisible = 0
+
+    wipeRecord: () =>
+        #console.log "Wiping record.."
+        #console.log "ActionHero recipe state: ", window.actionHero.recipeState
+        manager = window.actionHero
+        for sign of @state.signRecord
+            @resetSignRecord sign
+
+        for recipe of @state.recipeRecord
+            @state.recipeRecord[recipe].signIndex = 0
+            manager.tearDownRecipe recipe
+
+
+
     # Arg1 = sign name
     updateSignRecord: (sign) =>
-        console.log "Update sign #{sign}"
+        #console.log "Update sign #{sign}"
         data = @state.signRecord[sign]
         oldStatus = data.status
-        if(@assertSign(data, @currentFrame))
+        if(@assertSign(data, @state.currentFrame))
             # Sign passes assertion
             if(oldStatus != 'inactive')
                 # Update timeVisible
@@ -52,11 +72,11 @@ class GestureController
             else
                 data.status = 'pending'
         else
-            data.status = 'inactive'
+            @resetSignRecord sign
 
     # Arg1 = recipe name
     updateRecipeRecord: (recipe) =>
-        console.log "Update recipe #{recipe}"
+        #console.log "Update recipe #{recipe}"
         data = @state.recipeRecord[recipe]
         #console.log "data: ", data
         oldIndex = data.signIndex
@@ -82,6 +102,7 @@ class GestureController
             data.signIndex = 0
 
         manager = window.actionHero
+        #console.info "Data: ", data
         if(data.signIndex == data.signs.length)
             # Activate recipe
             manager.activateRecipe data.name
@@ -89,6 +110,8 @@ class GestureController
             # Tear down recipe.. action controller handles extra events
             manager.tearDownRecipe data.name
 
+            # Tear down with timers
+            manager.tearDownRecipe data.name
 
     assertSign: (sign, frameData) =>
         # Assert true unless a filter statement is found
@@ -118,19 +141,19 @@ class GestureController
                         sign_ok = false
             if(sign.extendedFingers)
                 extendedFingers = sign.extendedFingers
-                if(extendedFingers.indexFinger is not undefined)
+                if(extendedFingers.indexFinger?)
                     if extendedFingers.indexFinger != handModel.extendedFingers.indexFinger
                         sign_ok = false
-                if(extendedFingers.middleFinger is not undefined)
+                if(extendedFingers.middleFinger?)
                     if extendedFingers.middleFinger != handModel.extendedFingers.middleFinger
                         sign_ok = false
-                if(extendedFingers.ringFinger is not undefined)
+                if(extendedFingers.ringFinger?)
                     if extendedFingers.ringFinger != handModel.extendedFingers.ringFinger
                         sign_ok = false
-                if(extendedFingers.pinky is not undefined)
-                    if extendedFingers.pinky != handModel.extendedFingers.ringFinger
+                if(extendedFingers.pinky?)
+                    if extendedFingers.pinky != handModel.extendedFingers.pinky
                         sign_ok = false
-                if(extendedFingers.thumb is not undefined)
+                if(extendedFingers.thumb?)
                     if extendedFingers.thumb != handModel.extendedFingers.thumb
                         sign_ok = false
         return sign_ok
@@ -140,10 +163,16 @@ class GestureController
         for sign, data of @state.signRecord
             if(data.status == 'active')
                 activeSigns.push sign
+                if(data.feedback and data.feedback.audio)
+                    if(sign not in @state.lastActiveSigns)
+                        #console.log "Audio notification #{data.feedback.audio}"
+                        window.feedback.audioNotification data.feedback.audio
         return activeSigns
 
     parseGestures: (model) =>
         #console.log "Parse gestures: ", model
+        clearTimeout(@timerID)
+        @state.lastActiveSigns = @state.activeSigns
 
         manager = window.actionHero
         # Update position for mouse movement
@@ -151,10 +180,10 @@ class GestureController
         #console.log "Set position: ", manager.position
 
         # Update timestamps
-        @lastTimestamp = @currentTimestamp
-        @currentTimestamp = model.timestamp
+        @state.lastTimestamp = @state.currentTimestamp
+        @state.currentTimestamp = model.timestamp
         # Current frame
-        @currentFrame = model
+        @state.currentFrame = model
 
         if !@startTime
             @startTime = model.timestamp
@@ -188,3 +217,13 @@ class GestureController
         #console.log "Process recipes", @state.recipeRecord
         for recipe of @state.recipeRecord
             @updateRecipeRecord(recipe)
+
+        callback = => @wipeRecord()
+        delay = window.config.timeout
+
+        #console.log "Callback", callback
+        #console.log "Delay: ", delay
+
+        # Set timeout
+        @timerID = setTimeout callback, delay
+

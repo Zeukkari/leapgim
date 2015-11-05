@@ -14,6 +14,7 @@ class FeedbackController
         audio = new Audio(clip)
         audio.play()
 
+    # TODO
     mouseStatus: (elem, status) ->
         document.getElementById(elem).innerHTML = status
 
@@ -27,5 +28,6 @@ class FeedbackController
         adjustedConfidence = confidence * 100
         meter = document.getElementById('meter')
         meter.value = adjustedConfidence
+
 
 window.FeedbackController = FeedbackController

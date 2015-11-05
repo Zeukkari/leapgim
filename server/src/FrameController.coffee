@@ -105,7 +105,7 @@ class FrameController extends EventEmitter
                         thumb : hand.thumb.extended
                         indexFinger : hand.indexFinger.extended
                         middleFinger : hand.middleFinger.extended
-                        ringerFinger : hand.ringFinger.extended
+                        ringFinger : hand.ringFinger.extended
                         pinky : hand.pinky.extended
                     position: palmPosition
                     grabStrength : hand.grabStrength

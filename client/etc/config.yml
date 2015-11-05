@@ -1,25 +1,58 @@
 socket: 'tcp://127.0.0.1:8282'
-timeout: 500
+timeout: 2000
 actions:
     mouse1Down:
         type: 'mouse'
-        action: 'hold'
+        action: 'down'
         target: 'left'
+        feedback:
+            audio: 'asset/audio/mousedown.ogg'
     mouse1Up:
         type: 'mouse'
-        action: 'release'
+        action: 'up'
         target: 'left'
+        feedback:
+            audio: 'asset/audio/mouseup.ogg'
     mouse2Down:
         type: 'mouse'
-        action: 'hold'
+        action: 'down'
         target: 'right'
     mouse2Up:
         type: 'mouse'
-        action: 'release'
+        action: 'up'
         target: 'right'
+    mouse2Click:
+        type: 'mouse'
+        action: 'click'
+        target: 'right'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    mouseScrollUp:
+        type: 'mouse'
+        action: 'scroll'
+        direction: 'up'
+        magnitude: 20
+    mouseScrollDown:
+        type: 'mouse'
+        action: 'scroll'
+        direction: 'down'
+        magnitude: 20
+    keyboardButtonADown:
+        type: 'keyboard'
+        action: 'down'
+        button: 'a'
+    keyboardButtonAUp:
+        type: 'keyboard'
+        action: 'up'
+        button: 'a'
     mouseMove:
         type: 'mouse'
         action: 'move'
+    toggleFreeze:
+        type: 'mouse'
+        action: 'toggleFreeze'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
 signs:
     pinchIndex:
         pinch:
@@ -32,6 +65,21 @@ signs:
     freeHand:
         grab:
             max: 0.4
+    # peaceHeld:
+    #     extendedFingers:
+    #         indexFinger: true
+    #         middleFinger: true
+    #         ringFinger: false
+    #         pinky: false
+    #     minTime: 2000000
+    #     feedback:
+    #         audio: 'asset/audio/mallet.ogg'
+    # surpriseHand:
+    #     grab:
+    #         max: 0.4
+    #     feedback:
+    #         audio: 'asset/audio/mallet.ogg'
+
 recipes:
     mouseMove:
         action: 'mouseMove'
@@ -46,5 +94,13 @@ recipes:
     mouseButton2:
         signs:
          - 'pinchRing'
-        action: 'mouse2Down'
-        tearDown: 'mouse2Up'
+        action: 'mouse2Click'
+    # mouseButton1:
+    #     signs:
+    #      - 'pinchIndex'
+    #     action: 'toggleFreeze'
+    # keyboardButtonAHold:
+    #     signs:
+    #      - 'pinchIndex'
+    #     action: 'keyboardButtonADown'
+    #     tearDown: 'keyboardButtonAUp'

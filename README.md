@@ -1,33 +1,52 @@
-Leap Motion gesture input mapper
+# Leap Motion gesture input mapper
 
 
 Setup
 =====
 
-Install:
+Windows 10 dependencies:
+-----------------------
+  * Nodejs and nvm: https://github.com/coreybutler/nvm-windows (download and install)
+```
+nvm install 4.1.2
+nvm use 4.1.2
+node -v
+```
+  * git: https://git-scm.com/download/win
+  * node-gyp: `npm install -g node-gyp`
+  * Visual Studio 2013
+  * Python (v2.7.3 recommended, v3.x.x is not supported).
 
-npm install git+https://git@github.com/zeukkari/leapgim.git
 
-
-Run locally:
-
-npm start
-
-
-Notes
------
+Ubuntu 14.04 dependencies:
+..........................
 
 Node.js versions can be easily switched with the n package. In order to run leapgim you propably need to install it and switch node.js versions to whatever we're using for the moment.
 
 Install n and switch node.js versions:
 
+```
 sudo npm install n -g
 sudo n 2.14.4
+```
 
-
-Ubuntu 14.04 dependencies:
-
+```
 sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
+```
+
+Install
+-------
+
+```
+npm install git+https://git@github.com/zeukkari/leapgim.git
+```
+
+Running
+-------
+
+```
+npm start
+```
 
 
 Leapgim Frame Model
@@ -110,7 +129,6 @@ Actions
 
 [template]
 - action
-- time (sleep after)
 - feedback
 
 Signs
