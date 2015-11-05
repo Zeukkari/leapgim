@@ -13,9 +13,7 @@ class ActionController
         @recipes = window.config.recipes
         window.ActionController = @
         @robot = require 'robotjs'
-        @mouseState =
-            left : "up",
-            right : "up"
+        @mouseState = 'free' # free|frozen
         @position =
             x: undefined
             y: undefined
@@ -29,37 +27,35 @@ class ActionController
             if(recipe.tearDownDelay)
                 @recipeState[name].tearDownDelay = recipe.tearDownDelay
 
-    # keyboardTest: (down) =>
-    #     if(down == 'down')
-    #         console.log "Keyboard state: ", @recipeState.keyboardTest.status
-    #         window.feedback.audioNotification 'asset/audio/mouseup.ogg'
-    #         @robot.keyToggle 't', 'down', 'command'
-    #         @robot.keyToggle 't', 'up', 'command'
+    freezeMouse: () => @mouseState = 'frozen'
+    unfreezeMouse: () => @mouseState = 'free'
+    toggleMouseFreeze: () =>
+        if (@mouseState == 'frozen')
+            @mouseState = 'free'
+        else if(@mouseState == 'free')
+            @mouseState = 'frozen'
 
     mouseMove: (position) =>
-        screenSize = @robot.getScreenSize()
-        moveTo =
-            x: position.x * screenSize.width
-            y: position.y * screenSize.height
-        @robot.moveMouse(moveTo.x, moveTo.y)
+        if(@mouseState == 'free')
+            screenSize = @robot.getScreenSize()
+            moveTo =
+                x: position.x * screenSize.width
+                y: position.y * screenSize.height
+            @robot.moveMouse(moveTo.x, moveTo.y)
+        else
+            console.log "Mouse is frozen.."
 
     # buttonAction: up|down|click|doubleClick, button: left|right
     mouseButton: (buttonAction, button) =>
         feedback = window.feedback
         if(buttonAction == 'up')
             @robot.mouseToggle buttonAction, button
-            @mouseState[button] = 'up'
         else if(buttonAction == 'down')
-            if(@mouseState.button != buttonAction)
-                @robot.mouseToggle buttonAction, button
-                @mouseState[button] = 'down'
+            @robot.mouseToggle buttonAction, button
         else if(buttonAction == 'click')
             @robot.mouseClick button, false
-            @mouseState[button] = 'up'
         else if(buttonAction == 'doubleClick')
             @robot.mouseClick button, true
-            @mouseState[button] = 'up'
-        #window.feedback.mouseStatus button, @mouseState[button] # This shouldn't be here..
 
     # action: up|down|tap
     keyboard: (action, button) =>
@@ -88,6 +84,12 @@ class ActionController
                 window.feedback.audioNotification cmd.feedback.audio
 
         if(cmd.type == 'mouse')
+            if(cmd.action == 'freeze')
+                @freezeMouse()
+            if(cmd.action == 'unfreeze')
+                @unfreezeMouse()
+            if(cmd.action == 'toggleFreeze')
+                @toggleMouseFreeze()
             if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
                 @mouseButton cmd.action, cmd.target
             if(cmd.action == 'move')

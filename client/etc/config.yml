@@ -37,9 +37,22 @@ actions:
         action: 'scroll'
         direction: 'down'
         magnitude: 20
+    keyboardButtonADown:
+        type: 'keyboard'
+        action: 'down'
+        button: 'a'
+    keyboardButtonAUp:
+        type: 'keyboard'
+        action: 'up'
+        button: 'a'
     mouseMove:
         type: 'mouse'
         action: 'move'
+    toggleFreeze:
+        type: 'mouse'
+        action: 'toggleFreeze'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
 signs:
     pinchIndex:
         pinch:
@@ -82,3 +95,12 @@ recipes:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
+    # mouseButton1:
+    #     signs:
+    #      - 'pinchIndex'
+    #     action: 'toggleFreeze'
+    # keyboardButtonAHold:
+    #     signs:
+    #      - 'pinchIndex'
+    #     action: 'keyboardButtonADown'
+    #     tearDown: 'keyboardButtonAUp'
