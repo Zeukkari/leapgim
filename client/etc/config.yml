@@ -53,6 +53,26 @@ actions:
         action: 'toggleFreeze'
         feedback:
             audio: 'asset/audio/mallet.ogg'
+    keyboardButtonA:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'a'
+    keyboardButtonB:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'b'
+    keyboardButtonC:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'c'
+    compoundActionTest:
+        type: 'compound'
+        actions:
+         - 'keyboardButtonA'
+         - 'keyboardButtonB'
+         - 'keyboardButtonC'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
 signs:
     pinchIndex:
         pinch:
@@ -95,6 +115,10 @@ recipes:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
+    # compoundRecipe:
+    #     signs:
+    #      - 'pinchRing'
+    #     action: 'compoundActionTest'
     # mouseButton1:
     #     signs:
     #      - 'pinchIndex'
