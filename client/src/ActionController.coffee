@@ -99,6 +99,8 @@ class ActionController
         if(cmd.type == 'keyboard')
             if(cmd.action in ['up', 'down', 'tap'])
                 @keyboard cmd.action, cmd.button
+        if(cmd.type == 'compound')
+            @executeAction action for action in cmd.actions
 
     activateRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
