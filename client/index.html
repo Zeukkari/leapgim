@@ -6,22 +6,7 @@
         <script src="lib/ActionController.js"></script>
         <script src="lib/GestureController.js"></script>
         <script src="lib/App.js"></script>
-        <script>
-          var path = './lib';
-          var fs = require('fs');
-
-          fs.watch(path, function() {
-            require('nw.gui').App.closeAllWindows();
-          });
-        </script>
-        <script>
-          var path = './index.html';
-          var fs = require('fs');
-
-          fs.watch(path, function() {
-            require('nw.gui').App.closeAllWindows();
-          });
-        </script>
+        <script src="util/Overseer.js"></script>
     </head>
     <body>
         <h1 style="text-align:center">Leapgim</h1>
