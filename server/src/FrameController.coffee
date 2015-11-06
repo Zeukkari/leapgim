@@ -78,10 +78,15 @@ class FrameController extends EventEmitter
         if not frame.valid or frame.hands is null or frame.hands.length is 0
             console.log "Invalid frame or no hands detected"
         else
+
+            console.log "Gestures: ", frame.gestures
+
+
             @model =
                 hands : []
                 gestures : []
                 timestamp : frame.timestamp
+                #pointables : []
             for hand in frame.hands
                 if(config.stabilize)
                     console.log "Stabilized position in use!"
@@ -101,24 +106,62 @@ class FrameController extends EventEmitter
                     visible : hand.timeVisible
                     confidence : hand.confidence
                     extendedFingers:
-                        thumb : hand.thumb.extended
-                        indexFinger : hand.indexFinger.extended
-                        middleFinger : hand.middleFinger.extended
-                        ringFinger : hand.ringFinger.extended
-                        pinky : hand.pinky.extended
+                        thumb : hand.thumb?.extended
+                        indexFinger : hand.indexFinger?.extended
+                        middleFinger : hand.middleFinger?.extended
+                        ringFinger : hand.ringFinger?.extended
+                        pinky : hand.pinky?.extended
                     position: palmPosition
                     grabStrength : hand.grabStrength
                     pinchStrength : pinchStrength
                     pinchingFinger : pinchingFinger
+                    speed : hand.palmVelocity
+                    pitch : hand.pitch
+                    roll  : hand.roll
+                    direction : hand.direction
                 @model.hands.push handModel
+
+            # # Basically fingers, but also pencils etc.
+            # for pointable of frame.pointables
+
+            #     if(config.stabilize)
+            #         fingerPosition = pointable.stabilizedTipPosition
+            #     else
+            #         fingerPosition = pointable.tipPosition
+            #         tipPosition = relative3DPosition(frame, fingerPosition)
+
+            #     pointableModel =
+            #         direction : pointable.direction
+            #         length : pointable.length
+            #         id : pointable.id
+            #         tool : pointable.tool
+            #         speed : pointable.tipVelocity
+            #     model.pointables.push pointableModel
 
             # Gestures
             for gesture in frame.gestures
+
+                if gesture.type is "circle"
+                    circleVector = frame.pointable(gesture.pointableIds[0]).direction
+
+                    console.log "Circle vector", circleVector
+                    console.log "Cirlce normal", gesture.normal
+
+                    gesture.direction = Leap.vec3.dot(circleVector, gesture.normal)
+
                 gestureModel =
                     type : gesture.type
                     duration : gesture.duration
                     progress: gesture.progress
                     state : gesture.state
+                    radius : gesture.radius
+                    center : gesture.center
+                    hands : gesture.handIds
+                    speed : gesture.speed
+                    startPosition : gesture.startPosition
+                    position : gesture.position
+                    direction : gesture.direction
+
                 @model.gestures.push gestureModel
             @emit 'update', @model
         console.log "Processed frame: ", frame.id

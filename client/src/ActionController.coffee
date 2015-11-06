@@ -36,7 +36,6 @@ class ActionController
 
     freezeMouse: (handPosition) =>
         @freezePosition = @robot.getMousePos()
-        #console.log "Freeze mouse", @freezePosition
         @mouseState = 'frozen'
 
     unfreezeMouse: (handPosition) =>
@@ -45,6 +44,7 @@ class ActionController
             x: handPosition.x * screenSize.width
             y: handPosition.y * screenSize.height
         @unfreezePosition = normalizedHandPosition
+        console.log "Unfreeze mouse", @unfreezePosition
         @mouseState = 'free'
 
     toggleMouseFreeze: (handPosition) =>
@@ -90,11 +90,15 @@ class ActionController
             @robot.keyTap button
         return
 
-    scrollMouse: (direction, magnitude = 50) =>
+    scrollMouse: (direction, magnitude) =>
         if(direction == 'up' or direction == 'down')
             @robot.scrollMouse(magnitude, direction)
         else
             console.log 'This aint 3d, man!'
+
+
+    delayMouse: (delay) =>
+            @robot.delayMouse(delay)
 
     execSh: (cmd, options, callback) =>
         execSh cmd, options, callback
@@ -103,12 +107,11 @@ class ActionController
         console.log "Load profile #{profile}"
         window.loadProfile(profile)
 
+
     executeAction: (action) =>
-        #console.log "Execute action: ", action
         cmd = @actions[action]
         # console.log "cmd: ", cmd
         screenSize = @robot.getScreenSize()
-
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
                 window.feedback.audioNotification cmd.feedback.audio
@@ -129,6 +132,8 @@ class ActionController
                 @mouseMove(@position)
             if(cmd.action == 'scroll')
                 @scrollMouse cmd.direction, cmd.magnitude
+            if(cmd.action == 'delay')
+                @delayMouse cmd.delay
         if(cmd.type == 'keyboard')
             if(cmd.action in ['up', 'down', 'tap'])
                 @keyboard cmd.action, cmd.button
