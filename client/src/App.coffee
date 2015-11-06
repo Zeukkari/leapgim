@@ -8,17 +8,10 @@ window.loadProfile = (profile) ->
 
     console.log "Load profile #{profile}"
 
-<<<<<<< HEAD
-window.feedback = new window.FeedbackController
-window.actionHero = new window.ActionController
-console.log "Action hero", window.actionHero
-window.translator = new window.GestureController
-=======
     # Close possible zmq socket
     if(window.socket)
         console.log "Close socket"
         window.socket.close()
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
 
     # Clear possible old instances
     window.feedback = undefined

@@ -36,10 +36,6 @@ class ActionController
 
     freezeMouse: (handPosition) =>
         @freezePosition = @robot.getMousePos()
-<<<<<<< HEAD
-=======
-        #console.log "Freeze mouse", @freezePosition
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
         @mouseState = 'frozen'
 
     unfreezeMouse: (handPosition) =>
@@ -48,10 +44,7 @@ class ActionController
             x: handPosition.x * screenSize.width
             y: handPosition.y * screenSize.height
         @unfreezePosition = normalizedHandPosition
-<<<<<<< HEAD
         console.log "Unfreeze mouse", @unfreezePosition
-=======
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
         @mouseState = 'free'
 
     toggleMouseFreeze: (handPosition) =>
@@ -103,26 +96,22 @@ class ActionController
         else
             console.log 'This aint 3d, man!'
 
-<<<<<<< HEAD
+
     delayMouse: (delay) =>
             @robot.delayMouse(delay)
-=======
+
     execSh: (cmd, options, callback) =>
         execSh cmd, options, callback
 
     loadProfile: (profile) ->
         console.log "Load profile #{profile}"
         window.loadProfile(profile)
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
+
 
     executeAction: (action) =>
         cmd = @actions[action]
         # console.log "cmd: ", cmd
-<<<<<<< HEAD
-=======
         screenSize = @robot.getScreenSize()
-
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
                 window.feedback.audioNotification cmd.feedback.audio
@@ -237,9 +226,5 @@ class ActionController
         return recipeList
 
 # execute action, execute tear down action, set action state active/inactive.. fuuuu
-<<<<<<< HEAD
-#
-=======
 #
 window.ActionController = ActionController
->>>>>>> cf25dea83d37f449eeec8024a98d876b95485f86
