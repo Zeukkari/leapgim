@@ -146,16 +146,32 @@ class ActionController
         recipe = @recipes[recipeName]
         #console.log "recipe data:", recipe
         actionName = recipe.action
-        if(recipe.continuous)
-            #console.log "activate continuous recipe: ", recipeName
-            @executeAction(actionName)
-            return true
-        else if(@recipeState[recipeName].status == 'inactive')
-            if(!@recipeState[recipeName].timerID)
-                console.log "Activate recipe #{recipeName}"
-                @recipeState[recipeName].status = 'active'
-                @executeAction(actionName)
-                return true
+
+        # Skip activation if charging
+        if(!@recipeState[recipeName].timerID)
+            if(recipe.continuous)
+                if(@recipeState[recipeName].status != 'sleeping')
+                    if(recipe.chargeDelay)
+                        chargeDelay = recipe.chargeDelay
+                        #console.log "Recipe #{recipeName} sleeping for #{chargeDelay}"
+                        callback = () =>
+                            #console.log "Recipe #{recipeName} is awake!"
+                            @recipeState[recipeName].status = 'inactive'
+                            @recipeState[recipeName].timerID = null
+                        @recipeState[recipeName].status = 'sleeping'
+                        @recipeState[recipeName].timerID = setTimeout callback, chargeDelay
+                    #console.log "activate continuous recipe: ", recipeName
+                    @executeAction(actionName)
+                    return true
+                else
+                    #console.log "Recipe #{recipeName} is sleeping..."
+                    return false
+            else if(@recipeState[recipeName].status == 'inactive')
+                if(!@recipeState[recipeName].timerID)
+                    #console.log "Activate recipe #{recipeName}"
+                    @recipeState[recipeName].status = 'active'
+                    @executeAction(actionName)
+                    return true
         return false
 
     tearDownRecipe: (recipeName) =>

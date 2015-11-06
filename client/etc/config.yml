@@ -129,6 +129,8 @@ recipes:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
+        continuous: true
+        chargeDelay: 500
     # compoundRecipe:
     #     signs:
     #      - 'pinchRing'
