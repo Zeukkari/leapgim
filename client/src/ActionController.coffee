@@ -11,12 +11,17 @@ class ActionController
     constructor: ->
         @actions = window.config.actions
         @recipes = window.config.recipes
-        window.ActionController = @
         @robot = require 'robotjs'
         @mouseState = 'free' # free|frozen
         @position =
-            x: undefined
-            y: undefined
+            x: 0
+            y: 0
+        @freezePosition =
+            x: 0
+            y: 0
+        @unfreezePosition =
+            x: 0
+            y: 0
         @keyboardModel =
             test: false
         @recipeState = {}
@@ -27,23 +32,38 @@ class ActionController
             if(recipe.tearDownDelay)
                 @recipeState[name].tearDownDelay = recipe.tearDownDelay
 
-    freezeMouse: () => @mouseState = 'frozen'
-    unfreezeMouse: () => @mouseState = 'free'
-    toggleMouseFreeze: () =>
-        if (@mouseState == 'frozen')
-            @mouseState = 'free'
-        else if(@mouseState == 'free')
-            @mouseState = 'frozen'
+    freezeMouse: (handPosition) =>
+        @freezePosition = @robot.getMousePos()
+        @mouseState = 'frozen'
 
-    mouseMove: (position) =>
+    unfreezeMouse: (handPosition) =>
+        screenSize = @robot.getScreenSize()
+        normalizedHandPosition =
+            x: handPosition.x * screenSize.width
+            y: handPosition.y * screenSize.height
+        @unfreezePosition = normalizedHandPosition
+        console.log "Unfreeze mouse", @unfreezePosition
+        @mouseState = 'free'
+
+    toggleMouseFreeze: (handPosition) =>
+        if (@mouseState == 'frozen')
+            @unfreezeMouse handPosition
+        else if(@mouseState == 'free')
+            @freezeMouse handPosition
+
+    mouseMove: (handPosition) =>
         if(@mouseState == 'free')
             screenSize = @robot.getScreenSize()
+            normalizedHandPosition =
+                x: handPosition.x * screenSize.width
+                y: handPosition.y * screenSize.height
+            offsetMapping =
+                x: @freezePosition.x - @unfreezePosition.x
+                y: @freezePosition.y - @unfreezePosition.y
             moveTo =
-                x: position.x * screenSize.width
-                y: position.y * screenSize.height
+                x: normalizedHandPosition.x + offsetMapping.x
+                y: normalizedHandPosition.y + offsetMapping.y
             @robot.moveMouse(moveTo.x, moveTo.y)
-        else
-            console.log "Mouse is frozen.."
 
     # buttonAction: up|down|click|doubleClick, button: left|right
     mouseButton: (buttonAction, button) =>
@@ -68,34 +88,37 @@ class ActionController
             @robot.keyTap button
         return
 
-    scrollMouse: (direction, magnitude = 50) =>
+    scrollMouse: (direction, magnitude) =>
         if(direction == 'up' or direction == 'down')
             @robot.scrollMouse(magnitude, direction)
         else
             console.log 'This aint 3d, man!'
 
-    executeAction: (action) =>
-        #console.log "Execute action: ", action
-        cmd = @actions[action]
-        #console.log "cmd: ", cmd
+    delayMouse: (delay) =>
+            @robot.delayMouse(delay)
 
+    executeAction: (action) =>
+        cmd = @actions[action]
+        # console.log "cmd: ", cmd
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
                 window.feedback.audioNotification cmd.feedback.audio
 
         if(cmd.type == 'mouse')
             if(cmd.action == 'freeze')
-                @freezeMouse()
+                @freezeMouse(@position)
             if(cmd.action == 'unfreeze')
-                @unfreezeMouse()
+                @unfreezeMouse(@position)
             if(cmd.action == 'toggleFreeze')
-                @toggleMouseFreeze()
+                @toggleMouseFreeze(@position)
             if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
                 @mouseButton cmd.action, cmd.target
             if(cmd.action == 'move')
                 @mouseMove(@position)
             if(cmd.action == 'scroll')
                 @scrollMouse cmd.direction, cmd.magnitude
+            if(cmd.action == 'delay')
+                @delayMouse cmd.delay
         if(cmd.type == 'keyboard')
             if(cmd.action in ['up', 'down', 'tap'])
                 @keyboard cmd.action, cmd.button

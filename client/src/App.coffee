@@ -10,6 +10,7 @@ console.log "Config: ", config
 
 window.feedback = new window.FeedbackController
 window.actionHero = new window.ActionController
+console.log "Action hero", window.actionHero
 window.translator = new window.GestureController
 
 socket = zmq.socket('sub')

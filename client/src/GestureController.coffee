@@ -38,6 +38,28 @@ class GestureController
         @currentFrame = {}
         window.gestureController = @
 
+    directionCalculator: (x, y, z) =>
+
+        max = Math.max(x, y, z)
+
+        if max is x
+            if x > 0
+                result = 'left'
+            if x < 0
+                result = 'right'
+        if max is y
+            if y > 0
+                result ='down'
+            if y < 0
+                status = 'up'
+        if max is z
+            if z > 0
+                status = 'forward'
+            if z < 0
+                status = 'backward'
+
+        return status
+
     resetSignRecord: (sign) =>
         #console.log "Reset sign #{sign}"
         data = @state.signRecord[sign]
@@ -156,6 +178,84 @@ class GestureController
                 if(extendedFingers.thumb?)
                     if extendedFingers.thumb != handModel.extendedFingers.thumb
                         sign_ok = false
+            if sign.hover
+                if sign.hover.left?
+                    if hand.type is not 'left' and sign.hover.left is true
+                        sign_ok = false
+                if sign.hover.minTime?
+                    if sign.hover.minTime > hand.timeVisible
+                        sign_ok = false
+        console.log " Here ?"
+
+        # pitch: up (180) and down (-180)
+        # roll: left (180) and right (180)
+
+       # for pointableModel in frameData.pointables
+       #      if sign.tool?
+       #          if pointable.tool is false
+       #              sign_ok = false
+       #      if sign.noSameHand
+       #          if pointable.id != hand.id then sign_ok = false
+
+        for gestureModel in frameData.gestures
+            #fingers = gesture.pointableIds[f]
+            #amount = gesture.pointableIds[0].lenght
+            #hands = gesture.handIds[0].lenght
+            gesture = gestureModel
+
+            if sign.minDuration?
+                if sign.minDuration > gesture.duration then sign_ok = false
+            if sign.maxDuration?
+                if sign.maxDuration < gesture.duration then sign_ok = false
+
+            if sign.circle
+                #if sign.circle.fingerCount?
+                #    if sign.circle.fingerCount is not amount then sign_ok = false
+                if sign.circle.minCircles?
+                    if sign.circle.minCircles > gesture.progress
+                        console.log "State not cool! 1"
+                        sign_ok = false
+                if sign.circle.maxCircles?
+                    if sign.circle.maxCircles < gesture.progress
+                        console.log "State not cool! 2"
+                        sign_ok = false
+                if sign.circle.minRadius?
+                    if sign.circle.minRadius > gesture.radius
+                        console.log "State not cool! 3"
+                        sign_ok = false
+                if sign.circle.maxRadius?
+                    if sign.circle.maxRadius < gesture.radius
+                        console.log "State not cool! 4"
+                        sign_ok = false
+                #if sign.circle.twoHanded?
+                #    if gesture.handIds[0].lenght > 2 then sign_ok = false
+                if sign.circle.clockwise is true
+                    if gesture.direction < 0 then sign_ok = false
+                if sign.circle.clockwise is false
+                    if gesture.direction > 0 then sign_ok = false
+                if gesture.state is 'stop'
+                    console.log "State not cool!"
+                    sign_ok = false
+            if sign.swipe
+                swipe = sign.swipe
+                pos = gesture.position
+                spos = gesture.startPosition
+                if swipe.minDistance?
+                    if gesture.position > gesture.startPosition then sign_ok = false
+                if swipe.maxDistance?
+                    if gesture.position < gesture.startPosition then sign_ok = false
+                if swipe.minSpeed?
+                    if swipe.speed < gesture.speed then sign_ok = false
+                if swipe.maxSpeed?
+                    if swipe.speed > gesture.speed then sign_ok = false
+                if swipe.direction?
+                    x = Math.abs(spos[0] - pos[0])
+                    y = Math.abs(spos[1] - pos[0])
+                    z = Math.abs(spos[1] - pos[0])
+                    result = @directionCalculator(x, y, z)
+                    if result != swipe.direction
+                        sign_ok = false
+
         return sign_ok
 
     getActiveSigns: () =>
@@ -205,7 +305,7 @@ class GestureController
         window.feedback.confidenceMeter confidence
 
         # Process signs
-        #console.log "Process signs", @state.signRecord
+        console.log "Process signs", @state.signRecord
         for sign of @state.signRecord
             #console.log "Sign: ", sign
             @updateSignRecord(sign)

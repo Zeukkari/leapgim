@@ -31,12 +31,12 @@ actions:
         type: 'mouse'
         action: 'scroll'
         direction: 'up'
-        magnitude: 20
+        magnitude: 50
     mouseScrollDown:
         type: 'mouse'
         action: 'scroll'
         direction: 'down'
-        magnitude: 20
+        magnitude: 50
     keyboardButtonADown:
         type: 'keyboard'
         action: 'down'
@@ -48,6 +48,10 @@ actions:
     mouseMove:
         type: 'mouse'
         action: 'move'
+    mouseDelay:
+        type: 'mouse'
+        action: 'delay'
+        delay: 100
     toggleFreeze:
         type: 'mouse'
         action: 'toggleFreeze'
@@ -65,6 +69,30 @@ signs:
     freeHand:
         grab:
             max: 0.4
+    #twoCirclesDown:
+    #    circle:
+    #        minCircles: 2
+    #        clockwise: true
+    #twoCirclesUp:
+    #    circle:
+    #        minCircles: 2
+    #        clockwise: false
+    swipeDown:
+        swipe:
+            direction: 'down'
+            minDistance: 10000
+    swipeUp:
+        swipe:
+            direction: 'up'
+            minDistance: 10000
+    #stopSign:
+    #    hover:
+    #        left: true
+    #        minDistance:
+    #startSign:
+    #    hover:
+    #        left: false
+    #        minTime: 3
     # peaceHeld:
     #     extendedFingers:
     #         indexFinger: true
@@ -95,6 +123,25 @@ recipes:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
+        tearDown: 'mouse2Up'
+    mouseScrollDown:
+        signs:
+        - 'swipeDown'
+        action: 'mouseScrollDown'
+        #tearDown: 'startSign'
+    mouseScrollUp:
+        signs:
+        - 'swipeUp'
+        action: 'mouseScrollUp'
+        #¨tearDown: 'startSign'
+    #stop:
+    #    signs:
+    #    - 'stopSign'
+    #    action: 'toggleFreeze'
+    #start:
+    #    signs:
+    #    - 'startSign'
+    #    action: 'toggleFreeze'
     # mouseButton1:
     #     signs:
     #      - 'pinchIndex'
