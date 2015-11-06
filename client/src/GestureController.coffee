@@ -62,6 +62,7 @@ class GestureController
         #console.log "Update sign #{sign}"
         data = @state.signRecord[sign]
         oldStatus = data.status
+        #console.log "Assert sign", data
         if(@assertSign(data, @state.currentFrame))
             # Sign passes assertion
             if(oldStatus != 'inactive')
@@ -227,3 +228,4 @@ class GestureController
         # Set timeout
         @timerID = setTimeout callback, delay
 
+window.GestureController = GestureController

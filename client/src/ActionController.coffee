@@ -13,7 +13,6 @@ class ActionController
     constructor: ->
         @actions = window.config.actions
         @recipes = window.config.recipes
-        window.ActionController = @
         @robot = require 'robotjs'
         @mouseState = 'free' # free|frozen
         @position =
@@ -29,9 +28,9 @@ class ActionController
             if(recipe.tearDownDelay)
                 @recipeState[name].tearDownDelay = recipe.tearDownDelay
 
-    freezeMouse: () => @mouseState = 'frozen'
-    unfreezeMouse: () => @mouseState = 'free'
-    toggleMouseFreeze: () =>
+    freezeMouse: => @mouseState = 'frozen'
+    unfreezeMouse: => @mouseState = 'free'
+    toggleMouseFreeze: =>
         if (@mouseState == 'frozen')
             @mouseState = 'free'
         else if(@mouseState == 'free')
@@ -79,6 +78,10 @@ class ActionController
     execSh: (cmd, options, callback) =>
         execSh cmd, options, callback
 
+    loadProfile: (profile) ->
+        console.log "Load profile #{profile}"
+        window.loadProfile(profile)
+
     executeAction: (action) =>
         #console.log "Execute action: ", action
         cmd = @actions[action]
@@ -110,6 +113,9 @@ class ActionController
             @execSh cmd.cmd, cmd.options, (err)->
                 if(err)
                     console.log "Exec error", err
+        if(cmd.type == 'profile')
+            if(cmd.action == 'load')
+                @loadProfile(cmd.target)
 
     activateRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
@@ -129,6 +135,7 @@ class ActionController
 
     tearDownRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
+        return unless recipe
         actionName = recipe.tearDown
 
         # Apathy!
@@ -174,3 +181,4 @@ class ActionController
 
 # execute action, execute tear down action, set action state active/inactive.. fuuuu
 #
+window.ActionController = ActionController
