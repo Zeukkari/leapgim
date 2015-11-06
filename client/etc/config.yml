@@ -114,7 +114,7 @@ recipes:
     mouseButton2:
         signs:
          - 'pinchRing'
-        action: 'mouse2Click'
+        action: 'toggleFreeze'
     # compoundRecipe:
     #     signs:
     #      - 'pinchRing'
