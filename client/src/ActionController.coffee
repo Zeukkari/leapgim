@@ -24,9 +24,6 @@ class ActionController
         @unfreezePosition =
             x: 0
             y: 0
-        @offsetMapping =
-            x: 0
-            y: 0
         @keyboardModel =
             test: false
         @recipeState = {}
@@ -38,13 +35,8 @@ class ActionController
                 @recipeState[name].tearDownDelay = recipe.tearDownDelay
 
     freezeMouse: (handPosition) =>
-        # screenSize = @robot.getScreenSize()
-        # normalizedHandPosition =
-        #     x: handPosition.x * screenSize.width
-        #     y: handPosition.y * screenSize.height
-        # @freezePosition = normalizedHandPosition
         @freezePosition = @robot.getMousePos()
-        console.log "Freeze mouse", @freezePosition
+        #console.log "Freeze mouse", @freezePosition
         @mouseState = 'frozen'
 
     unfreezeMouse: (handPosition) =>
@@ -53,7 +45,6 @@ class ActionController
             x: handPosition.x * screenSize.width
             y: handPosition.y * screenSize.height
         @unfreezePosition = normalizedHandPosition
-        console.log "Unfreeze mouse", @unfreezePosition
         @mouseState = 'free'
 
     toggleMouseFreeze: (handPosition) =>
@@ -64,17 +55,16 @@ class ActionController
 
     mouseMove: (handPosition) =>
         if(@mouseState == 'free')
-            @offsetMapping =
-                x: @freezePosition.x - @unfreezePosition.x
-                y: @freezePosition.y - @unfreezePosition.y
-
             screenSize = @robot.getScreenSize()
             normalizedHandPosition =
                 x: handPosition.x * screenSize.width
                 y: handPosition.y * screenSize.height
+            offsetMapping =
+                x: @freezePosition.x - @unfreezePosition.x
+                y: @freezePosition.y - @unfreezePosition.y
             moveTo =
-                x: normalizedHandPosition.x + @offsetMapping.x
-                y: normalizedHandPosition.y + @offsetMapping.y
+                x: normalizedHandPosition.x + offsetMapping.x
+                y: normalizedHandPosition.y + offsetMapping.y
             @robot.moveMouse(moveTo.x, moveTo.y)
 
     # buttonAction: up|down|click|doubleClick, button: left|right
@@ -117,13 +107,7 @@ class ActionController
         #console.log "Execute action: ", action
         cmd = @actions[action]
         # console.log "cmd: ", cmd
-        # console.log "Position: ", @position
-        # console.log "Offset: ", @offsetMapping
         screenSize = @robot.getScreenSize()
-        @debug =
-            x: @offsetMapping.x * screenSize.width
-            y: @offsetMapping.y * screenSize.height
-        #console.log "Debug: ", @debug
 
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
