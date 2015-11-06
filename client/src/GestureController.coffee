@@ -84,6 +84,7 @@ class GestureController
         #console.log "Update sign #{sign}"
         data = @state.signRecord[sign]
         oldStatus = data.status
+        #console.log "Assert sign", data
         if(@assertSign(data, @state.currentFrame))
             # Sign passes assertion
             if(oldStatus != 'inactive')
@@ -263,10 +264,14 @@ class GestureController
         for sign, data of @state.signRecord
             if(data.status == 'active')
                 activeSigns.push sign
-                if(data.feedback and data.feedback.audio)
+                if(data.feedback?.audio)
                     if(sign not in @state.lastActiveSigns)
                         #console.log "Audio notification #{data.feedback.audio}"
                         window.feedback.audioNotification data.feedback.audio
+                if(data.feedback?.visual?)
+                    options = data.feedback.visual
+                    window.feedback.visualNotification options.id, options.msg
+
         return activeSigns
 
     parseGestures: (model) =>
@@ -327,3 +332,4 @@ class GestureController
         # Set timeout
         @timerID = setTimeout callback, delay
 
+window.GestureController = GestureController

@@ -7,20 +7,34 @@ actions:
         target: 'left'
         feedback:
             audio: 'asset/audio/mousedown.ogg'
+            visual:
+                id: 'left'
+                msg: 'Down!'
     mouse1Up:
         type: 'mouse'
         action: 'up'
         target: 'left'
         feedback:
             audio: 'asset/audio/mouseup.ogg'
+            visual:
+                id: 'left'
+                msg: 'Up!'
     mouse2Down:
         type: 'mouse'
         action: 'down'
         target: 'right'
+        feedback:
+            visual:
+                id: 'right'
+                msg: 'Down!'
     mouse2Up:
         type: 'mouse'
         action: 'up'
         target: 'right'
+        feedback:
+            visual:
+                id: 'right'
+                msg: 'Up!'
     mouse2Click:
         type: 'mouse'
         action: 'click'
@@ -55,6 +69,26 @@ actions:
     toggleFreeze:
         type: 'mouse'
         action: 'toggleFreeze'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    keyboardButtonA:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'a'
+    keyboardButtonB:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'b'
+    keyboardButtonC:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'c'
+    compoundActionTest:
+        type: 'compound'
+        actions:
+         - 'keyboardButtonA'
+         - 'keyboardButtonB'
+         - 'keyboardButtonC'
         feedback:
             audio: 'asset/audio/mallet.ogg'
 signs:
@@ -123,8 +157,22 @@ recipes:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
-        tearDown: 'mouse2Up'
-    mouseScrollDown:
+        continuous: true
+        chargeDelay: 500
+        # compoundRecipe:
+        #     signs:
+        #      - 'pinchRing'
+        #     action: 'compoundActionTest'
+        # mouseButton1:
+        #     signs:
+        #      - 'pinchIndex'
+        #     action: 'toggleFreeze'
+        # keyboardButtonAHold:
+        #     signs:
+        #      - 'pinchIndex'
+        #     action: 'keyboardButtonADown'
+        #     tearDown: 'keyboardButtonAUp'
+        #         mouseScrollDown:
         signs:
         - 'swipeDown'
         action: 'mouseScrollDown'
@@ -133,21 +181,12 @@ recipes:
         signs:
         - 'swipeUp'
         action: 'mouseScrollUp'
-        #¨tearDown: 'startSign'
-    #stop:
-    #    signs:
-    #    - 'stopSign'
-    #    action: 'toggleFreeze'
-    #start:
-    #    signs:
-    #    - 'startSign'
-    #    action: 'toggleFreeze'
-    # mouseButton1:
-    #     signs:
-    #      - 'pinchIndex'
-    #     action: 'toggleFreeze'
-    # keyboardButtonAHold:
-    #     signs:
-    #      - 'pinchIndex'
-    #     action: 'keyboardButtonADown'
-    #     tearDown: 'keyboardButtonAUp'
+        #tearDown: 'startSign'
+        #stop:
+        #    signs:
+        #    - 'stopSign'
+        #    action: 'toggleFreeze'
+        #start:
+        #    signs:
+        #    - 'startSign'
+        #    action: 'toggleFreeze'

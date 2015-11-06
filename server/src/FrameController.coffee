@@ -22,9 +22,8 @@ class FrameController extends EventEmitter
         @model = []
         console.log "Frame Controller initialized"
 
-        # Sign, action, recipe
-        # Duration!
-
+    # TODO: return an array of pinching fingers if two fingers are both
+    # sufficiently close to the thumb.
     findPinchingFingerType: (hand) =>
         pincher = undefined
         closest = 500
