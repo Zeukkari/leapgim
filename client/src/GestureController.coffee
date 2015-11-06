@@ -186,7 +186,6 @@ class GestureController
                 if sign.hover.minTime?
                     if sign.hover.minTime > hand.timeVisible
                         sign_ok = false
-        console.log " Here ?"
 
         # pitch: up (180) and down (-180)
         # roll: left (180) and right (180)
@@ -214,19 +213,15 @@ class GestureController
                 #    if sign.circle.fingerCount is not amount then sign_ok = false
                 if sign.circle.minCircles?
                     if sign.circle.minCircles > gesture.progress
-                        console.log "State not cool! 1"
                         sign_ok = false
                 if sign.circle.maxCircles?
                     if sign.circle.maxCircles < gesture.progress
-                        console.log "State not cool! 2"
                         sign_ok = false
                 if sign.circle.minRadius?
                     if sign.circle.minRadius > gesture.radius
-                        console.log "State not cool! 3"
                         sign_ok = false
                 if sign.circle.maxRadius?
                     if sign.circle.maxRadius < gesture.radius
-                        console.log "State not cool! 4"
                         sign_ok = false
                 #if sign.circle.twoHanded?
                 #    if gesture.handIds[0].lenght > 2 then sign_ok = false
@@ -235,7 +230,6 @@ class GestureController
                 if sign.circle.clockwise is false
                     if gesture.direction > 0 then sign_ok = false
                 if gesture.state is 'stop'
-                    console.log "State not cool!"
                     sign_ok = false
             if sign.swipe
                 swipe = sign.swipe
@@ -310,7 +304,7 @@ class GestureController
         window.feedback.confidenceMeter confidence
 
         # Process signs
-        console.log "Process signs", @state.signRecord
+        #console.log "Process signs", @state.signRecord
         for sign of @state.signRecord
             #console.log "Sign: ", sign
             @updateSignRecord(sign)
