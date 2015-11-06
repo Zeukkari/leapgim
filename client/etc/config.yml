@@ -7,20 +7,34 @@ actions:
         target: 'left'
         feedback:
             audio: 'asset/audio/mousedown.ogg'
+            visual:
+                id: 'left'
+                msg: 'Down!'
     mouse1Up:
         type: 'mouse'
         action: 'up'
         target: 'left'
         feedback:
             audio: 'asset/audio/mouseup.ogg'
+            visual:
+                id: 'left'
+                msg: 'Up!'
     mouse2Down:
         type: 'mouse'
         action: 'down'
         target: 'right'
+        feedback:
+            visual:
+                id: 'right'
+                msg: 'Down!'
     mouse2Up:
         type: 'mouse'
         action: 'up'
         target: 'right'
+        feedback:
+            visual:
+                id: 'right'
+                msg: 'Up!'
     mouse2Click:
         type: 'mouse'
         action: 'click'
@@ -114,7 +128,7 @@ recipes:
     mouseButton2:
         signs:
          - 'pinchRing'
-        action: 'toggleFreeze'
+        action: 'mouse2Click'
     # compoundRecipe:
     #     signs:
     #      - 'pinchRing'

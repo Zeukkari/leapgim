@@ -14,9 +14,9 @@ class FeedbackController
         audio = new Audio(clip)
         audio.play()
 
-    # TODO
-    mouseStatus: (elem, status) ->
-        document.getElementById(elem).innerHTML = status
+    visualNotification: (domID, msg) ->
+        #console.info "Visual notification", domID, msg
+        document.getElementById(domID)?.innerHTML = msg
 
     time: (elapsed) ->
         document.getElementById('timer').innerHTML = elapsed

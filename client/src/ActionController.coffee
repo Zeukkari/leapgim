@@ -112,6 +112,9 @@ class ActionController
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
                 window.feedback.audioNotification cmd.feedback.audio
+            if(cmd.feedback.visual?)
+                options = cmd.feedback.visual
+                window.feedback.visualNotification options.id, options.msg
 
         if(cmd.type == 'mouse')
             if(cmd.action == 'freeze')
