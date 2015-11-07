@@ -37,7 +37,8 @@ window.loadProfile = (profile) ->
                     model = JSON.parse str_message
                     translator.parseGestures(model)
             catch e
-                console.log "error", e
+                console.log "error", e.message
+                console.log "trace", e.stack
             return
         return
     socket.on 'connect_delay', (fd, ep) ->

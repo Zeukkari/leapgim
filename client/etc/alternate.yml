@@ -109,6 +109,18 @@ actions:
         type: 'keyboard'
         action: 'tap'
         button: 'up'
+    keyboardButtonDown:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'down'
+    keyboardButtonRight:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'right'
+    keyboardButtonLeft:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'left'
     compoundActionTest:
         type: 'compound'
         actions:
@@ -123,6 +135,30 @@ actions:
          - 'keyboardCtrlDown'
          - 'keyboardAltDown'
          - 'keyboardButtonUp'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    ctrlAltDown:
+        type: 'compound'
+        actions:
+         - 'keyboardCtrlDown'
+         - 'keyboardAltDown'
+         - 'keyboardButtonDown'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    ctrlAltLeft:
+        type: 'compound'
+        actions:
+         - 'keyboardCtrlDown'
+         - 'keyboardAltDown'
+         - 'keyboardButtonLeft'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    ctrlAltRight:
+        type: 'compound'
+        actions:
+         - 'keyboardCtrlDown'
+         - 'keyboardAltDown'
+         - 'keyboardButtonRight'
         feedback:
             audio: 'asset/audio/mallet.ogg'
     ctrlAltTearDown:
@@ -154,12 +190,39 @@ signs:
         swipe:
             direction: 'up'
             minDistance: 10000
+    swipeRight:
+        swipe:
+            direction: 'right'
+            minDistance: 10000
+    swipeLeft:
+        swipe:
+            direction: 'left'
+            minDistance: 10000
 recipes:
     swichDesktopUp:
+        signs:
+        - 'swipeDown'
+        action: 'ctrlAltDown'
+        tearDown: 'ctrlAltTearDown'
+        tearDownDelay: 100
+    swichDesktopDown:
         signs:
         - 'swipeUp'
         action: 'ctrlAltUp'
         tearDown: 'ctrlAltTearDown'
+        tearDownDelay: 100
+    swichDesktopLeft:
+        signs:
+        - 'swipeRight'
+        action: 'ctrlAltRight'
+        tearDown: 'ctrlAltTearDown'
+        tearDownDelay: 100
+    swichDesktopRight:
+        signs:
+        - 'swipeLeft'
+        action: 'ctrlAltLeft'
+        tearDown: 'ctrlAltTearDown'
+        tearDownDelay: 100
     changeProfile:
         signs:
         - 'pinchPinky'
