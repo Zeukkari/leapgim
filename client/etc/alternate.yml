@@ -4,7 +4,7 @@ actions:
     alternateProfile:
         type: 'profile'
         action: 'load'
-        target: 'etc/alternate.yml'
+        target: 'etc/config.yml'
         feedback:
             audio: 'asset/audio/amsterdam.ogg'
     mouse1Down:
@@ -89,6 +89,26 @@ actions:
         type: 'keyboard'
         action: 'tap'
         button: 'c'
+    keyboardCtrlDown:
+        type: 'keyboard'
+        action: 'down'
+        button: 'ctrl'
+    keyboardCtrlUp:
+        type: 'keyboard'
+        action: 'up'
+        button: 'ctrl'
+    keyboardAltDown:
+        type: 'keyboard'
+        action: 'down'
+        button: 'alt'
+    keyboardAltUp:
+        type: 'keyboard'
+        action: 'up'
+        button: 'alt'
+    keyboardButtonUp:
+        type: 'keyboard'
+        action: 'tap'
+        button: 'up'
     compoundActionTest:
         type: 'compound'
         actions:
@@ -97,6 +117,19 @@ actions:
          - 'keyboardButtonC'
         feedback:
             audio: 'asset/audio/mallet.ogg'
+    ctrlAltUp:
+        type: 'compound'
+        actions:
+         - 'keyboardCtrlDown'
+         - 'keyboardAltDown'
+         - 'keyboardButtonUp'
+        feedback:
+            audio: 'asset/audio/mallet.ogg'
+    ctrlAltTearDown:
+        type: 'compound'
+        actions:
+         - 'keyboardAltUp'
+         - 'keyboardCtrlUp'
 signs:
     pinchIndex:
         pinch:
@@ -113,14 +146,6 @@ signs:
     freeHand:
         grab:
             max: 0.4
-    #twoCirclesDown:
-    #    circle:
-    #        minCircles: 2
-    #        clockwise: true
-    #twoCirclesUp:
-    #    circle:
-    #        minCircles: 2
-    #        clockwise: false
     swipeDown:
         swipe:
             direction: 'down'
@@ -129,50 +154,12 @@ signs:
         swipe:
             direction: 'up'
             minDistance: 10000
-    #stopSign:
-    #    hover:
-    #        left: true
-    #        minDistance:
-    #startSign:
-    #    hover:
-    #        left: false
-    #        minTime: 3
-    # peaceHeld:
-    #     extendedFingers:
-    #         indexFinger: true
-    #         middleFinger: true
-    #         ringFinger: false
-    #         pinky: false
-    #     minTime: 2000000
-    #     feedback:
-    #         audio: 'asset/audio/mallet.ogg'
-    # surpriseHand:
-    #     grab:
-    #         max: 0.4
-    #     feedback:
-    #         audio: 'asset/audio/mallet.ogg'
-
 recipes:
-    mouseMove:
-        action: 'mouseMove'
-        signs:
-         - 'freeHand'
-        continuous: true
-    mouseButton1:
-        signs:
-         - 'pinchIndex'
-        action: 'mouse1Down'
-        tearDown: 'mouse1Up'
-    mouseButton2:
-        signs:
-         - 'pinchRing'
-        action: 'mouse2Click'
-        continuous: true
-        chargeDelay: 500
-    mouseScrollUp:
+    swichDesktopUp:
         signs:
         - 'swipeUp'
-        action: 'mouseScrollUp'
+        action: 'ctrlAltUp'
+        tearDown: 'ctrlAltTearDown'
     changeProfile:
         signs:
         - 'pinchPinky'
