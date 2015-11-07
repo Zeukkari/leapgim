@@ -32,6 +32,7 @@
     "nw-gyp": "^0.12.3"
   },
   "repository": {
+    
     "type": "git",
     "url": "https://github.com/Zeukkari/leapgim.git"
   }

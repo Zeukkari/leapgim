@@ -92,11 +92,11 @@ actions:
     keyboardCtrlDown:
         type: 'keyboard'
         action: 'down'
-        button: 'ctrl'
+        button: 'control'
     keyboardCtrlUp:
         type: 'keyboard'
         action: 'up'
-        button: 'ctrl'
+        button: 'control'
     keyboardAltDown:
         type: 'keyboard'
         action: 'down'

@@ -250,6 +250,7 @@ class GestureController
                     result = @directionCalculator(x, y, z)
                     if result != swipe.direction
                         sign_ok = false
+                console.log 'swipe', JSON.stringify(swipe)
 
         return sign_ok
 

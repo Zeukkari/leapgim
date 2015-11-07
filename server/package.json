@@ -8,7 +8,7 @@
     "coffee": "node_modules/coffee-script/bin/coffee",
     "build": "coffee -o lib src/FrameController.coffee",
     "postinstall": "npm run build",
-    "start": "node index.js"
+    "start": "npm run build && node index.js"
   },
   "dependencies": {
     "coffee-script": "~1.10.0",

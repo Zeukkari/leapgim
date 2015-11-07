@@ -73,13 +73,13 @@ class FrameController extends EventEmitter
         }
 
     processFrame: (frame) =>
-        console.log "Processing frame..."
+        # console.log "Processing frame..."
 
         if not frame.valid or frame.hands is null or frame.hands.length is 0
-            console.log "Invalid frame or no hands detected"
+            # console.log "Invalid frame or no hands detected"
         else
 
-            console.log "Gestures: ", frame.gestures
+            # console.log "Gestures: ", frame.gestures
 
 
             @model =
@@ -164,7 +164,7 @@ class FrameController extends EventEmitter
 
                 @model.gestures.push gestureModel
             @emit 'update', @model
-        console.log "Processed frame: ", frame.id
+        # console.log "Processed frame: ", frame.id
         return
 
 
@@ -213,7 +213,7 @@ socket.bindSync config.socket
 frameController = new FrameController
 
 frameController.on 'update', (model)->
-    console.log "Frame Controller update", model
+    # console.log "Frame Controller update", model
     socket.send [
         'update'
         JSON.stringify model
@@ -239,7 +239,7 @@ consume = () ->
     if frame is null
         return
     frameController.processFrame(frame)
-    console.log "Consumed frame ", frame.id
+    # console.log "Consumed frame ", frame.id
 
 # Config key: interval
 setInterval consume, config.interval
