@@ -1,11 +1,7 @@
 {EventEmitter} = require 'events'
 Leap = require 'leapjs'
-#zmq = require 'zmq'
-#YAML = require 'yamljs'
 fs = require 'fs'
 
-# config = YAML.load 'etc/config-server.yml'
-#config = YAML.parse fs.readFileSync 'etc/config-server.yml', 'utf8'
 config =
     interval: 50
     stabilize: true
@@ -83,10 +79,6 @@ class FrameController extends EventEmitter
         if not frame.valid or frame.hands is null or frame.hands.length is 0
             # console.log "Invalid frame or no hands detected"
         else
-
-            # console.log "Gestures: ", frame.gestures
-
-
             @model =
                 hands : []
                 gestures : []
@@ -126,23 +118,6 @@ class FrameController extends EventEmitter
                     direction : hand.direction
                 @model.hands.push handModel
 
-            # # Basically fingers, but also pencils etc.
-            # for pointable of frame.pointables
-
-            #     if(config.stabilize)
-            #         fingerPosition = pointable.stabilizedTipPosition
-            #     else
-            #         fingerPosition = pointable.tipPosition
-            #         tipPosition = relative3DPosition(frame, fingerPosition)
-
-            #     pointableModel =
-            #         direction : pointable.direction
-            #         length : pointable.length
-            #         id : pointable.id
-            #         tool : pointable.tool
-            #         speed : pointable.tipVelocity
-            #     model.pointables.push pointableModel
-
             # Gestures
             for gesture in frame.gestures
 
@@ -171,59 +146,6 @@ class FrameController extends EventEmitter
             @emit 'update', @model
         # console.log "Processed frame: ", frame.id
         return
-
-
-# #
-# # Socket
-# #
-# socket = zmq.socket 'pub'
-# # Register to monitoring events
-# socket.on 'connect', (fd, ep) ->
-#     console.log 'connect, endpoint:', ep
-#     return
-# socket.on 'connect_delay', (fd, ep) ->
-#     console.log 'connect_delay, endpoint:', ep
-#     return
-# socket.on 'connect_retry', (fd, ep) ->
-#     console.log 'connect_retry, endpoint:', ep
-#     return
-# socket.on 'listen', (fd, ep) ->
-#     console.log 'listen, endpoint:', ep
-#     return
-# socket.on 'bind_error', (fd, ep) ->
-#     console.log 'bind_error, endpoint:', ep
-#     return
-# socket.on 'accept', (fd, ep) ->
-#     console.log 'accept, endpoint:', ep
-#     return
-# socket.on 'accept_error', (fd, ep) ->
-#     console.log 'accept_error, endpoint:', ep
-#     return
-# socket.on 'close', (fd, ep) ->
-#     console.log 'close, endpoint:', ep
-#     return
-# socket.on 'close_error', (fd, ep) ->
-#     console.log 'close_error, endpoint:', ep
-#     return
-# socket.on 'disconnect', (fd, ep) ->
-#     console.log 'disconnect, endpoint:', ep
-#     return
-# console.log 'Start monitoring...'
-# socket.monitor 500, 0
-
-
-# # Config key: socket
-# socket.bindSync config.socket
-
-#frameController = new FrameController
-
-# frameController.on 'update', (model)->
-#     # console.log "Frame Controller update", model
-#     socket.send [
-#         'update'
-#         JSON.stringify model
-#     ]
-#     return
 
 # Init Leap Motion
 leapController = new Leap.Controller (

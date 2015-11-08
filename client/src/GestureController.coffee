@@ -17,7 +17,6 @@ class GestureController
         state.recipeRecord = {}
         state.activeSigns = []
         state.lastActiveSigns = []
-        #state.status = "Disconnected" # disconnect/connected/something
         state.timeout = window.config.timeout
 
         # Sign record
