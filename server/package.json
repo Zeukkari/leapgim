@@ -2,31 +2,34 @@
   "name": "leapgimd",
   "author": "Petre Tudor, Timo Aho",
   "license": "GPL-3.0",
+  "version": "0.1.3",
   "description": "Leap Motion gesture input mapper",
   "main": "index.js",
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
     "build": "coffee -o lib src/FrameController.coffee",
+    "install": "node-pre-gyp install --fallback-to-build",
     "postinstall": "npm run build",
     "start": "npm run build && node index.js"
   },
   "dependencies": {
     "coffee-script": "~1.10.0",
-    "gutil": "^1.6.4",
     "leapjs": "~0.6.4",
     "yamljs": "^0.2.4",
     "zmq": "^2.13.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Zeukkari/leapgim.git"
-  },
+  "bundledDependencies":["node-pre-gyp"],
   "devDependencies": {
+    "aws-sdk": "~2.0.0-rc.15",
     "gulp": "^3.9.0",
     "gulp-coffee": "^2.3.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "gutil": "^1.6.4",
     "source-map-support": "^0.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zeukkari/leapgim.git"
   }
 }
