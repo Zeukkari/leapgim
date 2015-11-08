@@ -2,3 +2,5 @@ lib/
 node_modules/
 build/
 npm-debug.log
+output_old/
+output/
