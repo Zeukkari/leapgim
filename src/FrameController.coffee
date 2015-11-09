@@ -1,13 +1,12 @@
-{EventEmitter} = require 'events'
 Leap = require 'leapjs'
-zmq = require 'zmq'
-YAML = require 'yamljs'
-
-config = YAML.load 'etc/config.yml'
 
 # Frame controller recieves leap frame data from leapd and parses it into a
 # structured format we'll use later to configure gestures with
-class FrameController extends EventEmitter
+class FrameController # extends EventEmitter
+
+    config:
+        interval: 50
+        stabilize: true
 
     # A map to convert Finger type codes into descriptive names
     nameMap : [
@@ -18,8 +17,10 @@ class FrameController extends EventEmitter
         'pinky'
     ]
 
-    constructor: ->
+    constructor: (config, gestureController)->
         @model = []
+        @config = config
+        @gestureController = gestureController
         console.log "Frame Controller initialized"
 
     # TODO: return an array of pinching fingers if two fingers are both
@@ -78,17 +79,13 @@ class FrameController extends EventEmitter
         if not frame.valid or frame.hands is null or frame.hands.length is 0
             # console.log "Invalid frame or no hands detected"
         else
-
-            # console.log "Gestures: ", frame.gestures
-
-
             @model =
                 hands : []
                 gestures : []
                 timestamp : frame.timestamp
                 #pointables : []
             for hand in frame.hands
-                if(config.stabilize)
+                if(@config.stabilize)
                     console.log "Stabilized position in use!"
                     position = hand.stabilizedPalmPosition
                 else
@@ -121,23 +118,6 @@ class FrameController extends EventEmitter
                     direction : hand.direction
                 @model.hands.push handModel
 
-            # # Basically fingers, but also pencils etc.
-            # for pointable of frame.pointables
-
-            #     if(config.stabilize)
-            #         fingerPosition = pointable.stabilizedTipPosition
-            #     else
-            #         fingerPosition = pointable.tipPosition
-            #         tipPosition = relative3DPosition(frame, fingerPosition)
-
-            #     pointableModel =
-            #         direction : pointable.direction
-            #         length : pointable.length
-            #         id : pointable.id
-            #         tool : pointable.tool
-            #         speed : pointable.tipVelocity
-            #     model.pointables.push pointableModel
-
             # Gestures
             for gesture in frame.gestures
 
@@ -167,79 +147,5 @@ class FrameController extends EventEmitter
         # console.log "Processed frame: ", frame.id
         return
 
-
-#
-# Socket
-#
-socket = zmq.socket 'pub'
-# Register to monitoring events
-socket.on 'connect', (fd, ep) ->
-    console.log 'connect, endpoint:', ep
-    return
-socket.on 'connect_delay', (fd, ep) ->
-    console.log 'connect_delay, endpoint:', ep
-    return
-socket.on 'connect_retry', (fd, ep) ->
-    console.log 'connect_retry, endpoint:', ep
-    return
-socket.on 'listen', (fd, ep) ->
-    console.log 'listen, endpoint:', ep
-    return
-socket.on 'bind_error', (fd, ep) ->
-    console.log 'bind_error, endpoint:', ep
-    return
-socket.on 'accept', (fd, ep) ->
-    console.log 'accept, endpoint:', ep
-    return
-socket.on 'accept_error', (fd, ep) ->
-    console.log 'accept_error, endpoint:', ep
-    return
-socket.on 'close', (fd, ep) ->
-    console.log 'close, endpoint:', ep
-    return
-socket.on 'close_error', (fd, ep) ->
-    console.log 'close_error, endpoint:', ep
-    return
-socket.on 'disconnect', (fd, ep) ->
-    console.log 'disconnect, endpoint:', ep
-    return
-console.log 'Start monitoring...'
-socket.monitor 500, 0
-
-
-# Config key: socket
-socket.bindSync config.socket
-
-frameController = new FrameController
-
-frameController.on 'update', (model)->
-    # console.log "Frame Controller update", model
-    socket.send [
-        'update'
-        JSON.stringify model
-    ]
-    return
-
-# Init Leap Motion
-leapController = new Leap.Controller (
-    inBrowser:              false,
-    enableGestures:         true,
-    frameEventName:         'deviceFrame',
-    background:             true,
-    loopWhileDisconnected:  false
-)
-console.log "Connecting Leap Controller"
-leapController.connect()
-console.log "Leap Controller connected"
-
-consume = () ->
-    frame = leapController.frame()
-
-    # Skip invalid frame processing
-    if frame is null
-        return
-    frameController.processFrame(frame)
-    # console.log "Consumed frame ", frame.id
-
-# Config key: interval
-setInterval consume, config.interval
+if(window)
+    window.FrameController = FrameController

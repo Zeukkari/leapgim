@@ -1,7 +1,7 @@
 # Leap Motion gesture input mapper
 
-Leapgim Client
-==============
+Leapgim
+=======
 
 Recipes
 -------

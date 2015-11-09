@@ -1,13 +1,10 @@
 #
 # Feedback Controller
 #
-# Relies visual and auditory feedback to the user.
-#
-
-config = window.config
 
 class FeedbackController
-    constructor: ->
+    constructor: (config) ->
+        @config = config #Unused..
         console.log "Feedback control ready"
 
     audioNotification: (clip) ->
@@ -29,5 +26,5 @@ class FeedbackController
         meter = document.getElementById('meter')
         meter.value = adjustedConfidence
 
-
-window.FeedbackController = FeedbackController
+if(window)
+    window.FeedbackController = FeedbackController

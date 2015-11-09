@@ -4,10 +4,11 @@
 # Parses signs (leapgim's own gestures) and triggers actions based on recipes.
 #
 
-config = window.config
-
 class GestureController
-    constructor: ->
+    constructor: (config, feedback, actionController) ->
+        @config = config
+        @feedback = feedback
+        @actionHero = actionController
         @startTime = null
         # General state data
         state = {}
@@ -17,17 +18,17 @@ class GestureController
         state.recipeRecord = {}
         state.activeSigns = []
         state.lastActiveSigns = []
-        state.timeout = window.config.timeout
+        state.timeout = @config.timeout
 
         # Sign record
-        for signName, sign of window.config.signs
+        for signName, sign of @config.signs
             sign.name = signName
             sign.timeVisible = 0
             # Sign status can be active/pending/inactive. A pending status implies that the sign has been visible but not long enough.
             sign.status = 'inactive'
             state.signRecord[signName] = sign
         # Recipe record
-        for recipeName, recipe of window.config.recipes
+        for recipeName, recipe of @config.recipes
             recipe.name = recipeName
             recipe.timeVisible = 0
             # recipe status can be active/pending/inactive. A pending status implies that the recipe has been visible but not long enough.
@@ -68,15 +69,13 @@ class GestureController
     wipeRecord: () =>
         #console.log "Wiping record.."
         #console.log "ActionHero recipe state: ", window.actionHero.recipeState
-        manager = window.actionHero
+        manager = @actionHero
         for sign of @state.signRecord
             @resetSignRecord sign
 
         for recipe of @state.recipeRecord
             @state.recipeRecord[recipe].signIndex = 0
             manager.tearDownRecipe recipe
-
-
 
     # Arg1 = sign name
     updateSignRecord: (sign) =>
@@ -123,7 +122,7 @@ class GestureController
         else
             data.signIndex = 0
 
-        manager = window.actionHero
+        manager = @actionHero
         #console.info "Data: ", data
         if(data.signIndex == data.signs.length)
             # Activate recipe
@@ -261,10 +260,10 @@ class GestureController
                 if(data.feedback?.audio)
                     if(sign not in @state.lastActiveSigns)
                         #console.log "Audio notification #{data.feedback.audio}"
-                        window.feedback.audioNotification data.feedback.audio
+                        @feedback.audioNotification data.feedback.audio
                 if(data.feedback?.visual?)
                     options = data.feedback.visual
-                    window.feedback.visualNotification options.id, options.msg
+                    @feedback.visualNotification options.id, options.msg
 
         return activeSigns
 
@@ -273,7 +272,7 @@ class GestureController
         clearTimeout(@timerID)
         @state.lastActiveSigns = @state.activeSigns
 
-        manager = window.actionHero
+        manager = @actionHero
         # Update position for mouse movement
         manager.position = model.hands[0].position
         #console.log "Set position: ", manager.position
@@ -293,15 +292,15 @@ class GestureController
         elapsedMS = @currentTotalTime - @startTime
         elapsedSeconds = elapsedMS / 1000000
 
-        window.feedback.time elapsedSeconds
+        @feedback.time elapsedSeconds
 
         visible = model.hands[0].visible
 
-        window.feedback.handVisible visible
+        @feedback.handVisible visible
 
         confidence = model.hands[0].confidence
 
-        window.feedback.confidenceMeter confidence
+        @feedback.confidenceMeter confidence
 
         # Process signs
         #console.log "Process signs", @state.signRecord
@@ -318,7 +317,7 @@ class GestureController
             @updateRecipeRecord(recipe)
 
         callback = => @wipeRecord()
-        delay = window.config.timeout
+        delay = @config.timeout
 
         #console.log "Callback", callback
         #console.log "Delay: ", delay
@@ -326,4 +325,5 @@ class GestureController
         # Set timeout
         @timerID = setTimeout callback, delay
 
-window.GestureController = GestureController
+if(window)
+    window.GestureController = GestureController

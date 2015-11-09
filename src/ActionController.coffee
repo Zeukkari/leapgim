@@ -5,14 +5,12 @@
 #
 execSh = require 'exec-sh'
 
-feedback = window.feedback
-config = window.config
-
-
 class ActionController
-    constructor: ->
-        @actions = window.config.actions
-        @recipes = window.config.recipes
+    constructor:(config, feedback) ->
+        @config = config
+        @feedback = feedback
+        @actions = config.actions
+        @recipes = config.recipes
         @robot = require 'robotjs'
         @mouseState = 'free' # free|frozen
         @position =
@@ -69,7 +67,6 @@ class ActionController
 
     # buttonAction: up|down|click|doubleClick, button: left|right
     mouseButton: (buttonAction, button) =>
-        feedback = window.feedback
         if(buttonAction == 'up')
             @robot.mouseToggle buttonAction, button
         else if(buttonAction == 'down')
@@ -81,7 +78,6 @@ class ActionController
 
     # action: up|down|tap
     keyboard: (action, button) =>
-        feedback = window.feedback
         if(action == 'up')
             @robot.keyToggle button, action
         else if(action == 'down')
@@ -105,8 +101,7 @@ class ActionController
 
     loadProfile: (profile) ->
         console.log "Load profile #{profile}"
-        window.loadProfile(profile)
-
+        throw "LOAD PROFILE NOT IMPLEMENTED!"
 
     executeAction: (action) =>
         cmd = @actions[action]
@@ -114,10 +109,10 @@ class ActionController
         screenSize = @robot.getScreenSize()
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
-                window.feedback.audioNotification cmd.feedback.audio
+                @feedback.audioNotification cmd.feedback.audio
             if(cmd.feedback.visual?)
                 options = cmd.feedback.visual
-                window.feedback.visualNotification options.id, options.msg
+                @feedback.visualNotification options.id, options.msg
 
         if(cmd.type == 'mouse')
             if(cmd.action == 'freeze')
@@ -225,6 +220,5 @@ class ActionController
                     recipeList.push recipeName
         return recipeList
 
-# execute action, execute tear down action, set action state active/inactive.. fuuuu
-#
-window.ActionController = ActionController
+if(window)
+    window.ActionController = ActionController

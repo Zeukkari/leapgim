@@ -1,35 +1,104 @@
 {
-  "name": "leapgim",
-  "author": "Petre Tudor, Taija Mertanen, Timo Aho",
-  "license": "GPL-3.0",
-  "description": "Leap Motion gesture input mapper",
-  "version": "0.1.2",
-  "scripts": {
-    "install": "npm run client-install && npm run server-install",
-    "client-install": "cd client && npm install",
-    "server-install": "cd server && npm install",
-    "start": "pm2 start server/etc/process-config.json && pm2-dev start client/etc/process-config.json",
-    "watch": "npm run gulpclient && npm run gulpserver",
-    "gulpclient": "cd client/src && gnome-terminal -x gulp watch",
-    "gulpserver": "cd server/src && gnome-terminal -x gulp watch"
-  },
-  "dependencies": {
-    "nw": "^0.12.3",
-    "pm2": "^0.15.8"
-  },
-  "homepage": "https://github.com/Zeukkari/leapgim",
-  "bugs": {
-    "url": "https://github.com/Zeukkari/leapgim/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Zeukkari/leapgim.git"
-  },
-  "keywords": [
-    "leap",
-    "leapmotion",
-    "mouse",
-    "keyboard",
-    "hand gesture"
-  ]
+    "name": "leapgim",
+    "author": "Petre Tudor, Taija Mertanen, Timo Aho",
+    "license": "GPL-3.0",
+    "description": "Leap Motion gesture input mapper",
+    "version": "0.1.2",
+    "homepage": "https://github.com/Zeukkari/leapgim",
+    "bugs": {
+        "url": "https://github.com/Zeukkari/leapgim/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Zeukkari/leapgim.git"
+    },
+    "keywords": [
+        "leap",
+        "leapmotion",
+        "mouse",
+        "keyboard",
+        "hand gesture"
+    ],
+    "app_name": "leapgim",
+    "nodejs": true,
+    "additional_trust_anchors": [
+        ""
+    ],
+    "inject-js-end": "",
+    "node-remote": "127.0.0.1",
+    "keywords": [],
+    "devDependencies": {
+        "gulp": "^3.9.0",
+        "nw-gyp": "^0.12.3",
+        "gulp-util": "^3.0.7",
+        "gulp-sourcemaps": "^1.6.0",
+        "gulp-coffee": "^2.3.1"
+    },
+    "user-agent": "",
+    "window": {
+        "fullscreen": false,
+        "resizable": false,
+        "show": true,
+        "always-on-top": false,
+        "frame": true,
+        "title": "leapgim",
+        "kiosk": false,
+        "kiosk_emulation": false,
+        "exe_icon": "",
+        "visible": true,
+        "transparent": false,
+        "as_desktop": false,
+        "width": 640,
+        "position": "",
+        "show_in_taskbar": true,
+        "height": 480,
+        "mac_icon": "",
+        "toolbar": true,
+        "icon": ""
+    },
+    "version": "0.1.0",
+    "inject-js-start": "",
+    "main": "index.html",
+    "chromium-args": "",
+    "webexe_settings": {
+        "linux-x32": false,
+        "export_dir": "output",
+        "windows-x64": false,
+        "uncompressed_folder": false,
+        "download_dir": "/home/petre/.local/share/Web2Executable/files/downloads",
+        "nw_compression_level": 9,
+        "mac-x32": false,
+        "windows-x32": false,
+        "mac-x64": true,
+        "nw_version": "0.12.3",
+        "force_download": false,
+        "linux-x64": false
+    },
+    "dependencies": {
+        "coffee-script": "~1.10.0",
+        "robotjs": "^0.3.1",
+        "yamljs": "^0.2.4",
+        "leapjs": "~0.6.4",
+        "exec-sh": "^0.2.0",
+        "nw": "^0.12.3"
+    },
+    "scripts": {
+        "coffee": "node_modules/coffee-script/bin/coffee",
+        "postinstall": "npm run build",
+        "nw-gyp": "nw-gyp/bin/nw-gyp.js",
+        "start": "npm run build && nw .",
+        "rebuild-robotjs": "( cd node_modules/robotjs && nw-gyp configure rebuild --target=0.12.3 )",
+        "build": "coffee -co lib src/*.coffee",
+        "install": "npm run rebuild-robotjs",
+        "nw": "node_modules/nw/bin/nw"
+    },
+    "webkit": {
+        "page-cache": false,
+        "java": false,
+        "plugin": false
+    },
+    "js-flags": "",
+    "single-instance": true,
+    "snapshot": "",
+    "node-main": ""
 }
