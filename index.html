@@ -50,6 +50,7 @@
         </table>
     </body>
     <script>
-        document.getElementById("reload-status").innerHTML = new Date();
+      if(require('robotjs')) {require('robotjs').moveMouse(0,0)}
+      else window.alert("Robot.js not found!");
     </script>
 </html>
