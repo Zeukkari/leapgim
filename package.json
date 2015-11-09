@@ -3,7 +3,7 @@
     "author": "Petre Tudor, Taija Mertanen, Timo Aho",
     "license": "GPL-3.0",
     "description": "Leap Motion gesture input mapper",
-    "version": "0.1.2",
+    "version": "0.1.3-alpha.2",
     "homepage": "https://github.com/Zeukkari/leapgim",
     "bugs": {
         "url": "https://github.com/Zeukkari/leapgim/issues"
