@@ -4,9 +4,6 @@ Leap = require 'leapjs'
 # structured format we'll use later to configure gestures with
 class FrameController # extends EventEmitter
 
-    config:
-        interval: 50
-        stabilize: true
 
     # A map to convert Finger type codes into descriptive names
     nameMap : [
@@ -143,7 +140,7 @@ class FrameController # extends EventEmitter
                     direction : gesture.direction
 
                 @model.gestures.push gestureModel
-            @emit 'update', @model
+            @gestureController.parseGestures(@model)
         # console.log "Processed frame: ", frame.id
         return
 

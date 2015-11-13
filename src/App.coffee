@@ -30,8 +30,6 @@ loadProfile = (profile) ->
     leapController.connect()
     console.log "Leap Controller connected"
 
-    frameController = new FrameController
-
     consume = () ->
         frame = leapController.frame()
 
