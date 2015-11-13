@@ -139,6 +139,8 @@ class FrameController # extends EventEmitter
                     position : gesture.position
                     direction : gesture.direction
 
+                console.log "Gesture: ", gesture
+
                 @model.gestures.push gestureModel
             @gestureController.parseGestures(@model)
         # console.log "Processed frame: ", frame.id
