@@ -22,56 +22,22 @@ Default Gesture Mapping
 -----------------------
 
 Mouse grab/release: Generic grabbing pose
+
 Mouse 1: Pinch index finger
+
 Mouse 2: Pinch ring finger
+
 Mouse scrollwheel: Circle gesture while mouse is inactive
 
 
 Installation
 ============
 
-Please ensure that you have the required dependencies before installing:
+
+Prequisites: Robot.js dependencies.
 
 
-Requirements are identical to Robot.js
-
-Prequisites
------------
-
-Windows 10 dependencies
------------------------
-
-  * Nodejs and nvm: https://github.com/coreybutler/nvm-windows (download and install)
-```
-nvm install 4.1.2
-nvm use 4.1.2
-node -v
-```
-  * git: https://git-scm.com/download/win
-  * node-gyp: `npm install -g node-gyp`
-  * Visual Studio 2013
-  * Python (v2.7.3 recommended, v3.x.x is not supported).
-
-
-Ubuntu 14.04 dependencies
--------------------------
-
-Node.js versions can be easily switched with the n package. In order to run leapgim you propably need to install it and switch node.js versions to whatever we're using for the moment.
-
-Install n and switch node.js versions:
-
-```
-sudo npm install n -g
-sudo n 2.14.4
-```
-
-```
-sudo apt-get install build-essential g++ xorg-dev xutils xutils-dev libx11-dev libzmq3 libzmq3-dev
-```
-
-
-Install
--------
+Setup:
 
 ```
 npm install leapgim
