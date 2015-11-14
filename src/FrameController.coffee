@@ -34,8 +34,8 @@ class FrameController # extends EventEmitter
                 pincher = current
             f++
         pincherName = @nameMap[pincher.type]
-        console.log "Pincher type: ", pincher.type
-        console.log "Pincher: " + pincherName
+        # console.log "Pincher type: ", pincher.type
+        # console.log "Pincher: " + pincherName
         return pincherName
 
     ###
@@ -70,6 +70,30 @@ class FrameController # extends EventEmitter
             z: z
         }
 
+    roughDirection: (normalVector) ->
+        unless(normalVector?)
+            return false
+
+        unless(normalVector.length is 3)
+            return false
+
+        vectorX = normalVector[0]
+        vectorY = normalVector[1]
+        vectorZ = normalVector[2]
+        if vectorX < 0.5 and vectorY > 0.5 and vectorZ < 0.5
+            return 'up'
+        if vectorX < 0.5 and vectorY < -0.5 and vectorZ < 0.5
+            return 'down'
+        if vectorX < -0.5 and vectorY < 0.5 and vectorZ < 0.5
+            return 'left'
+        if vectorX > 0.5 and vectorY < 0.5 and vectorZ < 0.5
+            return 'right'
+        if vectorX < 0.5 and vectorY < 0.5 and vectorZ < -0.5
+            return 'forward'
+        if vectorX < 0.5 and vectorY < 0.5 and vectorZ > 0.5
+            return 'backward'
+        return false
+
     processFrame: (frame) =>
         # console.log "Processing frame..."
 
@@ -83,7 +107,6 @@ class FrameController # extends EventEmitter
                 #pointables : []
             for hand in frame.hands
                 if(@config.stabilize)
-                    console.log "Stabilized position in use!"
                     position = hand.stabilizedPalmPosition
                 else
                     position = hand.palmPosition
@@ -115,33 +138,25 @@ class FrameController # extends EventEmitter
                     direction : hand.direction
                 @model.hands.push handModel
 
-            # Gestures
-            for gesture in frame.gestures
 
-                if gesture.type is "circle"
-                    circleVector = frame.pointable(gesture.pointableIds[0]).direction
+            if(frame.gestures)
+                for gesture in frame.gestures when (gesture.type == 'circle' or gesture.type == 'swipe')
+                    #console.log "Gesture #{gesture.type}"
+                    gestureModel =
+                        type : gesture.type
+                        duration : gesture.duration
+                        state : gesture.state
 
-                    console.log "Circle vector", circleVector
-                    console.log "Cirlce normal", gesture.normal
+                    # Gestures
+                    if(gesture.type == 'circle')
+                        gestureModel.direction = @roughDirection gesture.normal
+                        gestureModel.progress = gesture.progress
+                    if(gesture.type == 'swipe')
+                        gestureModel.direction = @roughDirection gesture.direction
 
-                    gesture.direction = Leap.vec3.dot(circleVector, gesture.normal)
+                    @model.gestures.push gestureModel
 
-                gestureModel =
-                    type : gesture.type
-                    duration : gesture.duration
-                    progress: gesture.progress
-                    state : gesture.state
-                    radius : gesture.radius
-                    center : gesture.center
-                    hands : gesture.handIds
-                    speed : gesture.speed
-                    startPosition : gesture.startPosition
-                    position : gesture.position
-                    direction : gesture.direction
-
-                console.log "Gesture: ", gesture
-
-                @model.gestures.push gestureModel
+            #console.log "Model: ", @model
             @gestureController.parseGestures(@model)
         # console.log "Processed frame: ", frame.id
         return

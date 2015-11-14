@@ -38,28 +38,6 @@ class GestureController
         @currentFrame = {}
         window.gestureController = @
 
-    directionCalculator: (x, y, z) =>
-
-        max = Math.max(x, y, z)
-
-        if max is x
-            if x > 0
-                result = 'left'
-            if x < 0
-                result = 'right'
-        if max is y
-            if y > 0
-                result ='down'
-            if y < 0
-                status = 'up'
-        if max is z
-            if z > 0
-                status = 'forward'
-            if z < 0
-                status = 'backward'
-
-        return status
-
     resetSignRecord: (sign) =>
         #console.log "Reset sign #{sign}"
         data = @state.signRecord[sign]
@@ -134,121 +112,99 @@ class GestureController
             # Tear down with timers
             manager.tearDownRecipe data.name
 
+    assertHand: (sign, handModel) =>
+        sign_ok = true
+        if(sign.grab)
+            grabStrength = handModel.grabStrength
+            if(sign.grab.min)
+                if(grabStrength < sign.grab.min)
+                    sign_ok = false
+            if(sign.grab.max)
+                if(grabStrength > sign.grab.max)
+                    sign_ok = false
+        if(sign.pinch)
+            pinchStrength = handModel.pinchStrength
+            pincher = handModel.pinchingFinger
+
+            if(sign.pinch.pincher)
+                if (sign.pinch.pincher != pincher)
+                    sign_ok = false
+            if(sign.pinch.min)
+                if(pinchStrength < sign.pinch.min)
+                    sign_ok = false
+            if(sign.pinch.max)
+                if(pinchStrength > sign.pinch.max)
+                    sign_ok = false
+        if(sign.extendedFingers)
+            extendedFingers = sign.extendedFingers
+            if(extendedFingers.indexFinger?)
+                if extendedFingers.indexFinger != handModel.extendedFingers.indexFinger
+                    sign_ok = false
+            if(extendedFingers.middleFinger?)
+                if extendedFingers.middleFinger != handModel.extendedFingers.middleFinger
+                    sign_ok = false
+            if(extendedFingers.ringFinger?)
+                if extendedFingers.ringFinger != handModel.extendedFingers.ringFinger
+                    sign_ok = false
+            if(extendedFingers.pinky?)
+                if extendedFingers.pinky != handModel.extendedFingers.pinky
+                    sign_ok = false
+            if(extendedFingers.thumb?)
+                if extendedFingers.thumb != handModel.extendedFingers.thumb
+                    sign_ok = false
+        if sign.hover
+            if sign.hover.left?
+                if hand.type is not 'left' and sign.hover.left is true
+                    sign_ok = false
+            if sign.hover.minTime?
+                if sign.hover.minTime > hand.timeVisible
+                    sign_ok = false
+
+        return sign_ok
+
+
+    assertGesture: (sign, gestureData) =>
+        if sign.circle
+            if gestureData.type != 'circle'
+                return false
+            if sign.circle.direction?
+                if gestureData.direction != sign.circle.direction
+                    return false
+            if sign.circle.progress?.min?
+                if sign.circle.progress.min > gestureData.progress
+                    return false
+            if sign.circle.progress?.max?
+                if sign.circle.progress.max < gestureData.progress
+                    return false
+            if sign.circle.duration?.min?
+                if sign.circle.duration.min > gestureData.duration
+                    return false
+            if sign.circle.duration?.max?
+                if sign.circle.duration.max < gestureData.duration
+                    return false
+        return true
+
     assertSign: (sign, frameData) =>
         # Assert true unless a filter statement is found
         sign_ok = true
 
+        hand_spotted = false
         for handModel in frameData.hands
-            if(sign.grab)
-                grabStrength = handModel.grabStrength
-                if(sign.grab.min)
-                    if(grabStrength < sign.grab.min)
-                        sign_ok = false
-                if(sign.grab.max)
-                    if(grabStrength > sign.grab.max)
-                        sign_ok = false
-            if(sign.pinch)
-                pinchStrength = handModel.pinchStrength
-                pincher = handModel.pinchingFinger
+            hand_ok = @assertHand sign, handModel
+            if(hand_ok)
+                hand_spotted = true
+        if(!hand_spotted)
+            sign_ok = false
 
-                if(sign.pinch.pincher)
-                    if (sign.pinch.pincher != pincher)
-                        sign_ok = false
-                if(sign.pinch.min)
-                    if(pinchStrength < sign.pinch.min)
-                        sign_ok = false
-                if(sign.pinch.max)
-                    if(pinchStrength > sign.pinch.max)
-                        sign_ok = false
-            if(sign.extendedFingers)
-                extendedFingers = sign.extendedFingers
-                if(extendedFingers.indexFinger?)
-                    if extendedFingers.indexFinger != handModel.extendedFingers.indexFinger
-                        sign_ok = false
-                if(extendedFingers.middleFinger?)
-                    if extendedFingers.middleFinger != handModel.extendedFingers.middleFinger
-                        sign_ok = false
-                if(extendedFingers.ringFinger?)
-                    if extendedFingers.ringFinger != handModel.extendedFingers.ringFinger
-                        sign_ok = false
-                if(extendedFingers.pinky?)
-                    if extendedFingers.pinky != handModel.extendedFingers.pinky
-                        sign_ok = false
-                if(extendedFingers.thumb?)
-                    if extendedFingers.thumb != handModel.extendedFingers.thumb
-                        sign_ok = false
-            if sign.hover
-                if sign.hover.left?
-                    if hand.type is not 'left' and sign.hover.left is true
-                        sign_ok = false
-                if sign.hover.minTime?
-                    if sign.hover.minTime > hand.timeVisible
-                        sign_ok = false
-
-        # pitch: up (180) and down (-180)
-        # roll: left (180) and right (180)
-
-       # for pointableModel in frameData.pointables
-       #      if sign.tool?
-       #          if pointable.tool is false
-       #              sign_ok = false
-       #      if sign.noSameHand
-       #          if pointable.id != hand.id then sign_ok = false
-
-        for gestureModel in frameData.gestures
-            #fingers = gesture.pointableIds[f]
-            #amount = gesture.pointableIds[0].lenght
-            #hands = gesture.handIds[0].lenght
-            gesture = gestureModel
-
-            if sign.minDuration?
-                if sign.minDuration > gesture.duration then sign_ok = false
-            if sign.maxDuration?
-                if sign.maxDuration < gesture.duration then sign_ok = false
-
-            if sign.circle
-                #if sign.circle.fingerCount?
-                #    if sign.circle.fingerCount is not amount then sign_ok = false
-                if sign.circle.minCircles?
-                    if sign.circle.minCircles > gesture.progress
-                        sign_ok = false
-                if sign.circle.maxCircles?
-                    if sign.circle.maxCircles < gesture.progress
-                        sign_ok = false
-                if sign.circle.minRadius?
-                    if sign.circle.minRadius > gesture.radius
-                        sign_ok = false
-                if sign.circle.maxRadius?
-                    if sign.circle.maxRadius < gesture.radius
-                        sign_ok = false
-                #if sign.circle.twoHanded?
-                #    if gesture.handIds[0].lenght > 2 then sign_ok = false
-                if sign.circle.clockwise is true
-                    if gesture.direction < 0 then sign_ok = false
-                if sign.circle.clockwise is false
-                    if gesture.direction > 0 then sign_ok = false
-                if gesture.state is 'stop'
-                    sign_ok = false
-            if sign.swipe
-                swipe = sign.swipe
-                pos = gesture.position
-                spos = gesture.startPosition
-                if swipe.minDistance?
-                    if gesture.position > gesture.startPosition then sign_ok = false
-                if swipe.maxDistance?
-                    if gesture.position < gesture.startPosition then sign_ok = false
-                if swipe.minSpeed?
-                    if swipe.speed < gesture.speed then sign_ok = false
-                if swipe.maxSpeed?
-                    if swipe.speed > gesture.speed then sign_ok = false
-                if swipe.direction?
-                    x = Math.abs(spos[0] - pos[0])
-                    y = Math.abs(spos[1] - pos[0])
-                    z = Math.abs(spos[1] - pos[0])
-                    result = @directionCalculator(x, y, z)
-                    if result != swipe.direction
-                        sign_ok = false
-                console.log 'swipe', JSON.stringify(swipe)
+        if(sign.circle or sign.swipe)
+            if(frameData.gestures.length == 0)
+                sign_ok = false
+            gesture_spotted = false
+            for gestureModel in frameData.gestures
+                gesture_ok = @assertGesture sign, gestureModel
+                if gesture_ok then gesture_spotted = true
+            if(!gesture_spotted)
+                sign_ok = false
 
         return sign_ok
 

@@ -12,7 +12,7 @@ class ActionController
         @actions = config.actions
         @recipes = config.recipes
         @robot = require 'robotjs'
-        @mouseState = 'free' # free|frozen
+        @mouseState = @config.defaultMouseState or 'free' # free|frozen
         @position =
             x: 0
             y: 0
@@ -34,6 +34,7 @@ class ActionController
 
     freezeMouse: (handPosition) =>
         @freezePosition = @robot.getMousePos()
+        console.log "Freeze mouse", @freezePosition
         @mouseState = 'frozen'
 
     unfreezeMouse: (handPosition) =>
@@ -87,11 +88,11 @@ class ActionController
         return
 
     scrollMouse: (direction, magnitude) =>
-        if(direction == 'up' or direction == 'down')
-            @robot.scrollMouse(magnitude, direction)
-        else
-            console.log 'This aint 3d, man!'
-
+        if(@mouseState == 'frozen')
+            if(direction == 'up' or direction == 'down')
+                @robot.scrollMouse(magnitude, direction)
+            else
+                console.log 'This aint 3d, man!'
 
     delayMouse: (delay) =>
             @robot.delayMouse(delay)
@@ -103,10 +104,7 @@ class ActionController
         console.log "Load profile #{profile}"
         throw "LOAD PROFILE NOT IMPLEMENTED!"
 
-    executeAction: (action) =>
-        cmd = @actions[action]
-        # console.log "cmd: ", cmd
-        screenSize = @robot.getScreenSize()
+    processFeedback: (cmd) =>
         if(cmd.feedback?)
             if(cmd.feedback.audio?)
                 @feedback.audioNotification cmd.feedback.audio
@@ -114,33 +112,66 @@ class ActionController
                 options = cmd.feedback.visual
                 @feedback.visualNotification options.id, options.msg
 
-        if(cmd.type == 'mouse')
-            if(cmd.action == 'freeze')
-                @freezeMouse(@position)
-            if(cmd.action == 'unfreeze')
-                @unfreezeMouse(@position)
-            if(cmd.action == 'toggleFreeze')
-                @toggleMouseFreeze(@position)
-            if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
-                @mouseButton cmd.action, cmd.target
-            if(cmd.action == 'move')
-                @mouseMove(@position)
-            if(cmd.action == 'scroll')
-                @scrollMouse cmd.direction, cmd.magnitude
-            if(cmd.action == 'delay')
-                @delayMouse cmd.delay
-        if(cmd.type == 'keyboard')
-            if(cmd.action in ['up', 'down', 'tap'])
-                @keyboard cmd.action, cmd.button
+    executeAction: (action) =>
+        #console.log "Execute action #{action}"
+
+        cmd = @actions[action]
+        #console.log "cmd: ", cmd
+        screenSize = @robot.getScreenSize()
+
+        # Execute command series
         if(cmd.type == 'compound')
             @executeAction action for action in cmd.actions
+
+        # Execute command
         if(cmd.type == 'exec')
+            @processFeedback(cmd)
             @execSh cmd.cmd, cmd.options, (err)->
                 if(err)
                     console.log "Exec error", err
+
+        # Change recipe set
         if(cmd.type == 'profile')
             if(cmd.action == 'load')
+                @processFeedback(cmd)
                 @loadProfile(cmd.target)
+
+        # Change recipe set
+        if(cmd.type == 'filler')
+            @processFeedback(cmd)
+
+        if(cmd.type == 'mouse')
+
+            # Universal mouse actions
+            if(cmd.action == 'toggleFreeze')
+                @processFeedback(cmd)
+                @toggleMouseFreeze(@position)
+            if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
+                @processFeedback(cmd)
+                @mouseButton cmd.action, cmd.target
+
+            # Frozen mouse actions
+            if(@mouseState == 'frozen')
+                if(cmd.action == 'unfreeze')
+                    @processFeedback(cmd)
+                    @unfreezeMouse(@position)
+                if(cmd.action == 'scroll')
+                    @processFeedback(cmd)
+                    console.log "Scroll mouse #{cmd.direction}, #{cmd.magnitude}"
+                    @scrollMouse cmd.direction, cmd.magnitude
+                if(cmd.type == 'keyboard')
+                    @processFeedback(cmd)
+                    if(cmd.action in ['up', 'down', 'tap'])
+                        @keyboard cmd.action, cmd.button
+
+            # Free mouse actions
+            if(@mouseState == 'free')
+                if(cmd.action == 'move')
+                    @mouseMove(@position)
+                if(cmd.action == 'freeze')
+                    @processFeedback(cmd)
+                    @freezeMouse(@position)
+
 
     activateRecipe: (recipeName) =>
         recipe = @recipes[recipeName]
@@ -175,12 +206,14 @@ class ActionController
         return false
 
     tearDownRecipe: (recipeName) =>
+        #console.log "Tear down #{recipeName}"
         recipe = @recipes[recipeName]
         return unless recipe
         actionName = recipe.tearDown
 
         # Apathy!
         if(!actionName)
+            #throw "Teardown Action name missing!"
             @recipeState[recipeName].status = 'inactive'
             @recipeState[recipeName].timerID = null
             return false
@@ -189,17 +222,17 @@ class ActionController
                 #console.log "Tear down delay for #{recipeName} is " + @recipeState[recipeName].tearDownDelay
                 if(@recipeState[recipeName].tearDownDelay)
                     callback = () =>
-                        console.log "Tear down timed recipe #{recipeName}"
+                        #console.log "Tear down timed recipe #{recipeName}"
                         @executeAction(actionName)
                         @recipeState[recipeName].status = 'inactive'
                         @recipeState[recipeName].timerID = null
                     @recipeState[recipeName].timerID = setTimeout callback, @recipeState[recipeName].tearDownDelay
                     return true
                 else
-                    console.log "Tear down non-timed recipe #{recipeName}"
+                    #console.log "Tear down non-timed recipe #{recipeName}"
+                    @executeAction(actionName)
                     @recipeState[recipeName].status = 'inactive'
                     @recipeState[recipeName].timerID = null
-                    @executeAction(actionName)
                     return true
             else
                 #console.log "Tear down timer already triggered for #{recipeName}"
