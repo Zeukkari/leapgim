@@ -21,13 +21,13 @@ Leapgim can be used as a prototyping platform to easily test a variety of hand g
 Default Gesture Mapping
 -----------------------
 
-Mouse grab/release: Generic grabbing pose
+- Mouse grab/release: Generic grabbing pose
 
-Mouse 1: Pinch index finger
+- Mouse 1: Pinch index finger
 
-Mouse 2: Pinch ring finger
+- Mouse 2: Pinch ring finger
 
-Mouse scrollwheel: Circle gesture while mouse is inactive
+- Mouse scrollwheel: Circle gesture while mouse is inactive
 
 
 Installation
