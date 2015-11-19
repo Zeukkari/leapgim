@@ -3,12 +3,21 @@ interval: 50
 stabilize: true
 timeout: 2000
 actions:
+    mouseMove:
+        type: 'mouse'
+        action: 'move'
+    toggleFreeze:
+        type: 'mouse'
+        action: 'toggleFreeze'
+        feedback:
+            audio: 'asset/audio/message.ogg'
+
     mouse1Down:
         type: 'mouse'
         action: 'down'
         target: 'left'
         feedback:
-            audio: 'asset/audio/mousedown.ogg'
+            audio: 'asset/audio/button-toggle-on.ogg'
             visual:
                 id: 'left'
                 msg: 'Down!'
@@ -17,7 +26,7 @@ actions:
         action: 'up'
         target: 'left'
         feedback:
-            audio: 'asset/audio/mouseup.ogg'
+            audio: 'asset/audio/button-toggle-off.ogg'
             visual:
                 id: 'left'
                 msg: 'Up!'
@@ -26,29 +35,74 @@ actions:
         action: 'click'
         target: 'right'
         feedback:
-            audio: 'asset/audio/mallet.ogg'
-    mouseMove:
-        type: 'mouse'
-        action: 'move'
-    centerMouse:
-        type: 'mouse'
-        action: 'centerMouse'
-    toggleFreeze:
-        type: 'mouse'
-        action: 'toggleFreeze'
-        feedback:
-            audio: 'asset/audio/amsterdam.ogg'
+            audio: 'asset/audio/button-pressed.ogg'
     mouseScrollUp:
         type: 'mouse'
         action: 'scroll'
         direction: 'up'
-        magnitude: 50
+        magnitude: 1
+        feedback:
+            audio: 'asset/audio/window-slide.ogg'
     mouseScrollDown:
         type: 'mouse'
         action: 'scroll'
         direction: 'down'
-        magnitude: 50
+        magnitude: 1
+        feedback:
+           audio: 'asset/audio/window-slide.ogg'
+    handFound:
+        type: 'filler'
+        feedback:
+           audio: 'asset/audio/message-new-instant.ogg'
+    handLost:
+        type: 'filler'
+        feedback:
+            audio: 'asset/audio/dialog-error.ogg'
+    freezeMouse:
+        type: 'mouse'
+        action: 'freeze'
+    handLostFreeze:
+        type: 'compound'
+        actions:
+        - 'handLost'
+        - 'freezeMouse'
+        - 'centerMouse'
+    keyLeftHold:
+        type: 'keyboard'
+        target: 'left'
+        action: 'down'
+    keyLeftRelease:
+        type: 'keyboard'
+        target: 'left'
+        action: 'up'
+    keyRightHold:
+        type: 'keyboard'
+        target: 'right'
+        action: 'down'
+    keyRightRelease:
+        type: 'keyboard'
+        target: 'right'
+        action: 'up'
+    keyUpHold:
+        type: 'keyboard'
+        target: 'up'
+        action: 'down'
+    keyUpRelease:
+        type: 'keyboard'
+        target: 'up'
+        action: 'up'
+    keyDownHold:
+        type: 'keyboard'
+        target: 'down'
+        action: 'down'
+    keyDownRelease:
+        type: 'keyboard'
+        target: 'down'
+        action: 'up'
 signs:
+    handVisible:
+        grab:
+            max: 1
     pinchIndex:
         pinch:
             pincher: 'indexFinger'
@@ -60,51 +114,100 @@ signs:
     circleForward:
         circle:
             direction: 'forward'
+            duration:
+                min: 100000
     circleBackward:
         circle:
             direction: 'backward'
+            duration:
+                min: 100000
     grab:
         grab:
-            min: 0.9
-    freeHand:
-        grab:
-            max: 0.4
+            min: 0.8
+    handLeft:
+        extendedFingers:
+            indexFinger: true
+            middleFinger: true
+            ringFinger: true
+            pinky: true
+        direction: 'left'
+    handRight:
+        extendedFingers:
+            indexFinger: true
+            middleFinger: true
+            ringFinger: true
+            pinky: true
+        direction: 'right'
+    handForward:
+        extendedFingers:
+            indexFinger: true
+            middleFinger: true
+            ringFinger: true
+            pinky: true
+        direction: 'forward'
+    handBackward:
+        extendedFingers:
+            indexFinger: true
+            middleFinger: true
+            ringFinger: true
+            pinky: true
+        direction: 'backward'
 recipes:
     mouseMove:
         action: 'mouseMove'
         signs:
-         - 'freeHand'
+         - 'handVisible'
         continuous: true
-        tearDownDelay: 2000
-        tearDown: 'centerMouse'
     toggleFreeze:
         action: 'toggleFreeze'
         signs:
          - 'grab'
+        minTime: 500000
     mouseButton1:
         signs:
          - 'pinchIndex'
-        action: 'centerMouse'
-    # mouseButton1:
-    #     signs:
-    #      - 'pinchIndex'
-    #     action: 'mouse1Down'
-    #     tearDown: 'mouse1Up'
+        action: 'mouse1Down'
+        tearDown: 'mouse1Up'
     mouseButton2:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
-        continuous: true
+        continuous: false
         chargeDelay: 500
     mouseScrollDown:
         signs:
          - 'circleForward'
         action: 'mouseScrollDown'
         continuous: true
-        chargeDelay: 500
+        chargeDelay: 150
     mouseScrollUp:
         signs:
          - 'circleBackward'
         action: 'mouseScrollUp'
         continuous: true
-        chargeDelay: 500
+        chargeDelay: 150
+    handFound:
+        signs:
+        - 'handVisible'
+        action: 'handFound'
+        tearDown: 'handLostFreeze'
+    holdLeft:
+        signs:
+        - 'handLeft'
+        action: 'keyLeftHold'
+        tearDown: 'keyLeftRelease'
+    holdRight:
+        signs:
+        - 'handRight'
+        action: 'keyRightHold'
+        tearDown: 'keyRightRelease'
+    holdUp:
+        signs:
+        - 'handUp'
+        action: 'keyUpHold'
+        tearDown: 'keyUpRelease'
+    holdDown:
+        signs:
+        - 'handDown'
+        action: 'keyDownHold'
+        tearDown: 'keyDownRelease'
