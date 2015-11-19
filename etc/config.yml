@@ -2,23 +2,13 @@ socket: 'tcp://127.0.0.1:8282'
 interval: 50
 stabilize: true
 timeout: 2000
-defaultMouseState: 'frozen'
 actions:
-    mouseMove:
-        type: 'mouse'
-        action: 'move'
-    toggleFreeze:
-        type: 'mouse'
-        action: 'toggleFreeze'
-        feedback:
-            audio: 'asset/audio/message.ogg'
-
     mouse1Down:
         type: 'mouse'
         action: 'down'
         target: 'left'
         feedback:
-            audio: 'asset/audio/button-toggle-on.ogg'
+            audio: 'asset/audio/mousedown.ogg'
             visual:
                 id: 'left'
                 msg: 'Down!'
@@ -27,7 +17,7 @@ actions:
         action: 'up'
         target: 'left'
         feedback:
-            audio: 'asset/audio/button-toggle-off.ogg'
+            audio: 'asset/audio/mouseup.ogg'
             visual:
                 id: 'left'
                 msg: 'Up!'
@@ -36,42 +26,29 @@ actions:
         action: 'click'
         target: 'right'
         feedback:
-            audio: 'asset/audio/button-pressed.ogg'
+            audio: 'asset/audio/mallet.ogg'
+    mouseMove:
+        type: 'mouse'
+        action: 'move'
+    centerMouse:
+        type: 'mouse'
+        action: 'centerMouse'
+    toggleFreeze:
+        type: 'mouse'
+        action: 'toggleFreeze'
+        feedback:
+            audio: 'asset/audio/amsterdam.ogg'
     mouseScrollUp:
         type: 'mouse'
         action: 'scroll'
         direction: 'up'
-        magnitude: 1
-        feedback:
-            audio: 'asset/audio/window-slide.ogg'
+        magnitude: 50
     mouseScrollDown:
         type: 'mouse'
         action: 'scroll'
         direction: 'down'
-        magnitude: 1
-        feedback:
-           audio: 'asset/audio/window-slide.ogg'
-    handFound:
-        type: 'filler'
-        feedback:
-           audio: 'asset/audio/message-new-instant.ogg'
-    handLost:
-        type: 'filler'
-        feedback:
-            audio: 'asset/audio/dialog-error.ogg'
-    freezeMouse:
-        type: 'mouse'
-        action: 'freeze'
-    handLostFreeze:
-        type: 'compound'
-        actions:
-        - 'handLost'
-        - 'freezeMouse'
-
+        magnitude: 50
 signs:
-    handVisible:
-        grab:
-            max: 1
     pinchIndex:
         pinch:
             pincher: 'indexFinger'
@@ -83,53 +60,51 @@ signs:
     circleForward:
         circle:
             direction: 'forward'
-            duration:
-                min: 100000
     circleBackward:
         circle:
             direction: 'backward'
-            duration:
-                min: 100000
     grab:
         grab:
-            min: 0.8
+            min: 0.9
+    freeHand:
+        grab:
+            max: 0.4
 recipes:
     mouseMove:
         action: 'mouseMove'
         signs:
-         - 'handVisible'
+         - 'freeHand'
         continuous: true
+        tearDownDelay: 2000
+        tearDown: 'centerMouse'
     toggleFreeze:
         action: 'toggleFreeze'
         signs:
          - 'grab'
-        minTime: 500000
     mouseButton1:
         signs:
          - 'pinchIndex'
-        action: 'mouse1Down'
-        tearDown: 'mouse1Up'
+        action: 'centerMouse'
+    # mouseButton1:
+    #     signs:
+    #      - 'pinchIndex'
+    #     action: 'mouse1Down'
+    #     tearDown: 'mouse1Up'
     mouseButton2:
         signs:
          - 'pinchRing'
         action: 'mouse2Click'
-        continuous: false
+        continuous: true
         chargeDelay: 500
     mouseScrollDown:
         signs:
          - 'circleForward'
         action: 'mouseScrollDown'
         continuous: true
-        chargeDelay: 150
+        chargeDelay: 500
     mouseScrollUp:
         signs:
          - 'circleBackward'
         action: 'mouseScrollUp'
         continuous: true
-        chargeDelay: 150
-    handFound:
-        signs:
-        - 'handVisible'
-        action: 'handFound'
-        tearDown: 'handLostFreeze'
-
+        chargeDelay: 500

@@ -46,7 +46,7 @@
     "show_in_taskbar": true,
     "height": 80,
     "mac_icon": "leapgim.png",
-    "toolbar": false,
+    "toolbar": true,
     "icon": "leapgim-color.png"
   },
   "inject-js-start": "",
