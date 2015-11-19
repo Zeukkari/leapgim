@@ -37,6 +37,12 @@ class ActionController
         console.log "Freeze mouse", @freezePosition
         @mouseState = 'frozen'
 
+    centerMouse: () =>
+        center =
+            x: 0.5
+            y: 0.5
+        @mouseMove center
+
     unfreezeMouse: (handPosition) =>
         screenSize = @robot.getScreenSize()
         normalizedHandPosition =
@@ -146,6 +152,9 @@ class ActionController
             if(cmd.action == 'toggleFreeze')
                 @processFeedback(cmd)
                 @toggleMouseFreeze(@position)
+            if(cmd.action == 'centerMouse')
+                @processFeedback(cmd)
+                @centerMouse()
             if(cmd.action in ['up', 'down', 'click', 'doubleClick'])
                 @processFeedback(cmd)
                 @mouseButton cmd.action, cmd.target
