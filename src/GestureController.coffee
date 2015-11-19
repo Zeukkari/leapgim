@@ -160,6 +160,10 @@ class GestureController
                 if sign.hover.minTime > hand.timeVisible
                     sign_ok = false
 
+        if sign.direction
+            if sign.direction != handModel.direction
+                sign_ok = false
+
         return sign_ok
 
 

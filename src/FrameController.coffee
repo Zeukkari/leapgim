@@ -135,7 +135,7 @@ class FrameController # extends EventEmitter
                     speed : hand.palmVelocity
                     pitch : hand.pitch
                     roll  : hand.roll
-                    direction : hand.direction
+                    direction : @roughDirection(hand.palmNormal)
                 @model.hands.push handModel
 
 

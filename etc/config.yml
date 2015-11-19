@@ -11,7 +11,6 @@ actions:
         action: 'toggleFreeze'
         feedback:
             audio: 'asset/audio/message.ogg'
-
     mouse1Down:
         type: 'mouse'
         action: 'down'
@@ -61,6 +60,9 @@ actions:
     freezeMouse:
         type: 'mouse'
         action: 'freeze'
+    centerMouse:
+        type: 'mouse'
+        action: 'centerMouse'
     handLostFreeze:
         type: 'compound'
         actions:
@@ -71,34 +73,42 @@ actions:
         type: 'keyboard'
         target: 'left'
         action: 'down'
+        mouseState: 'frozen'
     keyLeftRelease:
         type: 'keyboard'
         target: 'left'
         action: 'up'
+        mouseState: 'frozen'
     keyRightHold:
         type: 'keyboard'
         target: 'right'
         action: 'down'
+        mouseState: 'frozen'
     keyRightRelease:
         type: 'keyboard'
         target: 'right'
         action: 'up'
+        mouseState: 'frozen'
     keyUpHold:
         type: 'keyboard'
         target: 'up'
         action: 'down'
+        mouseState: 'frozen'
     keyUpRelease:
         type: 'keyboard'
         target: 'up'
         action: 'up'
+        mouseState: 'frozen'
     keyDownHold:
         type: 'keyboard'
         target: 'down'
         action: 'down'
+        mouseState: 'frozen'
     keyDownRelease:
         type: 'keyboard'
         target: 'down'
         action: 'up'
+        mouseState: 'frozen'
 signs:
     handVisible:
         grab:
@@ -196,18 +206,22 @@ recipes:
         - 'handLeft'
         action: 'keyLeftHold'
         tearDown: 'keyLeftRelease'
+        chargeDelay: 500
     holdRight:
         signs:
         - 'handRight'
         action: 'keyRightHold'
         tearDown: 'keyRightRelease'
+        chargeDelay: 500
     holdUp:
         signs:
-        - 'handUp'
+        - 'handForward'
         action: 'keyUpHold'
         tearDown: 'keyUpRelease'
+        chargeDelay: 500
     holdDown:
         signs:
-        - 'handDown'
+        - 'handBackward'
         action: 'keyDownHold'
         tearDown: 'keyDownRelease'
+        chargeDelay: 500
