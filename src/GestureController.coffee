@@ -113,6 +113,7 @@ class GestureController
             manager.tearDownRecipe data.name
 
     assertHand: (sign, handModel) =>
+        console.log "Hand direction #{handModel.direction}"
         sign_ok = true
         if(sign.grab)
             grabStrength = handModel.grabStrength
@@ -159,6 +160,10 @@ class GestureController
             if sign.hover.minTime?
                 if sign.hover.minTime > hand.timeVisible
                     sign_ok = false
+
+        if sign.direction
+            if sign.direction != handModel.direction
+                sign_ok = false
 
         return sign_ok
 

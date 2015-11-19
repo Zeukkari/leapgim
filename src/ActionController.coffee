@@ -149,6 +149,15 @@ class ActionController
         if(cmd.type == 'filler')
             @processFeedback(cmd)
 
+        if(cmd.type == 'keyboard')
+            console.log "Key #{cmd.target} action #{cmd.action}"
+            if(cmd.action == 'down')
+                @robot.keyToggle(cmd.target, 'down')
+            if(cmd.action == 'up')
+                @robot.keyToggle(cmd.target, 'up')
+            if(cmd.action == 'tap')
+                @robot.keyTap(cmd.target)
+
         if(cmd.type == 'mouse')
 
             # Universal mouse actions

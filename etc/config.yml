@@ -61,6 +61,9 @@ actions:
     freezeMouse:
         type: 'mouse'
         action: 'freeze'
+    centerMouse:
+        type: 'mouse'
+        action: 'centerMouse'
     handLostFreeze:
         type: 'compound'
         actions:
@@ -196,18 +199,22 @@ recipes:
         - 'handLeft'
         action: 'keyLeftHold'
         tearDown: 'keyLeftRelease'
+        chargeDelay: 150
     holdRight:
         signs:
         - 'handRight'
         action: 'keyRightHold'
         tearDown: 'keyRightRelease'
+        chargeDelay: 150
     holdUp:
         signs:
-        - 'handUp'
+        - 'handForward'
         action: 'keyUpHold'
         tearDown: 'keyUpRelease'
+        chargeDelay: 150
     holdDown:
         signs:
-        - 'handDown'
+        - 'handBackward'
         action: 'keyDownHold'
         tearDown: 'keyDownRelease'
+        chargeDelay: 150
