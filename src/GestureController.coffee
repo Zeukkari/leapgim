@@ -113,7 +113,6 @@ class GestureController
             manager.tearDownRecipe data.name
 
     assertHand: (sign, handModel) =>
-        console.log "Hand direction #{handModel.direction}"
         sign_ok = true
         if(sign.grab)
             grabStrength = handModel.grabStrength
