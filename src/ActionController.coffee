@@ -123,6 +123,12 @@ class ActionController
         #console.log "Execute action #{action}"
 
         cmd = @actions[action]
+
+        # Skip frames based on mouse state
+        if(cmd.mouseState)
+            if(@mouseState != cmd.mouseState)
+                return false
+
         #console.log "cmd: ", cmd
         screenSize = @robot.getScreenSize()
 
@@ -170,27 +176,23 @@ class ActionController
                 @processFeedback(cmd)
                 @mouseButton cmd.action, cmd.target
 
-            # Frozen mouse actions
-            if(@mouseState == 'frozen')
-                if(cmd.action == 'unfreeze')
-                    @processFeedback(cmd)
-                    @unfreezeMouse(@position)
-                if(cmd.action == 'scroll')
-                    @processFeedback(cmd)
-                    console.log "Scroll mouse #{cmd.direction}, #{cmd.magnitude}"
-                    @scrollMouse cmd.direction, cmd.magnitude
-                if(cmd.type == 'keyboard')
-                    @processFeedback(cmd)
-                    if(cmd.action in ['up', 'down', 'tap'])
-                        @keyboard cmd.action, cmd.button
+            if(cmd.action == 'unfreeze')
+                @processFeedback(cmd)
+                @unfreezeMouse(@position)
+            if(cmd.action == 'scroll')
+                @processFeedback(cmd)
+                console.log "Scroll mouse #{cmd.direction}, #{cmd.magnitude}"
+                @scrollMouse cmd.direction, cmd.magnitude
+            if(cmd.type == 'keyboard')
+                @processFeedback(cmd)
+                if(cmd.action in ['up', 'down', 'tap'])
+                    @keyboard cmd.action, cmd.button
 
-            # Free mouse actions
-            if(@mouseState == 'free')
-                if(cmd.action == 'move')
-                    @mouseMove(@position)
-                if(cmd.action == 'freeze')
-                    @processFeedback(cmd)
-                    @freezeMouse(@position)
+            if(cmd.action == 'move')
+                @mouseMove(@position)
+            if(cmd.action == 'freeze')
+                @processFeedback(cmd)
+                @freezeMouse(@position)
 
 
     activateRecipe: (recipeName) =>
