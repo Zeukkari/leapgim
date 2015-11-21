@@ -22,8 +22,6 @@ class ActionController
         @unfreezePosition =
             x: 0
             y: 0
-        @keyboardModel =
-            test: false
         @recipeState = {}
         for name, recipe of @recipes
             @recipeState[name] =
