@@ -2,6 +2,11 @@ Leap = require 'leapjs'
 robot = require 'robotjs'
 YAML = require 'yamljs'
 fs = require 'fs'
+FeedbackController = require './FeedbackController'
+ActionController = require './ActionController'
+GestureController = require './GestureController'
+FrameController = require './FrameController'
+
 defaultProfile = 'etc/config.yml'
 
 loadProfile = (profile) ->

@@ -161,5 +161,4 @@ class FrameController # extends EventEmitter
         # console.log "Processed frame: ", frame.id
         return
 
-if(window)
-    window.FrameController = FrameController
+module.exports = FrameController
