@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('./lib/App');
+
+require("./lib/App");
