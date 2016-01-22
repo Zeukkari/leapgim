@@ -13,29 +13,17 @@ server.listen port, ->
   return
 # Routing
 app.use express.static(__dirname + '/../static')
-# Chatroom
-numUsers = 0
-
-setInterval(->
-  console.log "Foo"
-  io.emit 'new message',
-    message: "Howling!"
-    username: "Legion"
-, 2000)
 
 io.on 'connection', (socket) ->
   console.log "A user connected"
-  
-  socket.on 'new message', (data) ->
-    # we tell the client to execute 'new message'
-    socket.broadcast.emit 'new message',
-      username: socket.username
-      message: data
-    return
-
   socket.on 'disconnect', ()->
-    console.log('user disconnected');
-
+    console.log('user disconnected');  
+  # socket.on 'new message', (data) ->
+  #   # we tell the client to execute 'new message'
+  #   socket.broadcast.emit 'new message',
+  #     username: socket.username
+  #     message: data
+  #   return
 
 FeedbackController = require './FeedbackController'
 ActionController = require './ActionController'
@@ -82,6 +70,6 @@ loadProfile = (profile) ->
 
   # Config key: interval
   setInterval consume, config.interval
-  return "Foo.."
+  return
 
 loadProfile(defaultProfile)
