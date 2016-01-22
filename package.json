@@ -1,9 +1,13 @@
 {
   "name": "leapgim",
-  "author": "Petre Tudor, Taija Mertanen, Timo Aho",
+  "author": "Timo Aho",
   "license": "GPL-3.0",
   "description": "Leap Motion gesture input mapper",
-  "version": "0.1.5",
+  "version": "0.1.6",
+  "main": "index.js",
+  "bin": {
+    "leapgim": "./index.js"
+  },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
     "url": "https://github.com/Zeukkari/leapgim/issues"
@@ -12,71 +16,24 @@
     "type": "git",
     "url": "https://github.com/Zeukkari/leapgim.git"
   },
-  "keywords": [],
-  "app_name": "leapgim",
-  "nodejs": true,
-  "additional_trust_anchors": [
-    ""
-  ],
-  "inject-js-end": "",
-  "node-remote": "127.0.0.1",
   "devDependencies": {
+    "coffee-script": "~1.10.0",
     "gulp": "^3.9.0",
-    "nw-gyp": "^0.12.3",
     "gulp-util": "^3.0.7",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-coffee": "^2.3.1"
   },
-  "user-agent": "",
-  "window": {
-    "fullscreen": false,
-    "resizable": false,
-    "show": true,
-    "always-on-top": true,
-    "frame": true,
-    "title": "leapgim",
-    "kiosk": false,
-    "kiosk_emulation": false,
-    "exe_icon": "leapgim.png",
-    "visible": true,
-    "transparent": false,
-    "as_desktop": false,
-    "width": 320,
-    "position": "",
-    "show_in_taskbar": true,
-    "height": 80,
-    "mac_icon": "leapgim.png",
-    "toolbar": true,
-    "icon": "leapgim-color.png"
-  },
-  "inject-js-start": "",
-  "main": "index.html",
-  "chromium-args": "",
   "dependencies": {
-    "coffee-script": "~1.10.0",
     "exec-sh": "^0.2.0",
+    "express": "^4.13.3",
     "leapjs": "~0.6.4",
-    "node-gyp": "^3.0.3",
-    "nw": "^0.12.3",
-    "nw-gyp": "^0.12.3",
-    "robotjs": "^0.3.3",
+    "robotjs": "^0.3.7",
+    "socket.io": "^1.4.4",
     "yamljs": "^0.2.4"
   },
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
-    "postinstall": "npm run build",
-    "nw-gyp": "nw-gyp/bin/nw-gyp.js",
-    "start": "npm run build && nw .",
-    "rebuild-robotjs": "( cd node_modules/robotjs && nw-gyp configure rebuild --target=0.12.3 )",
     "build": "coffee -co lib src/*.coffee",
-    "install": "npm run rebuild-robotjs",
-    "nw": "node_modules/nw/bin/nw"
-  },
-  "webkit": {
-    "plugin": true
-  },
-  "js-flags": "",
-  "single-instance": true,
-  "snapshot": "",
-  "node-main": ""
+    "start": "node index.js"
+  }
 }

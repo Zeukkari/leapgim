@@ -36,7 +36,6 @@ class GestureController
             state.recipeRecord[recipeName] = recipe
         @state = state
         @currentFrame = {}
-        window.gestureController = @
 
     resetSignRecord: (sign) =>
         #console.log "Reset sign #{sign}"
@@ -285,5 +284,4 @@ class GestureController
         # Set timeout
         @timerID = setTimeout callback, delay
 
-if(window)
-    window.GestureController = GestureController
+module.exports = GestureController

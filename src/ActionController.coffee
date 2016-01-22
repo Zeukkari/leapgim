@@ -272,5 +272,4 @@ class ActionController
                     recipeList.push recipeName
         return recipeList
 
-if(window)
-    window.ActionController = ActionController
+module.exports = ActionController

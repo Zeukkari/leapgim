@@ -1,30 +1,28 @@
 #
 # Feedback Controller
 #
-
+# TODO: Cleanup
 class FeedbackController
-    constructor: (config) ->
-        @config = config #Unused..
+    constructor: (io) ->
+        @io = io
         console.log "Feedback control ready"
 
     audioNotification: (clip) ->
-        audio = new Audio(clip)
-        audio.play()
+        console.log "Play audio: #{clip}"
+        @io.emit 'play audio',
+            file: clip
 
     visualNotification: (domID, msg) ->
-        #console.info "Visual notification", domID, msg
-        document.getElementById(domID)?.innerHTML = msg
+        #console.log "TODO: Visual notification: #{domID}, #{msg}"
 
     time: (elapsed) ->
-        document.getElementById('timer').innerHTML = elapsed
+        #console.log "TODO: Feedback time: #{elapsed}"
 
     handVisible: (visible) ->
-        document.getElementById('handVisible').innerHTML = visible
+        #console.log "TODO: Hand visible: #{visible}"
 
     confidenceMeter: (confidence) ->
         adjustedConfidence = confidence * 100
-        meter = document.getElementById('meter')
-        meter.value = adjustedConfidence
+        #console.log "TODO: Show confidence: #{adjustedConfidence}"
 
-if(window)
-    window.FeedbackController = FeedbackController
+module.exports = FeedbackController
