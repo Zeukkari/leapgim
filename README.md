@@ -6,8 +6,34 @@ Leapgim
 Leapgim takes hand signs as input and outputs other types of emulated computer input.
 
 
+Installation
+============
+
+
+Prequisites: Robot.js dependencies.
+
+
+Setup:
+
+```
+npm install leapgim
+```
+
+
+Usage
+=====
+
+Run the service with:
+
+```
+npm start
+```
+
+Open a browser at "http://localhost:3000" for audio.
+
+
 Background
-----------
+==========
 
 Leap Motion is a sensor device for detecting detecting hand motions. A neat little piece of future technology. My first thought was that I would love to use the controller as a mouse replacement. Unfortunately the controller works with Leap-enabled software only. The goal of this project is to enable the Leap Motion controller to be used with other software also.
 
@@ -29,29 +55,6 @@ Default Gesture Mapping
 
 - Mouse scrollwheel: Circle gesture while mouse is inactive
 
-
-Installation
-============
-
-
-Prequisites: Robot.js dependencies.
-
-
-Setup:
-
-```
-npm install leapgim
-```
-
-
-Usage
-=====
-
-Run with:
-
-```
-npm start
-```
 
 Leapgim takes hand signs as input and outputs other types of emulated computer input. Recipes are how signs are translated into actions. The term is borrowed from IFTTT (https://ifttt.com/).
 

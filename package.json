@@ -1,9 +1,13 @@
 {
   "name": "leapgim",
-  "author": "Petre Tudor, Taija Mertanen, Timo Aho",
+  "author": "Timo Aho",
   "license": "GPL-3.0",
   "description": "Leap Motion gesture input mapper",
-  "version": "0.1.5",
+  "version": "0.1.6",
+  "main": "index.js",
+  "bin": {
+    "leapgim": "./index.js"
+  },
   "homepage": "https://github.com/Zeukkari/leapgim",
   "bugs": {
     "url": "https://github.com/Zeukkari/leapgim/issues"
@@ -13,13 +17,13 @@
     "url": "https://github.com/Zeukkari/leapgim.git"
   },
   "devDependencies": {
+    "coffee-script": "~1.10.0",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.7",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-coffee": "^2.3.1"
   },
   "dependencies": {
-    "coffee-script": "~1.10.0",
     "exec-sh": "^0.2.0",
     "express": "^4.13.3",
     "leapjs": "~0.6.4",
@@ -30,6 +34,6 @@
   "scripts": {
     "coffee": "node_modules/coffee-script/bin/coffee",
     "build": "coffee -co lib src/*.coffee",
-    "start": "npm run build; node index.js"
+    "start": "node index.js"
   }
 }

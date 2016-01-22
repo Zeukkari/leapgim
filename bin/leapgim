@@ -1,3 +1,2 @@
-#!/usr/bin/env sh
-cd ..
-npm start
+#!/usr/bin/env node
+require('..');
