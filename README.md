@@ -5,6 +5,8 @@ Leapgim
 
 Leapgim takes hand signs as input and outputs other types of emulated computer input.
 
+Demo: https://www.youtube.com/watch?v=cck8rIonXgw
+
 
 Installation
 ============
