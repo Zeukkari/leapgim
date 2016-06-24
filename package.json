@@ -27,7 +27,7 @@
     "exec-sh": "^0.2.0",
     "express": "^4.13.3",
     "leapjs": "~0.6.4",
-    "robotjs": "^0.3.7",
+    "robotjs": "^0.4.4",
     "socket.io": "^1.4.4",
     "yamljs": "^0.2.4"
   },
