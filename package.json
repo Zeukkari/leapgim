@@ -4,7 +4,7 @@
   "license": "GPL-3.0",
   "description": "Leap Gesture Intention Mapper",
   "version": "0.1.6",
-  "main": "index.js",
+  "main": "index.html",
   "bin": {
     "leapgim": "./index.js"
   },
