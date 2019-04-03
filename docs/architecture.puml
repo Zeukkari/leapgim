@@ -1,0 +1,33 @@
+@startuml
+
+title Leapgim System Architecture
+
+cloud "Leap Motion Service" as Leapd {
+}
+
+cloud "Robot.js" as Robotjs {
+}
+
+cloud "Feedback Client" as FeedbackClient {
+}
+
+
+package "Leapgim" {
+    component [AppManager]
+    component [FrameController]
+    component [GestureController]
+    component [ActionController]
+    component [FeedbackController]
+}
+
+Leapd -down-> AppManager: datastream
+AppManager -down-> FrameController: parsed frame data
+FrameController -down-> GestureController: gesture data
+GestureController -down-> ActionController: action events
+GestureController -> FeedbackController: feedback events
+ActionController -> FeedbackController: feedback events
+ActionController -down-> Robotjs: Keyboard & Mouse input
+FeedbackController -down-> FeedbackClient : socket.io
+
+@enduml
+
