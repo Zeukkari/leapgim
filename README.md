@@ -1,8 +1,5 @@
 # Leap Motion gesture input mapper
 
-Leapgim
-=======
-
 Leapgim takes hand signs as input and outputs other types of emulated computer input.
 
 Demos: 
@@ -12,8 +9,8 @@ Demos:
 - https://www.youtube.com/watch?v=cck8rIonXgw
 
 
-Installation
-============
+## Installation
+
 
 
 Prequisites: Robot.js dependencies.
@@ -26,8 +23,7 @@ npm install leapgim
 ```
 
 
-Usage
-=====
+## Usage
 
 Run the service with:
 
@@ -38,8 +34,7 @@ npm start
 Open a browser at "http://localhost:3000" for audio.
 
 
-Background
-==========
+## Background
 
 Leap Motion is a sensor device for detecting detecting hand motions. A neat little piece of future technology. My first thought was that I would love to use the controller as a mouse replacement. Unfortunately the controller works with Leap-enabled software only. The goal of this project is to enable the Leap Motion controller to be used with other software also.
 
@@ -50,8 +45,8 @@ This project provides a way to define custom hand gestures and evoke actions bas
 Leapgim can be used as a prototyping platform to easily test a variety of hand gestures and their reliability.
 
 
-Default Gesture Mapping
------------------------
+### Default Gesture Mapping
+
 
 - Mouse grab/release: Generic grabbing pose
 
@@ -69,8 +64,7 @@ signs -> recipe -> actions
 ```
 
 
-Action Types
-------------
+### Action Types
 
 Mouse buttons:
 - Mouse button down
@@ -101,9 +95,13 @@ Misc:
 - Reconfigure (load another profile / client config)
 
 
-Signs
------
+### Signs
 
 Signs are hand gestures in leapgim context. A sign can contain contain information about hand hand poses, native gestures, and time constraints.
 
 We use the term 'sign' to provide a clear distinction from leap motion's native gestures circle, swipe, key tap and screen tap.
+
+
+## Application Architecture
+
+![](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Zeukkari/leapgim/master/docs/architecture.puml)
