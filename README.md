@@ -1,12 +1,14 @@
 # Leap Motion gesture input mapper
 
+*DEPRECATED: This project would require a legacy leap motion v2 sdk* 
+
 Leapgim takes hand signs as input and outputs other types of emulated computer input.
 
-Demos: 
+## Demo
 
-- https://www.youtube.com/watch?v=00KzsH7EuGs
+[http://www.youtube.com/watch?v=cck8rIonXgw](http://www.youtube.com/watch?v=cck8rIonXgw)
 
-- https://www.youtube.com/watch?v=cck8rIonXgw
+[![youtube demo](http://i3.ytimg.com/vi/cck8rIonXgw/maxresdefault.jpg)](http://www.youtube.com/watch?v=cck8rIonXgw)
 
 
 ## Installation
